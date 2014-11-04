@@ -1,0 +1,89 @@
+\section{Introduzione}
+I sistemi di gestione di basi di dati (DBMS) sono strumenti software per la gestione
+di grandi masse di dati. Prima dell'avvento dei database, ogni programma aveva il suo
+file privato, organizzato \emph{sequenzialmente} e la gestione dei dati era affidata
+al filesystem. Ci\`o causava problemi di:
+
+\begin{itemize}
+ \item \textbf{ridondanza}: diversi files venivano replicati, dovendo essere condivisi
+ con pi\`u applicazioni;
+ \item \textbf{inconsistenza}: se un'informazione veniva aggiornata, tale aggiornamento 
+ poteva riguardare solo una copia del dato;
+ \item \textbf{dipendenza dei dati}: i dati venivano strutturati dalle applicazioni, in
+ base al loro utilizzo.
+\end{itemize}
+
+Per ovviare a questi problemi si inizi\`o a progettare le \textbf{basi di dati}, le quali
+videro una grande svolta quando alcuni ingegneri dell'IBM introdussero negli anni '70 il
+\emph{modello relazionale}.
+
+  \subsection{Le basi di dati}
+  Le caratteristiche di una base di dati sono:
+  \begin{itemize}
+   \item \textbf{multiuso e integrazione}: la stessa base di dati pu\`o essere utilizzata 
+   da diverse applicazioni con diversi scopi;
+   \item \textbf{indipendenza e controllo centralizzato}: i dati non sono gestiti dalle
+   applicazioni ma da un software dedicato, il quale ne gestisce anche le regole di 
+   accesso.
+  \end{itemize}
+ I vantaggi che ne derivano sono la minima ridondanza, integrità dei dati e sicurezza.
+ 
+ \subsubsection{Integrità}
+ I dati devono rispettare dei vincoli che esistono nella realtà di interesse. Consideriamo
+ ad esempio il database di InfoStud della Sapienza:
+ \begin{itemize}
+  \item uno studente risiede in \emph{una sola} città (\textbf{dipendenze funzionali});
+  \item la matricola \emph{identifica univocamente} uno studente (\textbf{vincoli di chiave});
+  \item un voto è un intero positivo tra 18 e 30 (\textbf{vicoli di dominio}). 
+ \end{itemize}
+ 
+ \subsubsection{Sicurezza}
+ I dati devono essere protetti da accessi non autorizzati. Il \textbf{DBA} (\emph{Database 
+ Administrator}) deve considerare:
+ \begin{itemize}
+  \item valore corrente per \emph{accessi autorizzati};
+  \item valore corrente per accessi \emph{non autorizzati};
+  \item \emph{chi} può accedere \emph{a quali} dati e in \emph{quale modalità};
+  \item definire regole di accesso ed effetti relativi a una violazione.
+ \end{itemize}
+ 
+ \subsection{Transazione}
+ \begin{defn}Si definisce \textbf{transazione} una sequenza di operazioni che costituiscono 
+ un'unica operazione logica.\end{defn}
+ \begin{exmp}
+  ``Trasferire €1000 da c/c1 al c/c2''
+    \begin{enumerate}
+     \item cerca c/c1;
+     \item modifica $saldo$ in $saldo - 1000$;
+     \item cerca c/c2;
+     \item modifica $saldo$ in $saldo + 1000$;
+    \end{enumerate}
+ \end{exmp}
+ Una transazione deve essere eseguita completamente (\emph{committed}) o non deve essere eseguita
+ affatto (\emph{rolled back}).
+ 
+ \subsection{Ripristino}
+ Può capitare che, a causa di un malfunzionamento del sistema (ad esempio sbalzi di tensione), la
+ base di dati si trovi con delle informazioni corrotte. In questi casi, per ripristinare il valore
+ corretto dei dati, si hanno due possibili modi di agire:
+ \begin{itemize}
+  \item sfruttare il \textbf{transaction log}, che contiene i dettagli di tutte le transazioni,
+  tra cui valori precedenti e successivi alla modifica;
+  \item ripristinare l'ultimo \textbf{dump} effettuato. Il dump è una copia periodica del
+  database.
+ \end{itemize}
+ 
+ \subsection{Compiti del DBA}
+ Il Database Administrator ha vari compiti, tra i quali ricadono le scelte di progettazione
+ della base di dati. Esse implicano la definizione di:
+ \begin{itemize}
+  \item schema logico
+  \item schema fisico
+  \item sottoschema o viste
+ \end{itemize}
+ inoltre al DBA spetta l'onere di mantenere il sistema.
+
+
+
+
+

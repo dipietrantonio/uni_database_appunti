@@ -1,0 +1,56 @@
+\section{Il modello relazionale}
+Il modello attualmente più diffuso e con il quale si organizzano i database è chiamato
+\textbf{modello relazionale}. Tale nome è dovuto al fatto che esso è basato sul
+concetto matematico di \emph{relazione}.
+\begin{defn}
+ Dati $n$ domini $D_1$, $D_2$, $\ldots$, $D_n$ non necessariamente distinti, una 
+ relazione $r$ su $D_1$, $D_2$, $\ldots$, $D_n$ è un sottoinsieme del prodotto cartesiano
+ $D_1 \times D_2 \times \ldots \times D_n$.
+\end{defn}
+Ogni elemento di $r$ è una n-pla $(d_1, d_2, \ldots, d_n)$  $\forall \ d_i \in D_i$
+
+\subsection{Relazioni e tabelle}
+Una relazione $r$ può essere rappresentata mediante una tabella: le righe corrispondono
+agli elementi della relazione (n-ple), le colonne corrispondono ai domini $D_1\ldots D_n$.
+
+\begin{exmp}
+La seguente tabella rappresenta una relazione con due 4-ple sui domini $String$, $String$, 
+$Int$ e $Real$.
+ \begin{center}
+  \begin{tabular}{llll}
+    String & String & Int & Real\\
+    \hline
+    Paolo & Rossi & 2 & 26,5\\
+    Mario & Biachi & 10 & 28,7
+  \end{tabular}
+ \end{center}
+ A questo punto è poco chiaro cosa rappresenti tale relazione. Bisogna stabilire metodo per
+ fornire un'interpretazione standard che rispecchi la realtà di interesse a cui essa si 
+ riferisce:a questo fine diamo nomi alle colonne e alla tabella stessa. La precedente tabella
+ diverrà quindi:
+
+\begin{center}
+  \begin{tabular}{l | l | l | l}
+    Nome & Cognome & Esami & Media\\
+    \hline
+    Paolo & Rossi & 2 & 26,5\\
+    Mario & Biachi & 10 & 28,7
+  \end{tabular}
+ \end{center}
+ Ora risulta più evidente che la realtà di interesse sono gli studenti di una data università. 
+ Daremo quindi il nome \emph{Studenti} a tale tabella.
+\end{exmp}
+
+Il nome dato ad ogni colonna viene chiamato \textbf{attributo}.
+\begin{defn}
+ Uno \emph{schema di relazione} è un insieme di attributi. 
+\end{defn}
+\begin{defn}
+ Uno \emph{schema di base di dati relazionale} è un insieme $\{R_1, R_2, \ldots, R_n\}$ di 
+ schemi di relazione. 
+\end{defn}
+\begin{defn}
+ Una \emph{base di dati relazionale} con schema $\{R_1, R_2, \ldots, R_n\}$ è un insieme
+ $\{r_1, r_2, \ldots, r_n\}$ dove $r_i$ è \emph{un'istanza} di relazione con schema $R_i$.
+\end{defn}
+

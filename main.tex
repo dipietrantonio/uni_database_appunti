@@ -1,0 +1,36 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[hidelinks]{hyperref}
+\usepackage{ragged2e}
+\usepackage{amsthm,multicol,amssymb, xcolor, mdframed,lmodern,textcomp, geometry}
+ \geometry{
+ a4paper,
+ left=30mm,
+ right=30mm,
+ top=23mm,
+ bottom=23mm,
+ }
+
+%titolo del documento%
+\title{\Huge Basi di Dati - Appunti}
+\author{Cristian Di Pietratonio}
+\date{1 novembre 2014}
+
+%importiamo le definizioni di nuove funzioni
+\input{tex_definitions.tex}
+
+\begin{document}
+\maketitle
+\newpage
+\setcounter{tocdepth}{2}
+\tableofcontents
+\newpage
+\input{introduzione.tex}
+\newpage
+\input{modello_relazionale.tex}
+\newpage
+\input{algebra_relazionale.tex}
+\newpage
+\input{3nf.tex}
+
+\end{document}

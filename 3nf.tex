@@ -1,0 +1,282 @@
+\section{Progettazione di una base di dati}
+\subsection{Anomalie}
+Si immagini di dover progettare una base di dati relazionale contenente i dati degli 
+studenti e dei corsi di un'Università. La soluzione più immediata è di creare un’unica
+relazione
+\begin{center}
+  $Universit\grave{a}(Matr, Nome, Citt\grave{a}, Prov, C\#, Titolo, Docente, C\_laurea,
+  Data, Voto)$ 
+\end{center}
+
+in cui una tupla $(m, n, c, p, C, t, D, l, d, v)$ rappresenta il fatto che uno studente
+con matricola $m$ e nome $n$, residente nella città $c$ che si trova in provincia di $p$,
+ha sostenuto l’esame del corso, con codice $C$ e titolo $t$, tenuto dal docente $D$, del 
+corso di laurea $l$ in data $d$ riportando il voto $v$.\\\\
+Adottando questa soluzione si avrebbero un certo numero di inconvenienti che vanno sotto 
+il nome di \textbf{anomalia}. Un anomalia è essenzialmente un comportamento \emph{inaspettato
+e indesiderato} da parte della base di dati, generato in risposta ad un'operazione. Le anomalie 
+più comuni (spiegate relativamente all'esempio) sono:
+\begin{itemize}
+ \item \textbf{anomalie di inserimento}: non si possono inserire i dati di uno studente 
+ se non ha sostenuto almeno un esame;
+ \item \textbf{anomalie di cancellazione}: se si cancellano i dati di un corso (perché il
+ corso è stato disattivato) e c’è uno studente che ha sostenuto solo l’esame relativo a 
+ quel corso, perdo le informazioni sullo studente;
+ \item \textbf{anomalie di aggiornamento}: se devo modificare il docente di un corso devo 
+ farlo per ogni tupla in cui compare il corso;
+ \item \textbf{ridondanza} dei dati: le informazioni anagrafiche di uno studente sono
+  ripetute per ogni esame sostenuto dallo studente.
+\end{itemize}
+Queste anomalie sono dovute al fatto che si sono rappresentati in un’unica relazione più 
+\emph{concetti}: il concetto ``Studente'', ``Corso'' ed ``Esame''. Rappresentando i tre 
+concetti in tre relazioni distinte
+\begin{center}
+  $Studente(Matr, Nome, Citt\grave{a}, Prov)$\\
+  $Corso(C\#, Titolo, Docente, C\_laurea)$\\
+  $Esame(Matr, C\#, Data, Voto)$
+\end{center}
+
+tali anomalie vengono eliminate. Tuttavia è possibile riscontrare il permanere di simili 
+anomalie concernenti le città:per eliminare queste ultime anomalie che hanno la stessa 
+origine di quelle viste precedentemente, posso utilizzare lo \emph{schema} seguente:
+\begin{center}
+  $Studente(Matr,Nome,Citt\grave{a})$\\
+  $Comune(Citt\grave{a},Prov)$\\
+  $Corso(C\#,Titolo,Docente, C\_laurea)$\\
+  $Esame(Matr, C\#, Data,Voto)$
+\end{center}
+
+\subsection{La Terza Forma Normale}
+Si è constatato che ci sono schemi migliori di altri. Esistono dunque \emph{regole 
+e proprietà formali} che ci permettono di costruire un \emph{buono} schema?\\
+Se si analizzano le anomalie nella relazione $Universit\grave{a}$ si nota che sono 
+legate al fatto che
+\begin{itemize}
+ \item $Voto$ e $Data$ sono \emph{determinati univocamente} da $Matr$ e $C\#$;
+ \item  i dati di uno studente sono \emph{determinati univocamente} da $Matr$;
+ \item i dati di un corso sono \emph{determinati univocamente} da $C\#$.
+\end{itemize}
+Il concetto di ``determina univocamente'' è colto dal concetto formale di \textbf{dipendenza funzionale}.
+\begin{defn}
+  Dato uno schema di relazione $R$, una \emph{dipendenza funzionale} su $R$ 
+  è una coppia ordinata di sottoinsiemi non vuoti $X$, $Y$ $\in R$ e viene denotata 
+  come $X \rightarrow Y$.
+\end{defn}
+\begin{prop}
+Un'istanza $r$ di $R$ \emph{soddisfa} la dipendenza funzionale $X \rightarrow Y$
+se per ogni coppia di tuple $t_1$, $t_2$ $\in r$ si ha che se $t_1[X] = t_2[X] 
+\Rightarrow t_1[Y] = t_2[Y]$. 
+\end{prop}
+In simboli:
+\begin{center}
+\begin{math}
+(\ \forall (t_1, t_2) \in r\ t.c.\ t_1[X] = t_2[X] \Rightarrow t_1[Y] = t_2[Y]) 
+\Rightarrow (X\rightarrow Y
+\end{math}
+soddisfa $r$).
+\end{center}
+Sia $F$ un insieme di dipendenze funzionali su $R$ ed $r$ un'istanza di $R$. Se $r$ 
+soddisfa tutte le dipendenze in $F$, diciamo che $r$ è un'istanza \emph{legale} di $R$. 
+\begin{defn}
+La \emph{chiusura di F}, denotata con $F^+$, è l'insieme di dipendenze funzionali che 
+sono soddisfatte da ogni istanza legale di $R$. 
+\end{defn}
+
+Banalmente si ha che $F$ $\subseteq$ $F^+$.\\
+\begin{defn}
+ Dato uno schema di relazione $R$, un insieme di dipendenze funzionali $F$ su $R$ e un
+sottoinsieme $K$ di $R$, diciamo che $K$ è una \textbf{chiave} per $R$ se:
+\begin{itemize}
+ \item $K \rightarrow R \in F^+$
+ \item $\forall K'\subset K,\ K'\rightarrow R \notin F^+$.
+\end{itemize}
+\end{defn}
+In pratica una chiave è il minimo sottoinsieme di $R$ che determina univocamente il 
+valore dei restanti attributi di $R$ (banalmente la chiave determina se stessa e i 
+suoi sottoinsiemi) tale che, se prendessimo un suo sottoinsieme, esso non sarebbe 
+chiave.\\
+In futuro denoteremo con $A_1, A_2, \ldots, A_n$ un insieme di attributi, con $X$ 
+e $Y$ sottoinsiemi di $R$, con $XY$ l'insieme $X$ $\cup$ $Y$.
+
+\begin{exmp}
+ Considerando il precendente schema $Universit\grave{a}$, possiamo osservare che un'istanza 
+ di \emph{Università} per rispecchiare la realtà di interesse deve soddisfare le seguenti 
+ dipendenze funzionali:
+ \begin{itemize}
+  \item $Matr,\ C\# \rightarrow Nome,\ Citt\grave{a},\ Prov,\ Titolo,\ Docente,\ C\_laurea,
+  \ Data,\ Voto$;
+  \item $C\# \rightarrow Titolo,\ Docente,\ C\_laurea$
+  \item $Matr \rightarrow Nome\, Citt\grave{a},\ Prov$
+  \item $Citt\grave{a} \rightarrow Prov$
+ \end{itemize}
+ Quindi $\{Matr, C\#\}$ costituisce una \emph{chiave} per Università.
+\end{exmp}
+
+Ci sono attributi che \textbf{dipendono parzialmente} dalla chiave. Nell'esempio [4.1] 
+\{$Titolo$, $Docente$, $C\_laurea$\} dipendono funzionalmente da $C\#$; altri attributi
+invece \textbf{dipendono transitivamente} dalla chiave, ad esempio $Prov$ dipende
+funzionalmente da $Matr$ in quanto $Matr \rightarrow Citt\grave{a} \rightarrow Prov$.\\
+Prendendo lo schema finale, vediamo che in nessuno schema di relazione ci sono attributi
+che dipendono parzialmente né transitivamente dalla chiave. 
+\begin{prop}
+Uno schema di relazione in cui non ci sono sono attributi che dipendono parzialmente né 
+transitivamente dalla chiave è detto in \textbf{Terza Forma Normale} (3NF). 
+\end{prop}
+Formalizziamo i concetti appena introdotti:
+\begin{defn}
+ Dati uno schema di relazione $R$ e un insieme di dipendenze funzionali $F$ su $R$
+diciamo che:
+\begin{itemize}
+ \item un attributo $A$ $\in$ $R$ è \textbf{primo} se appartiene ad una chiave di $R$;
+ \item un sottoinsieme $X$ $\subset$ $R$ è una \textbf{superchiave} se contiene una 
+ chiave di $R$.
+\end{itemize}
+\end{defn}
+Nell'esempio [4.1], considerando la relazione \emph{Università}, $Matr$ è primo mentre
+ \{$Matr$, $C\#$, $Nome$\} è una superchiave.
+\begin{defn}
+Siano $R$ uno schema di relazione ed $F$ un insieme di dipendenze funzionali su $R$.
+\begin{itemize}
+ \item $X\rightarrow A$ $\in F^+$ è una dipendenza parziale su $R$ se $A$ non 
+ è primo e $X$ è contenuto propriamente in una chiave di R.
+ \item $X\rightarrow A$ $\in F^+$ è una dipendenza transitiva su $R$ se $A$ 
+ non è primo e $\forall K \subset R$ si ha che $X$ non è contenuto propriamente 
+ in $K$ e $K-X \neq \emptyset$.
+\end{itemize}
+\end{defn}
+\begin{prop}
+Siano $R$ uno schema di relazione ed $F$ un insieme di dipendenze funzionali su $R$. 
+$R$ è in 3NF se, $\forall (X\rightarrow A) \in F^+$ t.c. $A\notin X$, si ha che $A$ è
+primo oppure $X$ è una superchiave.
+\end{prop}
+\begin{theo}
+Siano $R$ uno schema di relazione e $F$ un insieme di dipendenze funzionali su $R$. Uno
+schema $R$ è in 3NF se e solo se non esistono né dipendenze parziali né dipendenze 
+transitive in $R$.
+\end{theo}
+\textbf{Dimostrazione.} La parte \emph{solo se} deriva banalmente dalla definizione [4.5].\\
+Parte \emph{se.} Supponiamo per assurdo che $R$ non sia in 3NF nonostante non ci siano
+dipendenze parziali o transitive; in tal caso esiste una dipendenza funzionale $X\rightarrow A$
+$\in F^+$ t.c. $A$ non è primo e $X$ non è una superchiave. Poiché $X$ non è una
+superchiave due casi (mutuamente esclusivi) sono possibili:
+\begin{itemize}
+ \item o per ogni chiave $K$ di $R$, $X$ non è contenuto propriamente in $K$ e $K-X \neq 
+ \emptyset$; in tal caso $X\rightarrow A$ è una dipendenza transitiva su $R$ (contraddizione)
+ \item oppure esiste una chiave $K$ di $R$ t.c. $X \subset K$; in tal caso $X\rightarrow A$ 
+ è una dipendenza parziale su $R$ (contraddizione). $\Box$
+\end{itemize}
+Un obbiettivo da tenere presente quando si progetta una base di dati è quello di produrre 
+uno schema in cui ogni relazione sia in 3NF. Nella fase di progettazione concettuale si 
+individuano i concetti che devono essere rappresentati nella base di dati. Se questo lavoro 
+di individuazione è fatto accuratamente lo schema relazionale che può essere derivato in modo
+automatico con opportune regole, è in 3NF. Se tuttavia dopo tale processo ci trovassimo a 
+produrre uno schema che non è in 3NF dovremmo procedere ad una fase di decomposizione.
+
+\subsection{Decomposizione di schemi di relazione}
+Uno schema che non è in 3NF può essere decomposto in più modi in un insieme di schemi in 3NF.\\
+ Sia $R = ABC$ con l'insieme di dipendenze funzionali $F = \{A\rightarrow B, B\rightarrow C\}$.
+$R$ non è in 3NF per la presenza in $F^+$ della dipendenza transitiva $B\rightarrow C$, ma può 
+essere decomposto in:
+\begin{center}
+  $R_1 = AB$ con $F_1=\{A\rightarrow B\}$\\
+  $R_2 = BC$ con $F_2=\{B\rightarrow C\}$\\
+  oppure\\
+  $R_1 = AB$ con $F_1=\{A\rightarrow B\}$\\
+  $R_2 = AC$ con $F_2=\{A\rightarrow C\}$\\
+\end{center}
+Entrambi gli schemi sono in 3NF, tuttavia la seconda soluzione non è soddisfacente. Infatti,
+si consideri l’istanza della \emph{base di dati} costituita dalle due istanze legali di $R_1$ e $R_2$:
+
+    \begin{multicols}{2}   
+    \begin{flushright}
+    \begin{tabular}{l|l}
+     A & B \\
+     \hline
+     $a_1$ & $b_1$\\
+     $a_2$ & $b_1$
+    \end{tabular}
+    \end{flushright}
+
+    \begin{flushleft}
+    \begin{tabular}{l|l}
+     A & C \\
+     \hline
+     $a_1$ & $c_1$\\
+     $a_2$ & $c_2$
+    \end{tabular}
+    \end{flushleft}
+    \end{multicols}  
+ 
+  L'istanza di R che si può ricostruire da questa tramite \emph{join naturale} è\\
+    \begin{center}
+    \begin{tabular}{l|l|l}
+     A & B & C \\
+     \hline
+     $a_1$ &$b_1$ & $c_1$\\
+     $a_2$ &$b_1$ & $c_2$
+    \end{tabular}
+    \end{center}
+    
+    non è un'istanza legale di $R$, in quanto non soddisfa la dipendenza funzionale
+    $B\rightarrow C$.
+
+ \begin{exmp}
+  Si consideri la relazione $Studente = \{Matr, Com, Prov\}$, con $F = $ \{$Matr\rightarrow Com$,
+  $Matr\rightarrow Prov$, $Com\rightarrow Prov$\}; essa è in 3FN. Una decomposizione possibile è
+  la seguente:
+  \begin{center}
+    $R_1 = \{Matr, Com\}$ con $F_1 = \{Matr\rightarrow Com\}$ \\
+    $R_2 = \{Matr, Prov\}$ con $F_2 = \{Matr\rightarrow Prov\}$ \\
+   \end{center}
+  entrabe sono in 3FN; si cosiderino le seguenti istanze di $R_1$ e $R_2$
+  \begin{multicols}{2}
+  \begin{flushright} 
+  \begin{tabular}{l | l }
+  Matr & Com\\
+  \hline
+  $O_1$ & Marino\\
+  $O_2$ & Marino
+ \end{tabular}
+ \end{flushright}
+  
+  \begin{flushleft}
+   \begin{tabular}{ l | l}
+  Matr & Prov \\
+  \hline
+  $O_1$ & Parma\\
+  $O_2$ & Latina
+ \end{tabular}
+\end{flushleft}
+\end{multicols}
+e si provi a fare il join naturale per riottenere lo schema di partenza. Ecco il
+risultato:
+  \begin{center} 
+  \begin{tabular}{l | l | l}
+  Matr & Com & Prov\\
+  \hline
+  $O_1$ & Marino & Parma\\
+  $O_2$ & Marino & Latina
+ \end{tabular}
+ \end{center}
+ 
+ chiaramente si perde la dipendenza funzionale $Com\rightarrow Prov$.
+\end{exmp}
+Una istanza di una relazione contiene i dati di una certa realtà che lo schema della 
+base di dati intende rappresentare e si assumono come riferimenti veritieri. Pertanto 
+quando si decompone uno schema si vuole che ogni sua istanza sia ricostruibile da 
+un’istanza dello schema ottenuto dalla decomposizione.
+\begin{prop}
+Una decomposizione di uno schema di relazione deve avere i seguenti requisiti:
+\begin{itemize}
+ \item deve preservare le dipendenze funzionali che valgono su ogni istanza legale dello 
+ schema originario;
+ \item deve permettere di ricostruire mediante join naturale ogni istanza legale 
+ dello schema originario.
+\end{itemize} 
+\end{prop}
+
+
+
+
+
+
