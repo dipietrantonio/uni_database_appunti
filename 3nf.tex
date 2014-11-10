@@ -1,7 +1,7 @@
 \section{Progettazione di una base di dati}
 \subsection{Anomalie}
 Si immagini di dover progettare una base di dati relazionale contenente i dati degli 
-studenti e dei corsi di un'Università. La soluzione più immediata è di creare un’unica
+studenti e dei corsi di un'Università. La soluzione più immediata è di creare un'unica
 relazione
 \begin{center}
   $Universit\grave{a}(Matr, Nome, Citt\grave{a}, Prov, C\#, Titolo, Docente, C\_laurea,
@@ -10,7 +10,7 @@ relazione
 
 in cui una tupla $(m, n, c, p, C, t, D, l, d, v)$ rappresenta il fatto che uno studente
 con matricola $m$ e nome $n$, residente nella città $c$ che si trova in provincia di $p$,
-ha sostenuto l’esame del corso, con codice $C$ e titolo $t$, tenuto dal docente $D$, del 
+ha sostenuto l'esame del corso, con codice $C$ e titolo $t$, tenuto dal docente $D$, del 
 corso di laurea $l$ in data $d$ riportando il voto $v$.\\\\
 Adottando questa soluzione si avrebbero un certo numero di inconvenienti che vanno sotto 
 il nome di \textbf{anomalia}. Un anomalia è essenzialmente un comportamento \emph{inaspettato
@@ -20,14 +20,14 @@ più comuni (spiegate relativamente all'esempio) sono:
  \item \textbf{anomalie di inserimento}: non si possono inserire i dati di uno studente 
  se non ha sostenuto almeno un esame;
  \item \textbf{anomalie di cancellazione}: se si cancellano i dati di un corso (perché il
- corso è stato disattivato) e c’è uno studente che ha sostenuto solo l’esame relativo a 
+ corso è stato disattivato) e c'è uno studente che ha sostenuto solo l'esame relativo a 
  quel corso, perdo le informazioni sullo studente;
  \item \textbf{anomalie di aggiornamento}: se devo modificare il docente di un corso devo 
  farlo per ogni tupla in cui compare il corso;
  \item \textbf{ridondanza} dei dati: le informazioni anagrafiche di uno studente sono
   ripetute per ogni esame sostenuto dallo studente.
 \end{itemize}
-Queste anomalie sono dovute al fatto che si sono rappresentati in un’unica relazione più 
+Queste anomalie sono dovute al fatto che si sono rappresentati in un'unica relazione più 
 \emph{concetti}: il concetto ``Studente'', ``Corso'' ed ``Esame''. Rappresentando i tre 
 concetti in tre relazioni distinte
 \begin{center}
@@ -185,7 +185,7 @@ essere decomposto in:
   $R_2 = AC$ con $F_2=\{A\rightarrow C\}$\\
 \end{center}
 Entrambi gli schemi sono in 3NF, tuttavia la seconda soluzione non è soddisfacente. Infatti,
-si consideri l’istanza della \emph{base di dati} costituita dalle due istanze legali di $R_1$ e $R_2$:
+si consideri l'istanza della \emph{base di dati} costituita dalle due istanze legali di $R_1$ e $R_2$:
 
     \begin{multicols}{2}   
     \begin{flushright}
@@ -264,7 +264,7 @@ risultato:
 Una istanza di una relazione contiene i dati di una certa realtà che lo schema della 
 base di dati intende rappresentare e si assumono come riferimenti veritieri. Pertanto 
 quando si decompone uno schema si vuole che ogni sua istanza sia ricostruibile da 
-un’istanza dello schema ottenuto dalla decomposizione.
+un'istanza dello schema ottenuto dalla decomposizione.
 \begin{prop}
 Una decomposizione di uno schema di relazione deve avere i seguenti requisiti:
 \begin{itemize}
@@ -275,8 +275,93 @@ Una decomposizione di uno schema di relazione deve avere i seguenti requisiti:
 \end{itemize} 
 \end{prop}
 
+\subsection{Decomposizioni che preservano le dipendenze}
+Quando si decompone uno schema di relazione in $R$ su cui è definito un insieme di 
+dipendenze funzionali $F$, le dipendenze funzionali che si vogliono preservare sono
+tutte quelle che sono soddisfatte da ogni istanza legale di $R$, cioè le dipendenze
+funzionali in $F^+$; sarà quindi necessario calcolare tale insieme.
 
+\begin{defn}
+Sia $R$ uno schema di relazione e $F$ un insieme di dipendenze funzionali. Sia $F^A$ l'insieme
+di dipendenze funzionali definito nel modo seguente:
+\begin{itemize}
+ \item $f \in F \Rightarrow f \in F^A$;
+ \item $Y \subseteq X \subseteq R \Rightarrow X\rightarrow Y \in F^A$ (\textbf{assioma della riflessività});
+ \item $X \rightarrow Y \in F^A \Rightarrow XZ\rightarrow YZ \in F^A$, $\forall Z\subseteq R$ 
+ (\textbf{assioma dell'aumento});
+ \item $X \rightarrow Y \in F^A, Y \rightarrow Z \in F^A \Rightarrow X \rightarrow Z \in F^A$ 
+ (\textbf{assioma della transitività}).
+\end{itemize}
+\end{defn}
+Dimostreremo che $F^+=F^A$, cioè che la chiusura di un insieme di dipendenze funzionali $F$ può essere
+ottenuta a partire da $F$ applicando ricorsivamente gli assiomi della riflessività, dell'aumento e della
+transitività, conosciuti come \textbf{assiomi di Armstrong}.
 
+\begin{theo}
+Sia $F$ un insieme di dipendenze funzionali. Valgono le seguenti implicazioni:
+\begin{itemize}
+ \item \textbf{regola dell'unione: } $X\rightarrow Y \in F^A$ e $X\rightarrow Z \in F^A$ $\Rightarrow$ 
+ $X\rightarrow YZ \in F^A$
+ \item \textbf{regola della decomposizione: } $X\rightarrow Y \in F^A$ e $Z\subseteq Y$ $\Rightarrow$ 
+ $X\rightarrow Z \in F^A$
+ \item \textbf{regola della pseudotransitività: }$X\rightarrow Y \in F^A$ e $WY\rightarrow Z \in F^A 
+ \Rightarrow WX\rightarrow Z \in F^A$.
+\end{itemize}
+\end{theo}
+\textbf{Dimostrazione.}
+\begin{itemize}
+ \item \emph{Regola dell'unione.} Se $X\rightarrow Y \in F^A$, per l'assioma dell'aumento si ha $X\rightarrow 
+ XY \in F^A$. Analogamente, se $X\rightarrow Z \in F^A$, sempre per l'assioma dell'aumento si ha $XY 
+ \rightarrow YZ \in F^A$. Quindi, poiché $X \rightarrow XY \in F^A$ e $XY \rightarrow YZ \in F^A$, 
+ per l'assioma della transitività si ha $X \rightarrow YZ \in F^A$.
+ \item \emph{Regola della decomposizione.} Se $Z \subseteq Y$ allora, per l'assioma della riflessività, si ha 
+ $Y \rightarrow Z \in F^A$. Quindi, poiché $X \rightarrow Y \in F^A$ e $Y \rightarrow Z \in F^A$, per l'assioma
+ della transitività si ha $X\rightarrow Z \in F^A$.
+ \item \emph{Regola della pseudotransitività.} Se $X \rightarrow Y \in F^A$, per l'assioma dell'aumento si 
+ ha $WX \rightarrow WY \in F^A$. Quindi, poiché $WX \rightarrow WY \in F^A$ e $WY \rightarrow Z \in F^A$, 
+ per l'assioma della transitività si ha $WX\rightarrow Z \in F^A$.
+\end{itemize}
 
+Si osservi che, per la regola dell’unione, se $X\rightarrow A_i \in F^A$,$\forall i \in \{1, \ldots,n\}$, 
+allora $X \rightarrow A_1, A_2, \ldots, A_n \in F^A$ e che, per la regola della decomposizione, 
+se $X \rightarrow A_1, A_2, \ldots, A_n \in F^A$ allora $X\rightarrow A_i \in F^A$, $\forall i \in \{1, 
+\ldots, n\}$; cioè:
+\begin{center}
+ \begin{math}
+  X\rightarrow A_1, A_2, \ldots, A_n \in F^A \Leftrightarrow X \rightarrow A_i \in F^A, \forall i \in \{1, \ldots, n\}.
+ \end{math}
+\end{center}
 
+Pertanto, possiamo limitarci, quando necessario, a considerare solo dipendenze funzionali in cui il
+membro destro sia un \emph{singleton} (ovvero un solo attributo).
 
+\subsubsection{Chiusura di un insieme di attributi}
+
+Allo scopo di dimostrare che $F^+ = F^A$, introduciamo il concetto di \emph{chiusura} di un insieme di attributi
+rispetto ad un insieme di dipendenze funzionali. 
+\begin{defn}
+Siano $R$ uno schema di relazione, $F$ un insieme di dipendenze funzionali su $R$ e $X$ un sottoinsieme di $R$.
+La chiusura di $X$ rispetto ad $F$, denotata con $X^+_F$ (o semplicemente $X^+$, se non sorgono ambiguità) è 
+definita nel modo seguente: $X^+_F = \{A\ t.c.\ X \rightarrow A \in F^A\}$.
+\end{defn}
+In parole povere, la chiusura di un insieme di attributi X è l'insieme di tutti gli attributi determinati da $X$
+tramite dipendenze funzionali in $F^A$.
+
+\begin{lem}
+Siano $R$ uno schema di relazione ed $F$ un insieme di dipendenze funzionali su $R$. Si ha che:
+$X \rightarrow Y \in F^A \Leftrightarrow Y \subseteq X^+$.
+\end{lem}
+
+\textbf{Dimostrazione.} Sia $Y = A_1, A_2, \ldots, A_n$.\\
+\emph{Parte se.} Poiché $Y \subseteq X^+$, si ha che $X \rightarrow A_i \in F^A, \forall i \in \{1, \ldots, n\}$. 
+Pertanto, per la regola dell’unione, $X \rightarrow Y \in F^A$.\\
+\emph{Parte solo se.} Poiché $X \rightarrow Y \in F^A$, per la regola della decomposizione si ha che, 
+$X \rightarrow A_i \in F^A$, $\forall i \in \{1, \ldots, n\}$, cioè $A_i \in X^+, \forall i \in \{1, \ldots, n\}$ 
+e, quindi, $Y \subseteq X^+$.
+
+\subsubsection{Uguaglianza tra $F^A$ e $F^+$}
+
+Con le conoscenze acquisite finora siamo in grado di dimostrare che $F^+ = F^A$.
+\begin{theo}
+Siano $R$ uno schema di relazione ed $F$ un insieme di dipendenze funzionali su $R$. Si ha che $F^+ = F^A$.
+\end{theo}
