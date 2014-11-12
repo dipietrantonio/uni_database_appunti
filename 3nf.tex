@@ -418,5 +418,28 @@ Mostriamo che:
 \end{itemize}
 
 \subsubsection{Algoritmo per calcolare $\mathbf{X^{\boldsymbol{+}}}$}
+Per stabilire se una decomposizione preserva $F^+$, quest'ultimo va calcolato. Tale operazione potrebbe 
+tuttavia richiedere tempo esponenziale dipendente da $|F|$; se $F = \{A \rightarrow B_1, A \rightarrow B_2,
+\ldots, A \rightarrow B_n\}$, con $|F|=n$, per le regole della decomposizione e dell'unione si ha che 
+$F^+ \supseteq \{A \rightarrow Z t.c. Z \subseteq B_1B_2\ldots B_n\} e quindi $|F^+| = 2^n-1$. D'altra parte,
+per sapere se una decomposizione preserva le dipendenze, è sufficiente poter decidere se una dipendenza 
+funzionale $X \rightarrow Y in F^+$; ciò può essere fatto calcolando $X^+$ e verificando se $Y \subseteq 
+X^+$.\\ 
+Il calcolo di $X^+$ può essere fatto mediante il seguente algoritmo polinomiale.
+\begin{alg}
+\textsc{Input:} uno schema di relazione $R$, un insieme $F$ di dipendenze funzionali su $R$, un sottoinsieme
+$X$ di $R$.\\
+\textsc{Output:} $X^+_F$ nella variabile $Z$\\\\
+\textsc{Begin}\\
+$Z\vcentcolon= X$;\\
+$S\vcentcolon= \{A\ t.c.\ Y \rightarrow V \in F \wedge A \in V \wedge Y \subseteq Z\}$\\
+\textsc{while} $S$ \not\subseteq Z\\
+\indent \textsc{do}
+\indent \textsc{begin}
+\indent $Z\vcentcolon = Z \cup S$;\\
+\indent $S\vcentcolon= \{A\ t.c.\ Y \rightarrow V \in F \wedge A \in V \wedge Y \subseteq Z\}$;\\
+\indent \textsc{end}
+\textsc{end}
+\end{alg}
 
 
