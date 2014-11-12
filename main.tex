@@ -2,7 +2,8 @@
 \usepackage[utf8]{inputenc}
 \usepackage[hidelinks]{hyperref}
 \usepackage{ragged2e}
-\usepackage{amsthm,multicol,amssymb, xcolor, mdframed,lmodern,textcomp, geometry}
+\usepackage{graphicx}
+\usepackage{amsthm,amsbsy,multicol,amssymb, xcolor, mdframed,lmodern,textcomp, geometry}
  \geometry{
  a4paper,
  left=30mm,
@@ -10,6 +11,10 @@
  top=23mm,
  bottom=23mm,
  }
+
+ %comando per gli hyperlink personalizzati
+\newcommand{\linkto}[2]{\hyperref[#1]{\underline{\textsc{#2}}}}
+ 
 
 %titolo del documento%
 \title{\Huge Basi di Dati - Appunti}

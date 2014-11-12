@@ -319,10 +319,10 @@ Sia $F$ un insieme di dipendenze funzionali. Valgono le seguenti implicazioni:
  della transitività si ha $X\rightarrow Z \in F^A$.
  \item \emph{Regola della pseudotransitività.} Se $X \rightarrow Y \in F^A$, per l'assioma dell'aumento si 
  ha $WX \rightarrow WY \in F^A$. Quindi, poiché $WX \rightarrow WY \in F^A$ e $WY \rightarrow Z \in F^A$, 
- per l'assioma della transitività si ha $WX\rightarrow Z \in F^A$.
+ per l'assioma della transitività si ha $WX\rightarrow Z \in F^A$. $\Box$
 \end{itemize}
 
-Si osservi che, per la regola dell’unione, se $X\rightarrow A_i \in F^A$,$\forall i \in \{1, \ldots,n\}$, 
+Si osservi che, per la regola dell'unione, se $X\rightarrow A_i \in F^A$,$\forall i \in \{1, \ldots,n\}$, 
 allora $X \rightarrow A_1, A_2, \ldots, A_n \in F^A$ e che, per la regola della decomposizione, 
 se $X \rightarrow A_1, A_2, \ldots, A_n \in F^A$ allora $X\rightarrow A_i \in F^A$, $\forall i \in \{1, 
 \ldots, n\}$; cioè:
@@ -346,7 +346,7 @@ definita nel modo seguente: $X^+_F = \{A\ t.c.\ X \rightarrow A \in F^A\}$.
 \end{defn}
 In parole povere, la chiusura di un insieme di attributi X è l'insieme di tutti gli attributi determinati da $X$
 tramite dipendenze funzionali in $F^A$.
-
+\label{lemma4_1}
 \begin{lem}
 Siano $R$ uno schema di relazione ed $F$ un insieme di dipendenze funzionali su $R$. Si ha che:
 $X \rightarrow Y \in F^A \Leftrightarrow Y \subseteq X^+$.
@@ -354,10 +354,10 @@ $X \rightarrow Y \in F^A \Leftrightarrow Y \subseteq X^+$.
 
 \textbf{Dimostrazione.} Sia $Y = A_1, A_2, \ldots, A_n$.\\
 \emph{Parte se.} Poiché $Y \subseteq X^+$, si ha che $X \rightarrow A_i \in F^A, \forall i \in \{1, \ldots, n\}$. 
-Pertanto, per la regola dell’unione, $X \rightarrow Y \in F^A$.\\
+Pertanto, per la regola dell'unione, $X \rightarrow Y \in F^A$.\\
 \emph{Parte solo se.} Poiché $X \rightarrow Y \in F^A$, per la regola della decomposizione si ha che, 
 $X \rightarrow A_i \in F^A$, $\forall i \in \{1, \ldots, n\}$, cioè $A_i \in X^+, \forall i \in \{1, \ldots, n\}$ 
-e, quindi, $Y \subseteq X^+$.
+e, quindi, $Y \subseteq X^+$. $\Box$
 
 \subsubsection{Uguaglianza tra $F^A$ e $F^+$}
 
@@ -365,3 +365,58 @@ Con le conoscenze acquisite finora siamo in grado di dimostrare che $F^+ = F^A$.
 \begin{theo}
 Siano $R$ uno schema di relazione ed $F$ un insieme di dipendenze funzionali su $R$. Si ha che $F^+ = F^A$.
 \end{theo}
+\textbf{Dimostrazione.} Mostreremo che $F^+ \subseteq F^A$ e contemporaneamente $F^+ \subseteq F^A$, equivalente
+a dire che i due insiemi sono uguali.\\
+$\mathbf{F^{\boldsymbol{+}} \boldsymbol{\subseteq} F^A}$. Sia $X \rightarrow Y$ una dipendenza funzionale in $F^A$.
+Dimostriamo che $X\rightarrow Y \in F^+$ per induzione sul numero $i$ di applicazioni di uno degli assiomi di Armstrong.\\\\
+\emph{Base dell’induzione}: $i=0$. In tal caso $X \rightarrow Y \in F$ e quindi, banalmente, 
+$X \rightarrow Y \in F^+$.\\
+\emph{Ipotesi induttiva}: Ogni dipendenza funzionale ottenuta a partire da $F$ applicando gli assiomi di 
+Armstrong un numero di volte minore o uguale a $i–1$, con $i>0$, è in $F^+$.\\
+\emph{Passo induttivo}: all'$i$-esimo passo si ha $X \rightarrow Y$, che è il risultato di uno dei seguenti 
+tre casi:
+\begin{itemize}
+ \item  $X \rightarrow Y$ è stata ottenuta mediante l’assioma della riflessività, in tal caso $Y \subseteq X$. 
+ Sia $r$ un’istanza di $R$ e siano $t_1$ e $t_2$ due tuple di $r$ tali che $t_1[X]=t_2[X]$; banalmente si ha 
+ $t_1[Y] = t_2[Y]$. $X \rightarrow Y$ è dunque una dipendenza funzionale \emph{soddisfatta} da ogni istanza legale
+ di $R$, e per definizione fa parte di $F^+$.
+ \item $X \rightarrow Y$ è stata ottenuta applicando l’assioma dell’aumento ad una dipendenza funzionale 
+ $V \rightarrow W \in F^A$, quest'ultima già inclusa per ipotesi induttiva in $F^+$, in uno dei passaggi 
+ precenti all'attuale $i$-esimo; si ha quindi che $X = VZ$ e $Y = WZ$, per qualche $Z \subseteq R$.\\
+ Sia $r$ un’istanza legale di $R$ e siano $t_1$ e $t_2$ due tuple di $r$ tali che:
+ \begin{enumerate}
+  \item $t_1[X] = t_2[X]$; banalmente si ha che $t_1[V] = t_2[V]$ e $t_1[Z] = t_2[Z]$
+  \item per l’ipotesi induttiva da $t_1[V] = t_2[V]$ segue $t_1[W] = t_2[W]$
+  \item da $t_1[W] = t_2[W]$ e $t_1[Z] = t_2[Z]$ segue $t_1[Y] = t_2[Y]$
+ \end{enumerate}
+\item $X \rightarrow Y$ è stata ottenuta applicando l’assioma della transitività a due dipendenze funzionali 
+$X \rightarrow Z$ e $Z \rightarrow Y \in F^A$, ottenute applicando ricorsivamente gli assiomi di Armstrong 
+un numero di volte minore o uguale a $i–1$. Sia $r$ un’istanza legale di $R$ e siano $t_1$ e $t_2$ due tuple 
+di $r$ tali che $t_1[X] = t_2[X]$. Per l’ipotesi induttiva da $t_1[X] = t_2[X]$ segue $t_1[Z] = t_2[Z]$; da 
+$t_1[Z] = t_2[Z]$, ancora per l’ipotesi induttiva, segue $t_1[Y] = t_2[Y]$.
+\end{itemize}
+$\mathbf{F^A \boldsymbol{\subseteq} F^{\boldsymbol{+}}}$. Si supponga per assurdo che esista una dipendenza 
+funzionale $X \rightarrow Y \in F^+$ tale che $X \rightarrow Y \not\in F^A$. Si mostrerà che esiste 
+un’istanza legale di $R$ che non soddisfa $X \rightarrow Y$ (contraddicendo allora il fatto che $X \rightarrow Y 
+\in F^+$).\\
+Consideriamo la seguente istanza $r$ di $R$:
+\begin{center}
+\includegraphics[width=250px]{img_4_4_2.eps} 
+\end{center}
+Mostriamo che:
+\begin{itemize}
+ \item $r$ è un’istanza legale di $R$. Sia $V \rightarrow W$ una dipendenza funzionale in $F$ e supponiamo
+ per assurdo che non sia soddisfatta da $r$. In tal caso le due tuple di $r$ devono avere gli stessi valori
+ per $V$ e differenti valori per $W$; ciò implica che $V \subseteq X^+$ e $W \cap (R-X^+)\not = \emptyset$.
+ Poiché $V \subseteq X^+$, per il \linkto{lemma4_1}{Lemma 4.1}, si ha che $X \rightarrow V \in F^A$; pertanto,
+ per l’assioma della transitività, $X \rightarrow W \in F^A$ e, quindi, per il Lemma 4.1,
+ $W \subseteq X^+$ (che contraddice $W \cap (R-X^+)\not =\emptyset$).
+ \item $r$ non soddisfa $X \rightarrow Y$. Supponiamo per assurdo che $r$ soddisfi $X \rightarrow Y$. Poiché 
+ $X \subseteq X^+$ (per l’assioma della riflessività), le due tuple di $r$ coincidono sugli attributi $X$ 
+ e quindi, poiché $r$ soddisfa $X \rightarrow Y$, devono coincidere anche sugli attributi $Y$. Questo implica
+ che $Y \subseteq X^+$ e quindi, per il Lemma 4.1, che $X \rightarrow Y \in F^A$. $\Box$
+\end{itemize}
+
+\subsubsection{Algoritmo per calcolare $\mathbf{X^{\boldsymbol{+}}}$}
+
+
