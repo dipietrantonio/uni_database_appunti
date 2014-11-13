@@ -112,7 +112,7 @@ e $Y$ sottoinsiemi di $R$, con $XY$ l'insieme $X$ $\cup$ $Y$.
  Quindi $\{Matr, C\#\}$ costituisce una \emph{chiave} per Università.
 \end{exmp}
 
-Ci sono attributi che \textbf{dipendono parzialmente} dalla chiave. Nell'esempio [4.1] 
+Ci sono attributi che \textbf{dipendono parzialmente} dalla chiave. Nell'Esempio 4.1 
 \{$Titolo$, $Docente$, $C\_laurea$\} dipendono funzionalmente da $C\#$; altri attributi
 invece \textbf{dipendono transitivamente} dalla chiave, ad esempio $Prov$ dipende
 funzionalmente da $Matr$ in quanto $Matr \rightarrow Citt\grave{a} \rightarrow Prov$.\\
@@ -132,7 +132,7 @@ diciamo che:
  chiave di $R$.
 \end{itemize}
 \end{defn}
-Nell'esempio [4.1], considerando la relazione \emph{Università}, $Matr$ è primo mentre
+Nell'Esempio 4.1, considerando la relazione \emph{Università}, $Matr$ è primo mentre
  \{$Matr$, $C\#$, $Nome$\} è una superchiave.
 \begin{defn}
 Siano $R$ uno schema di relazione ed $F$ un insieme di dipendenze funzionali su $R$.
@@ -486,7 +486,7 @@ A tal fine, cominciamo con l’introdurre i concetti di \emph{decomposizione} di
 Sia $R$ uno schema di relazione. Una decomposizione di $R$ è una \emph{famiglia} $\rho = \{R_1, R_2, \ldots, 
 R_k\}$ di sottoinsiemi di $R$ che \emph{ricopre} $R$ ($\bigcup_{i=1}^k R_i = R$).
 \end{defn}
-
+\subsubsection{Equivalenza tra due insiemi di dipendenze funzionali}
 \begin{defn}
 Siano $F$ e $G$ due insiemi di dipendenze funzionali. $F$ e $G$ sono \emph{equivalenti}, in simboli $F \equiv 
 G$, se $F^+ = G^+$.
@@ -508,11 +508,11 @@ Sia $R$ uno schema di relazione, $F$ un insieme di dipendenze funzionali su $R$ 
 R_k\}$ una decomposizione di $R$. Diciamo che $\rho$ \emph{preserva} $F$ se $F \equiv \bigcup_{i=1}^k 
 \pi_{R_i}(F)$, dove $\pi_{R_i}(F) = \{X \rightarrow Y\ t.c.\ X \rightarrow Y \in F^+ \wedge XY \subseteq R_i\}$.
 \end{defn}
-
+\subsubsection{Algoritmo per verificare l'equivalenza tra F e G}
 Verificare se una decomposizione preserva un insieme di dipendenze funzionali $F$ richiede, dunque,
 che venga verificata l’equivalenza dei due insiemi di dipendenze funzionali $F$ e $G = \bigcup_{i=1}^k
 \pi_{R_i}(F)$; poiché, per definizione, $F^+ \supseteq G$, per il Lemma 2 è sufficiente verificare che $F\subseteq 
-G^+$; ciò può essere fatto con il seguente algoritmo (la cui correttezza è una banale conseguenza del Lemma 1 e
+G^+$; ciò può essere fatto con il seguente algoritmo (la cui correttezza è una banale conseguenza del Lemma 4.1 e
 del Teorema 3).
 
 \begin{alg}
@@ -528,3 +528,106 @@ $successo\vcentcolon=\ true$;\\
 \indent \textsc{end}\\
 \textsc{end}\\
 \end{alg}
+
+L’Algoritmo 2 richiede che venga calcolato $X^{+}_G$; se si volesse utilizzare a tale scopo l’Algoritmo 1
+si dovrebbe prima calcolare $G$, ma, per la definizione di $G$, ciò richiederebbe il calcolo di $F^+$ che
+richiede tempo esponenziale. Il seguente algoritmo permette di calcolare $X^{+}_G$ a partire da $F$.
+
+\begin{alg}
+\textsc{Input}: uno schema di relazione $R$, un insieme $F$ di dipendenze funzionali su $R$, una
+decomposizione $\rho =\{R_1, R_2, \ldots, R_k\}$ di $R$, un sottoinsieme $X$ di $R$;\\
+\textsc{Output}: la chiusura di $X$ rispetto a $G = \bigcup_{j=1}^k \pi_{R_j}(F)$, (nella variabile $Z$);\\\\
+\textsc{Begin}
+$Z\vcentcolon = X$;\\
+$S\vcentcolon = \emptyset$;\\
+\textsc{for} $j\vcentcolon = 1$ \textsc{to} $k$\\
+\indent$S \vcentcolon= S \cup (Z \cap R_j)^{+}_F \cap R_j$;\\
+\textsc{while} $S \not\subseteq Z$\\
+\indent \textsc{Begin}\\
+\indent $Z\vcentcolon = Z \cup S$;\\
+\indent \textsc{for} $j\vcentcolon= 1$ \textsc{to} $k$\\
+\indent \indent $S\vcentcolon= S \cup (Z \cap R_j)^{+}_F \cap R_j$;\\
+\indent \textsc{end}\\
+\textsc{end}\\
+\end{alg}
+
+\begin{theo}
+Sia $R$ uno schema di relazione, $F$ un insieme di dipendenze funzionali su $R$, $\rho =\{R_1, R_2, \ldots, R_k\}$
+una decomposizione di $R$ e $X$ un sottoinsieme di $R$. L’Algoritmo 4.3 calcola correttamente $X^{+}_G$, dove 
+$G = \bigcup_{j=1}^k \pi_{R_j}(F)$.
+\end{theo}
+\textbf{Dimostrazione.} Indichiamo con $Z^{(0)}$ il valore iniziale di $Z$ ($Z^{(0)} = X$) e con $Z^{(i)}$, $i \geq 
+1$, il valore di $Z$ dopo l’$i$-esima esecuzione dell’assegnazione $Z \vcentcolon= Z \cup S$; è facile vedere che 
+$Z^{(i)} \subseteq Z^{(i+1)}$, $\forall i$. Sia $Z^{(f)}$ il valore di $Z$ quando l’algoritmo termina; proveremo che:
+\begin{center}
+\begin{math}
+  A \in X^{+}_G \Leftrightarrow  A \in Z^{(f)} 
+\end{math}
+\end{center}
+\textbf{\emph{Parte solo se.}} Mostreremo per induzione su $i$ che $Z^{(i)} \subseteq X^{+}_G$, $\forall i$.\\
+\emph{Base dell’induzione}: $i=0$. Poiché $Z^{(0)} = X$ e $X \subseteq X^+$, si ha $Z^{(0)} \subseteq X^{+}_G$.\\
+\emph{Induzione}: $i >0$. Per l’ipotesi induttiva $Z^{(i-1)} \subseteq X^{+}_G$. Sia $A$ un attributo in $Z^{(i)}
+-Z^{(i-1)}$; in tal caso deve esistere un indice $j$ tale che $A \in (Z^{(i-1)} \cap R_j)^{+}_F \cap R_j$. Poiché
+$A \in (Z^{(i-1)} \cap R_j)^{+}_F$ si ha $(Z^{(i-1)} \cap R_j) \rightarrow A \in F^+$ (per il Teorema 4.3).\\
+Poiché $(Z^{(i-1)} \cap R_j) \rightarrow A \in F^+$, $A \in R_j$ e $Z^{(i-1)} \cap R_j \subseteq R_j$ si ha, per 
+la definizione di $G$, che $(Z^{(i-1)} \cap R_j) \rightarrow A \in G$. Poiché per l’ipotesi induttiva si ha che 
+$X \rightarrow Z^{(i-1)} \in G^+$, per la regola di decomposizione si ha anche che $X \rightarrow (Z^{(i-1)} 
+\cap R_j) \in G^+$ e, quindi, per l’assioma della transitività, che $X \rightarrow A \in G^+$, cioè $A \in X^{+}_G$.
+Quindi $Z^{(i)} \subseteq X^{+}_G$.\\
+\textbf{\emph{Parte se.}} Mostreremo che $X^{+}_G \subseteq Z^{(f)}$ tenendo conto anche della seguente proposizione:
+\begin{prop}
+Presi comunque due insiemi di attributi $X$ ed $Y$ e un insieme di dipendenze funzionali $F$ si ha, per la 
+definizione di chiusura di un insieme di attributi, $X \subseteq Y \Rightarrow X^{+}_F \subseteq Y^{+}_F$. 
+\end{prop}
+Poichè $X = Z^{(0)} \subseteq Z^{(f)}$, dalla Proposizione 4.5 segue che $X^{+}_G \subseteq (Z^{(f)})^{+}_G$. 
+Mostreremo che $Z^{(f)} = (Z^{(f)})^+_G$ da cui segue $X^+_G \subseteq Z^{(f)}.$\\
+Supponiamo per assurdo che $Z^{(f)}\not =(Z^{(f)})^+_G$. Consideriamo l’Algoritmo 4.1 che, per evitare ambiguità,
+riscriviamo sostituendo la variabile $W$ alla variabile $Z$ e la variabile $U$ alla variabile $S$:\\
+
+\noindent\textsc{Input:} uno schema di relazione $R$, un insieme $F$ di dipendenze funzionali su $R$, un sottoinsieme
+$X$ di $R$.\\
+\textsc{Output:} $X^+_F$ nella variabile $W$\\\\
+\textsc{Begin}\\
+$W\vcentcolon= X$;\\
+$U\vcentcolon= \{A\ t.c.\ Y \rightarrow V \in F \wedge A \in V \wedge Y \subseteq W\}$;\\
+\textsc{while} $U \not \subseteq W$\\
+\indent \textsc{begin}\\
+\indent $W\vcentcolon = W \cup U$;\\
+\indent $U\vcentcolon= \{A\ t.c.\ Y \rightarrow V \in F \wedge A \in V \wedge Y \subseteq W\}$;\\
+\indent \textsc{end}\\
+\textsc{end}\\
+
+Se eseguiamo tale algoritmo fornendo in input l’insieme di attributi $Z^{(f)}$ e l’insieme di dipendenze 
+funzionali $G$, al termine la variabile $W$ conterrà $(Z^{(f)})^+_G$. Se, come abbiamo supposto per assurdo,
+$Z^{(f)}\not =(Z^{(f)})^+_G$, deve esistere un attributo $B$ che appartiene a $U^{(0)}$ e non appartiene 
+a $W^{(0)} =Z^{(f)}$ (altrimenti si avrebbe $Z^{(f)} =(Z^{(f)})^+_G$). D’altra parte si ha:
+\begin{center}
+\begin{math}
+U^{(0)} = \{A\ t.c.\ Y \rightarrow V \in G \wedge A \in V \wedge Y \subseteq W^{(0)}\}
+\end{math}
+\end{center}
+e quindi, per la definizione di $G$, deve esistere $j$ tale che:
+\begin{center}
+ \begin{math}
+  B \in \{A\ t.c.\ Y \rightarrow V \in F^+ \wedge A \in V \wedge Y \subseteq W^{(0)} \wedge YV \subseteq R_j\}
+ \end{math}
+\end{center}
+Da $Y \subseteq W^{(0)} \wedge YV \subseteq R_j$ segue che:
+\begin{center}
+ \begin{math}
+  [a]\ Y \subseteq W^{(0)} \cap R_j = Z^{(f)} \cap R_j
+ \end{math}
+\end{center}
+Inoltre dal fatto che $Y \rightarrow V \in F^+$ segue, per il \linkto{lemma4_1}{Lemma 4.1}, che $V \subseteq Y^+_F$
+e, quindi, per la [a] e per la Proposizione 4.5 si ha che $V \subseteq (Z^(f) \cap R_j)^+_F$. Infine 
+poichè $YV \subseteq R_j$ si ha:
+\begin{center}
+ \begin{math}
+ V \subseteq (Z^{(f)} \cap R_j)^+_F \cap R_j
+ \end{math}
+\end{center}
+Poiché $B \in V$ si ha che $B \in (Z^{(f)} \cap R_j)^+_F \cap R_j$ e quindi $B \in S^{(f)}$. Poiché $B$ non 
+appartiene a $Z^{(f)}$ (per l’ipotesi per assurdo), $Z^{(f)}$ non può essere il valore finale di $Z$ 
+(contraddizione). \hfill $\Box$
+
+
