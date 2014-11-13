@@ -163,7 +163,7 @@ superchiave due casi (mutuamente esclusivi) sono possibili:
  \item o per ogni chiave $K$ di $R$, $X$ non è contenuto propriamente in $K$ e $K-X \neq 
  \emptyset$; in tal caso $X\rightarrow A$ è una dipendenza transitiva su $R$ (contraddizione)
  \item oppure esiste una chiave $K$ di $R$ t.c. $X \subset K$; in tal caso $X\rightarrow A$ 
- è una dipendenza parziale su $R$ (contraddizione). $\Box$
+ è una dipendenza parziale su $R$ (contraddizione).\hfill $\Box$
 \end{itemize}
 Un obbiettivo da tenere presente quando si progetta una base di dati è quello di produrre 
 uno schema in cui ogni relazione sia in 3NF. Nella fase di progettazione concettuale si 
@@ -275,12 +275,13 @@ Una decomposizione di uno schema di relazione deve avere i seguenti requisiti:
 \end{itemize} 
 \end{prop}
 
-\subsection{Decomposizioni che preservano le dipendenze}
+\subsection{Chiusura di un insieme di dipendenze funzionali}
 Quando si decompone uno schema di relazione in $R$ su cui è definito un insieme di 
 dipendenze funzionali $F$, le dipendenze funzionali che si vogliono preservare sono
 tutte quelle che sono soddisfatte da ogni istanza legale di $R$, cioè le dipendenze
 funzionali in $F^+$; sarà quindi necessario calcolare tale insieme.
 
+\subsubsection{L'insieme $F^A$}
 \begin{defn}
 Sia $R$ uno schema di relazione e $F$ un insieme di dipendenze funzionali. Sia $F^A$ l'insieme
 di dipendenze funzionali definito nel modo seguente:
@@ -319,7 +320,7 @@ Sia $F$ un insieme di dipendenze funzionali. Valgono le seguenti implicazioni:
  della transitività si ha $X\rightarrow Z \in F^A$.
  \item \emph{Regola della pseudotransitività.} Se $X \rightarrow Y \in F^A$, per l'assioma dell'aumento si 
  ha $WX \rightarrow WY \in F^A$. Quindi, poiché $WX \rightarrow WY \in F^A$ e $WY \rightarrow Z \in F^A$, 
- per l'assioma della transitività si ha $WX\rightarrow Z \in F^A$. $\Box$
+ per l'assioma della transitività si ha $WX\rightarrow Z \in F^A$. \hfill $\Box$
 \end{itemize}
 
 Si osservi che, per la regola dell'unione, se $X\rightarrow A_i \in F^A$,$\forall i \in \{1, \ldots,n\}$, 
@@ -349,7 +350,7 @@ tramite dipendenze funzionali in $F^A$.
 \label{lemma4_1}
 \begin{lem}
 Siano $R$ uno schema di relazione ed $F$ un insieme di dipendenze funzionali su $R$. Si ha che:
-$X \rightarrow Y \in F^A \Leftrightarrow Y \subseteq X^+$.
+$Y \subseteq X^+\Leftrightarrow X \rightarrow Y \in F^A$.
 \end{lem}
 
 \textbf{Dimostrazione.} Sia $Y = A_1, A_2, \ldots, A_n$.\\
@@ -357,11 +358,12 @@ $X \rightarrow Y \in F^A \Leftrightarrow Y \subseteq X^+$.
 Pertanto, per la regola dell'unione, $X \rightarrow Y \in F^A$.\\
 \emph{Parte solo se.} Poiché $X \rightarrow Y \in F^A$, per la regola della decomposizione si ha che, 
 $X \rightarrow A_i \in F^A$, $\forall i \in \{1, \ldots, n\}$, cioè $A_i \in X^+, \forall i \in \{1, \ldots, n\}$ 
-e, quindi, $Y \subseteq X^+$. $\Box$
+e, quindi, $Y \subseteq X^+$. \hfill $\Box$
 
 \subsubsection{Uguaglianza tra $F^A$ e $F^+$}
 
 Con le conoscenze acquisite finora siamo in grado di dimostrare che $F^+ = F^A$.
+\label{teorema4_3}
 \begin{theo}
 Siano $R$ uno schema di relazione ed $F$ un insieme di dipendenze funzionali su $R$. Si ha che $F^+ = F^A$.
 \end{theo}
@@ -414,16 +416,16 @@ Mostriamo che:
  \item $r$ non soddisfa $X \rightarrow Y$. Supponiamo per assurdo che $r$ soddisfi $X \rightarrow Y$. Poiché 
  $X \subseteq X^+$ (per l’assioma della riflessività), le due tuple di $r$ coincidono sugli attributi $X$ 
  e quindi, poiché $r$ soddisfa $X \rightarrow Y$, devono coincidere anche sugli attributi $Y$. Questo implica
- che $Y \subseteq X^+$ e quindi, per il Lemma 4.1, che $X \rightarrow Y \in F^A$. $\Box$
+ che $Y \subseteq X^+$ e quindi, per il Lemma 4.1, che $X \rightarrow Y \in F^A$. \hfill $\Box$
 \end{itemize}
 
-\subsubsection{Algoritmo per calcolare $\mathbf{X^{\boldsymbol{+}}}$}
+\subsubsection{Algoritmo per calcolare $X^+$}
 Per stabilire se una decomposizione preserva $F^+$, quest'ultimo va calcolato. Tale operazione potrebbe 
 tuttavia richiedere tempo esponenziale dipendente da $|F|$; se $F = \{A \rightarrow B_1, A \rightarrow B_2,
 \ldots, A \rightarrow B_n\}$, con $|F|=n$, per le regole della decomposizione e dell'unione si ha che 
-$F^+ \supseteq \{A \rightarrow Z t.c. Z \subseteq B_1B_2\ldots B_n\} e quindi $|F^+| = 2^n-1$. D'altra parte,
+$F^+ \supseteq \{A \rightarrow Z\ t.c.\ Z \subseteq B_1B_2\ldots B_n\}$ e quindi $|F^+| = 2^n-1$. D'altra parte,
 per sapere se una decomposizione preserva le dipendenze, è sufficiente poter decidere se una dipendenza 
-funzionale $X \rightarrow Y in F^+$; ciò può essere fatto calcolando $X^+$ e verificando se $Y \subseteq 
+funzionale $X \rightarrow Y \in F^+$; ciò può essere fatto calcolando $X^+$ e verificando se $Y \subseteq 
 X^+$.\\ 
 Il calcolo di $X^+$ può essere fatto mediante il seguente algoritmo polinomiale.
 \begin{alg}
@@ -432,14 +434,97 @@ $X$ di $R$.\\
 \textsc{Output:} $X^+_F$ nella variabile $Z$\\\\
 \textsc{Begin}\\
 $Z\vcentcolon= X$;\\
-$S\vcentcolon= \{A\ t.c.\ Y \rightarrow V \in F \wedge A \in V \wedge Y \subseteq Z\}$\\
-\textsc{while} $S$ \not\subseteq Z\\
-\indent \textsc{do}
-\indent \textsc{begin}
+$S\vcentcolon= \{A\ t.c.\ Y \rightarrow V \in F \wedge A \in V \wedge Y \subseteq Z\}$;\\
+\textsc{while} $S \not \subseteq Z$\\
+\indent \textsc{begin}\\
 \indent $Z\vcentcolon = Z \cup S$;\\
 \indent $S\vcentcolon= \{A\ t.c.\ Y \rightarrow V \in F \wedge A \in V \wedge Y \subseteq Z\}$;\\
-\indent \textsc{end}
-\textsc{end}
+\indent \textsc{end}\\
+\textsc{end}\\
 \end{alg}
 
+\begin{theo}
+L'Algoritmo 4.1 calcola correttamente la chiusura di un insieme di attributi $X$ rispetto ad un insieme $F$ 
+di dipendenze funzionali.
+\end{theo}
+\textbf{Dimostrazione.} Si indichi con $Z^{(0)}$ il valore iniziale di $Z$ (ovvero $Z^{(0)} = X$) e con 
+$Z^{(i)}$ ed $S^{(i)}$, $i \geq 1$, i valori di $Z$ ed $S$ dopo l'$i$-esima esecuzione del corpo del ciclo; 
+\`e facile vedere che $Z^{(i)} \subseteq Z^{(i+1)}$, $\forall i$. Sia $j$ tale che $S^{(j)} \subseteq Z^{(j)}$
+(cio\`e $Z^{(j)}$ \`e il valore di $Z$ quando l'algoritmo termina); si proverà che:
+\begin{center}
+ \begin{math}
+   A \in X^+ \Leftrightarrow A \in Z^{(j)}
+ \end{math}
+\end{center}
+\emph{\textbf{Parte solo se.}} Verrà dimostrato per induzione su $i$ che $Z^{(i)} \subseteq X^+$, $\forall i$, 
+e quindi, in particolare $Z^{(j)} \subseteq X^+$.\\
+\emph{Base dell’induzione}: $i=0$. Poiché $Z^{(0)} = X$ e $X\subseteq X^+$, si ha $Z^{(0)} \subseteq X^+$.\\
+\emph{Induzione}: $i>0$. Per l’ipotesi induttiva $Z^{(i-1)} \subseteq X^+$. Sia $A$ un attributo in $Z^{(i)}
+-Z^{(i-1)}$; deve esistere una dipendenza $Y \rightarrow V \in F$ tale che $Y\subseteq Z^{(i-1)}$ e $A \in V$.
+Poiché $Y \subseteq Z^{(i-1)}$, per l’ipotesi induttiva si ha che $Y \subseteq X^+$; pertanto, per il 
+\linkto{lemma4_1}{Lemma 4.1}, $X \rightarrow Y \in F^A$. Poiché $X \rightarrow Y \in F^A$ e $Y \rightarrow V
+\in F$, per l’assioma della transitività si ha $X \rightarrow V \in F^A$ e quindi, per il Lemma 4.1, $V 
+\subseteq X^+$. Pertanto, $\forall A \in Z^{(i)} -Z^{(i-1)}$ si ha $A \in X^+$. Da ciò segue, per l’ipotesi 
+induttiva, che $Z^{(i)} \subseteq X^+$.\\
+\emph{\textbf{Parte se.}} Sia $A$ un attributo in $X^+$. Mostreremo che $A \in Z^{(j)}$. Poiché $A \in X^+$,
+si ha $X \rightarrow A \in F^+$ (per il \linkto{teorema4_3}{Teorema 4.3}); pertanto $X \rightarrow A$ deve 
+essere soddisfatta da ogni istanza legale di $R$. Si consideri la seguente istanza $r$ di $R$:
+\begin{center}
+ \includegraphics[width=250px]{img_4_4_3.eps}
+\end{center}
+Mostriamo che $r$ è un’istanza legale di $R$. Infatti, se, per assurdo, esistesse in $F$ una dipendenza
+funzionale $V \rightarrow W$ non soddisfatta da $r$, si dovrebbe avere $V \subseteq Z^{(j)}$ e $W \cap 
+(R-Z^{(j)})\not = \emptyset$; ma, in tal caso, si avrebbe $S^{(j)} \not \subseteq Z^{(j)}$ (contraddizione).
+Poiché $r$ è un’istanza legale di $R$ deve soddisfare $X \rightarrow A$; ma, allora, poiché $X = Z^{(0)} 
+\subseteq Z^{(j)}$, $A$ deve essere in $Z^{(j)}$.\hfill $\Box$
 
+\subsection{Decomposizioni che preservano le dipendenze funzionali}
+Si vuole ora formalizzare il concetto di decomposizione che ``preserva un insieme di dipendenze funzionali''.
+A tal fine, cominciamo con l’introdurre i concetti di \emph{decomposizione} di uno schema di relazione ed 
+\emph{equivalenza} tra due insiemi di dipendenze funzionali.\\
+\begin{defn}
+Sia $R$ uno schema di relazione. Una decomposizione di $R$ è una \emph{famiglia} $\rho = \{R_1, R_2, \ldots, 
+R_k\}$ di sottoinsiemi di $R$ che \emph{ricopre} $R$ ($\bigcup_{i=1}^k R_i = R$).
+\end{defn}
+
+\begin{defn}
+Siano $F$ e $G$ due insiemi di dipendenze funzionali. $F$ e $G$ sono \emph{equivalenti}, in simboli $F \equiv 
+G$, se $F^+ = G^+$.
+\end{defn}
+Verificare l’equivalenza di due insiemi $F$ e $G$ di dipendenze funzionali richiede dunque che venga verificata
+l’uguaglianza di $F^+$ e $G^+$, cioè che $F^+ \subseteq G^+$ e contemporaneamente $F^+ \supseteq G^+$. Come 
+detto in precedenza, calcolare la chiusura di un insieme di dipendenze funzionali può richiedere tempo 
+esponenziale. Il seguente lemma ci permette tuttavia di verificare l’equivalenza dei due insiemi di dipendenze
+funzionali in tempo polinomiale.
+\begin{lem}
+Siano $F$ e $G$ due insiemi di dipendenze funzionali. $F \subseteq G^+ \Rightarrow F^+ \subseteq G^+$. 
+\end{lem}
+\textbf{Dimostrazione.} Sia $f \in (F^+ -F)$. Poiché, per il \linkto{teorema4_3}{Teorema 4.3}, $f$ è derivabile
+da $F$ mediante gli assiomi di Armstrong e ogni dipendenza funzionale in $F$ è derivabile da $G$ mediante gli 
+assiomi di Armstrong, $f$ è derivabile da $G$ mediante gli assiomi di Armstrong. \hfill $\Box$
+
+\begin{defn}
+Sia $R$ uno schema di relazione, $F$ un insieme di dipendenze funzionali su $R$ e $\rho = \{R_1, R_2, \ldots,
+R_k\}$ una decomposizione di $R$. Diciamo che $\rho$ \emph{preserva} $F$ se $F \equiv \bigcup_{i=1}^k 
+\pi_{R_i}(F)$, dove $\pi_{R_i}(F) = \{X \rightarrow Y\ t.c.\ X \rightarrow Y \in F^+ \wedge XY \subseteq R_i\}$.
+\end{defn}
+
+Verificare se una decomposizione preserva un insieme di dipendenze funzionali $F$ richiede, dunque,
+che venga verificata l’equivalenza dei due insiemi di dipendenze funzionali $F$ e $G = \bigcup_{i=1}^k
+\pi_{R_i}(F)$; poiché, per definizione, $F^+ \supseteq G$, per il Lemma 2 è sufficiente verificare che $F\subseteq 
+G^+$; ciò può essere fatto con il seguente algoritmo (la cui correttezza è una banale conseguenza del Lemma 1 e
+del Teorema 3).
+
+\begin{alg}
+\textsc{Input:} due insiemi $F$ e $G$ di dipendenze funzionali su $R$;\\
+\textsc{Output:} la variabile \emph{successo} che avrà valore \textsc{true} se $F\subseteq G^+$, \textsc{false}
+altrimenti;\\
+\textsc{Begin}\\
+$successo\vcentcolon=\ true$;\\
+\textsc{for each} $X \rightarrow Y \in F$\\
+\indent \textsc{begin}\\
+\indent $calcola\ X_{G}^+$;\\
+\indent \textsc{if} $Y \not\subseteq X^+_G$ \textsc{then} $successo=false$;\\
+\indent \textsc{end}\\
+\textsc{end}\\
+\end{alg}
