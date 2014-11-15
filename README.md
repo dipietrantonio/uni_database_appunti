@@ -3,11 +3,11 @@ Appunti di Basi di Dati
 Corso: Informatica
 Università La Sapienza
 
-<a href="https://github.com/Halolegend94/uni_database_appunti/blob/master/main.pdf?raw=true">DOWNLOAD PDF</a>\\
+<a href="https://github.com/Halolegend94/uni_database_appunti/blob/master/main.pdf?raw=true">DOWNLOAD PDF</a>
 
 1 Novembre 2014
-Con questo progetto si intende raccogliere in un unico documento PDF tutto il materiale utile per superare l'esame di Basi di Dati tenuto dalla professoressa Moscarini. \\
-Il codice sorgente è scritto in LaTeX, per una migliore qualità del documento e per future modifiche e aggiunte da parte di terzi.\\
+Con questo progetto si intende raccogliere in un unico documento PDF tutto il materiale utile per superare l'esame di Basi di Dati tenuto dalla professoressa Moscarini. 
+Il codice sorgente è scritto in LaTeX, per una migliore qualità del documento e per future modifiche e aggiunte da parte di terzi.
 
 Il file principale è il main.tex che importa gli altri. Ogni altro file .tex rappresenta una "section" degli appunti.
 
