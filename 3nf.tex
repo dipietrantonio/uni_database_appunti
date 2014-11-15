@@ -496,6 +496,7 @@ l'uguaglianza di $F^+$ e $G^+$, cioè che $F^+ \subseteq G^+$ e contemporaneamen
 detto in precedenza, calcolare la chiusura di un insieme di dipendenze funzionali può richiedere tempo 
 esponenziale. Il seguente lemma ci permette tuttavia di verificare l'equivalenza dei due insiemi di dipendenze
 funzionali in tempo polinomiale.
+\label{lemma4_2}
 \begin{lem}
 Siano $F$ e $G$ due insiemi di dipendenze funzionali. $F \subseteq G^+ \Rightarrow F^+ \subseteq G^+$. 
 \end{lem}
@@ -703,23 +704,210 @@ Sia $R$ uno schema di relazione, $F$ un insieme di dipendenze funzionali su $R$ 
 una decomposizione di $R$. L'Algoritmo 4.4 decide correttamente se $\rho$ ha un join senza perdita.
 \end{theo}
 \textbf{Dimostrazione.} Occorre dimostrare che: quando l'algoritmo termina la tabella r ha una tupla con tutte `a' 
-$Leftrightarrow$ $\rho$ ha un join senza perdita. Verrà dimostrata solo la parte ``solo se'' (per uno sketch della 
-prova della parte “se” consultare il testo di Ullman).\\
+$\Leftrightarrow$ $\rho$ ha un join senza perdita. Verrà dimostrata solo la parte ``solo se'' (per uno sketch della 
+prova della parte ``se'' consultare il testo di Ullman).\\
 \emph{Parte solo se.} Supponiamo per assurdo $\rho$ abbia un join senza perdita e che quando l'algoritmo
 termina la tabella $r$ non abbia una tupla con tutte `a'. La tabella $r$ può essere interpretata come
-un'istanza legale di $R$ (basta sostituire ai simboli `a' e ``b' valori presi dai domini dei corrispondenti
+un'istanza legale di $R$ (basta sostituire ai simboli `a' e `b' valori presi dai domini dei corrispondenti
 attributi in modo tale che ad uno stesso simbolo venga sostituito lo stesso valore) in quanto
 l'algoritmo termina quando non ci sono più violazioni delle dipendenze in $F$. Poiché nessun
-simbolo 'a' che compare nella tabella costruita inizialmente viene mai modificato dall'algoritmo,
-per ogni $i \in \{1, \ldots k\}$, $\pi_{R_i}(r)$ contiene una tupla con tutte 'a'; pertanto $m_\rho(r)$ contiene una 
+simbolo `a' che compare nella tabella costruita inizialmente viene mai modificato dall'algoritmo,
+per ogni $i \in \{1, \ldots k\}$, $\pi_{R_i}(r)$ contiene una tupla con tutte `a'; pertanto $m_\rho(r)$ contiene una 
 tupla con tutte `a' e, quindi, $m_\rho(r) \not= r$ (contraddizione).
 \begin{cor}
 Sia $R$ uno schema di relazione, $F$ un insieme di dipendenze funzionali su $R$ e $\rho = \{R_1, R_2\}$
 una decomposizione di $R$.
 \begin{center}
-$(R_1 \cap R_2) \rightarrow (R_1 - R_2) \vee (R_1 \cap R_2) \rightarrow (R_2 -R_1) \Rightarrow \rho$ ha un join senza perdita.                            
+$(R_1 \cap R_2) \rightarrow (R_1 - R_2) \vee (R_1 \cap R_2) \rightarrow (R_2 -R_1) \Rightarrow \rho$ ha un join senza 
+perdita.                            
 \end{center}
 \end{cor}
 
+\subsection{Decomposizioni in 3NF che conservano la dipendenze funzionali e hanno un join senza perdita}
 
+In questo paragrafo mostreremo che: 
+\begin{prop}
+Dato uno schema di relazione $R$ e un insieme di dipendenze funzionali $F$ su $R$ esiste sempre una decomposizione
+$\rho = \{R_1, R_2, \ldots, R_k\}$ di $R$ tale che:
+\begin{itemize}
+ \item $\forall i, i \in \{1, \ldots, k\}$, $R_i$ è in 3NF;
+ \item preserva $F$;
+ \item $\rho$ ha un join senza perdita
+\end{itemize}
+e che una tale decomposizione può essere calcolata in tempo polinomiale. 
+\end{prop}
 
+A tal fine abbiamo bisogno di introdurre il concetto di copertura minimale di un insieme di dipendenze funzionali.
+\begin{defn}
+Sia $F$ un insieme di dipendenze funzionali. Una \emph{copertura minimale} di $F$ è un insieme $G$ di dipendenze 
+funzionali equivalente ad $F$ tale che:
+\begin{enumerate}
+ \item per ogni dipendenza funzionale in $G$ la parte destra è un singleton, cioè è costituita da un unico
+attributo (ogni attributo nella parte destra è non ridondante);
+ \item $\not\exists X \rightarrow A \in G\ t.c.\ \exists X' \subseteq X\ t.c.\ G \equiv G - \{X \rightarrow A\} 
+ \cup \{X' \rightarrow A\}$ (ogni attributo nella parte sinistra è non ridondante);
+ \item $\not\exists X \rightarrow A \in G\ t.c.\ G \equiv G - \{X \rightarrow A\}$ (ogni dipendenza è non ridondante). 
+\end{enumerate}
+\end{defn}
+Per ogni insieme di dipendenze funzionali $F$ esiste una copertura minimale che può essere ottenuta in tempo polinomiale
+a partire dall'insieme $G$ equivalente ad $F$ in cui per ogni dipendenza funzionale la parte destra è un singleton 
+($G$ esiste sempre per la regola della decomposizione)
+\begin{itemize}
+ \item prima sostituendo ricorsivamente ogni dipendenza funzionale $A_1, \ldots, A_{i-1}, A_i, A_{i+1}, \ldots, A_n 
+ \rightarrow A\}$ tale che $G \equiv G - \{A_1, \ldots, A_{i-1}, A_i, A_{i+1}, \ldots, A_n \rightarrow A\} \cup 
+ \{A_1, \ldots, A_{i-1}, A_{i+1}, \ldots, A_n \rightarrow A\}$ con la dipendenza funzionale $\{A_1, \ldots, A_{i-1}, A_{i+1},
+ \ldots, A_n \rightarrow A\}$
+ \item e successivamente eliminando ricorsivamente ogni dipendenza funzionale $X \rightarrow A\ t.c.\ G \equiv G- 
+ \{X \rightarrow A\}$.
+\end{itemize}
+
+Il seguente algoritmo, dato uno schema di relazione $R$ e un insieme di dipendenze funzionali $F$ su $R$, che è una 
+copertura minimale, permette di calcolare in tempo polinomiale una decomposizione $\rho = \{R_1, R_2, \ldots, R_k\}$ 
+di $R$ tale che:
+\begin{itemize}
+ \item $\forall i \in \{1, \ldots, k\}$, $R_i$ è in 3NF;
+ \item $\rho$ preserva $F$.
+\end{itemize}
+
+\begin{alg}
+ \textsc{Input}: uno schema di relazione $R$ e un insieme $F$ di dipendenze funzionali su $R$, che è una copertura
+ minimale;\\
+ \textsc{Output}: una decomposizione $\rho$ di $R$ che preserva $F$ e tale che per ogni schema di relazione in è 
+ in 3NF;\\\\
+ \textsc{begin}\\
+ $S\vcentcolon= \emptyset$;\\
+ \textsc{for each} $A \in R$ tale che $A$ non è coinvolto in nessuna dipendenza funzionale in $F$ \textsc{do}\\
+ \indent $S\vcentcolon= S \cup \{A\}$;\\
+ \textsc{if} $S \not= \emptyset$ \textsc{then}\\
+\indent \textsc{begin}\\
+\indent $R\vcentcolon= R-S$;\\
+\indent $\rho\vcentcolon=\rho \cup \{S\}$;\\
+\indent \textsc{end}\\
+\textsc{if} esiste una dipendenza funzionale in $F$ che coinvolge tutti gli attributi in $R$ \textsc{then}\\
+\indent $\rho\vcentcolon= \rho \cup \{R\}$;\\
+\textsc{else}\\
+\indent \textsc{for each} $X \rightarrow A \in F$ \textsc{do} $\rho\vcentcolon= \rho \cup \{XA\}$\\
+\textsc{end}\\
+\end{alg}
+
+\begin{theo}
+Sia $R$ uno schema di relazione ed $F$ un insieme di dipendenze funzionali su $R$, che è una copertura minimale. 
+L'Algoritmo 4.5 permette di calcolare in tempo polinomiale una decomposizione $\rho$ di $R$ tale che:
+\begin{enumerate}
+ \item ogni schema di relazione in $\rho$ è in 3NF
+ \item preserva $F$.
+\end{enumerate}
+\end{theo}
+\textbf{Dimostrazione.}\\
+\emph{$\rho$ preserva $F$.} Sia $G = \bigcup_{i=1}^k \pi_{R_i}(F)$. Poiché per ogni dipendenza funzionale $X 
+\rightarrow A \in F$ si ha che $XA \in \rho$, si ha che $G \supseteq F$ e, quindi $G^+ \supseteq F^+$. 
+L'inclusione $G^+ \subseteq F^+$ è banalmente verificata in quanto per definizione, $G\subseteq F?+$. \\
+\emph{Ogni schema di relazione in $\rho$ è in 3NF.}
+Se $S \in \rho$, ogni attributo in $S$ fa parte della chiave e quindi, banalmente, $S$ è in 3NF. Se $R \in \rho$
+esiste una dipendenza funzionale in $F$ che coinvolge tutti gli attributi in $R$. Poiché $F$ è una copertura minimale
+tale dipendenza avrà la forma $R-A \rightarrow A$; poiché $F$ è una copertura minimale, non ci può essere una 
+dipendenza funzionale $X \rightarrow A \in F^+\ t.c.\ X \subset R-A$ e, quindi, $R-A$ è chiave in $R$.
+Sia $Y \rightarrow B$ una qualsiasi dipendenza in $F^+$; se $B = A$ allora, poiché $F$ è una copertura minimale, 
+$Y = R-A$ (cioè, $Y$ è una superchiave); se $B \not= A$ allora $B \in R-A$ e quindi $B$ è primo.
+Se $XA \in \rho$, poiché $F$ è una copertura minimale, non ci può essere una dipendenza funzionale $X' \rightarrow A 
+\in F^+\ t.c.\ X' \subset X$ e, quindi, $X$ è chiave in $XA$. Sia $Y \rightarrow B$ una qualsiasi dipendenza in $F^+$ 
+tale che $YB \subseteq XA$; se $B = A$ allora, poiché $F$ è una copertura minimale, $Y = X$ (cioè, $Y$ è una 
+superchiave); se $B \not= A$ allora $B \in X$ e quindi $B$ è primo.
+
+\begin{theo}
+Sia $R$ uno schema di relazione, $F$ un insieme di dipendenze funzionali su $R$, che è una copertura minimale e $\rho$
+la decomposizione di $R$ prodotta dall'Algoritmo 4.5. La decomposizione $\sigma = \rho \cup \{K\}$, dove $K$ è una 
+chiave per $R$, è tale che:
+\begin{enumerate}
+ \item ogni schema di relazione in $\sigma$ è in 3NF
+ \item $\sigma$ preserva $F$
+ \item $\sigma$ ha un join senza perdita. 
+\end{enumerate}
+\end{theo}
+\textbf{Dimostrazione.}\\
+\emph{$\sigma$ preserva $F$}. Sia $\sigma =\{R_1, R_2, \ldots, R_k, R_{k+1}\}$ dove $\rho=\{R_1, R_2, \ldots, R_k\}$ 
+è la decomposizione ottenuta mediante l'Algoritmo 4.5 e $R_{k+1} = K$. Sia $G'= \bigcup_{i=1}^{k+1}\{X\rightarrow Y 
+\in F^+\ t.c.\ XY \in R_i\}$. Poiché per il Teorema 4.8 $F\equiv G$, dove $G = \bigcup_{i=1}^k \{X\rightarrow Y\in F^+
+\ t.c.\ XY\in R_i\}$, è sufficiente dimostrare che $G\equiv G'$, cioè, per il \linkto{lemma4_2}{Lemma 2}, che 
+$G\subseteq (G')^+$ e $G'\subseteq G^+$. Infatti, $G\subseteq G'$ e quindi $G\subseteq (G')^+$. Inoltre, per 
+definizione, $G' \subseteq F^+$; poiché $F^+ =G^+$, si ha che $G'\subseteq G^+$.\\
+\emph{Ogni schema di relazione in $\sigma$ è in 3NF}. Poiché $\sigma =\rho \cup \{K\}$, è sufficiente verificare che 
+lo schema di relazione $K$ è in 3NF. Mostriamo che $K$ è chiave per lo schema $K$. Supponiamo per assurdo che
+$K$ non sia chiave per lo schema $K$; allora esiste un sottoinsieme proprio $K' \subset K$ tale che $K'\rightarrow 
+K \in F^+$; poiché $K$ è chiave per lo schema $R$, $K\rightarrow R \in F^+$; pertanto per transitività $K'\rightarrow
+R \in F^+$, che contraddice il fatto che $K$ è chiave per lo schema $R$. Pertanto, è chiave per lo schema $K$ e quindi per
+ogni dipendenza funzionale $X \rightarrow A \in F^+$ con $XA \subseteq K$, $A$ è primo.\\
+\emph{$\sigma$ ha un join senza perdita.} Supponiamo che l'ordine in cui gli attributi in $R-K$ vengono aggiunti a
+$Z$ dall'Algoritmo 4.1 quando calcola $K^+$ sia $A_1, A_2, \ldots, A_n$, e supponiamo che per ogni $i \in 
+\{1, \ldots, n\}$, l'attributo $A_i$ venga aggiunto a $Z$ a causa della presenza in $F$ della dipendenza $Y_i 
+\rightarrow A_i$ dove 
+\begin{center}
+$Y_i \rightarrow Z^{(i-1)} = KA_1A_2\ldots A_{i-1} \subseteq K^+$. 
+\end{center}
+
+Per dimostrare che $\rho$ ha un join senza perdita mostreremo che quando l'Algoritmo 4.4 è applicato a $\rho$
+viene prodotta una tabella che ha una riga con tutte `a'. Senza perdita di generalità, supponiamo che l'Algoritmo 4.4
+esamini le dipendenze funzionali $Y_1 \rightarrow A_1, Y_2 \rightarrow A_2, \ldots, Y_n \rightarrow A_n$ in questo ordine.
+Dimostreremo per induzione su $i$ che dopo che è stata considerata la dipendenza funzionale $Y_i \rightarrow A_i$ nella 
+riga che corrisponde allo schema di relazione $K$ c'è una `a' in ogni colonna $j$ con $j \leq i$.\\
+\emph{Base dell'induzione}: $i=1$. Poiché $Y_1 \subseteq Z^{(0)} = K$, sia nella riga che corrisponde allo schema di
+relazione $Y_1A_1$ che in quella che corrisponde allo schema di relazione $K$ ci sono tutte `a' in corrispondenza
+agli attributi in $Y_1$; inoltre nella riga che corrisponde allo schema di relazione $Y_1A_1$ c'è una `a' in
+corrispondenza ad $A_1$. Pertanto l'Algoritmo 4.4 pone una `a' in corrispondenza ad $A_1$ nella riga che corrisponde 
+allo schema di relazione $K$.\\ 
+\emph{Induzione}: $i > 1$. Per l'ipotesi induttiva, nella riga che corrisponde allo schema di relazione $K$ c'è una
+`a' in corrispondenza ad ogni attributo $A_j$ con $j \leq i-1$. Poiché $Y_i \subseteq KA_1A_2\ldots A_{i-1}$, sia nella
+riga che corrisponde allo schema di relazione $Y_iA_i$ che in quella che corrisponde allo schema di relazione $K$ ci sono
+tutte `a' in corrispondenza agli attributi in $Y_i$; inoltre nella riga che corrisponde allo schema di relazione $Y_iA_i$
+c'è una `a' in corrispondenza ad $A_i$. Pertanto l'Algoritmo 4.4 pone una `a' in corrispondenza ad $A_i$ nella riga che 
+corrisponde allo schema di relazione $K$.\hfill $\Box$
+
+\subsection{La forma normale di Boyce-Codd}
+Successivamente alla terza forma normale sono state definite altre forme normali per gli schemi di relazione, alcune delle 
+quali sono basate su vincoli (dipendenze multivalore e dipendenze di join) più generali delle dipendenze funzionali. Una 
+forma normale che ancora si basa sul concetto di dipendenza funzionale è la cosidetta forma normale di Boyce-Codd.
+\begin{defn}
+Siano $R$ uno schema di relazione e $F$ un insieme di dipendenze funzionali su $R$. $R$ è in forma normale di Boyce-Codd 
+se per ogni dipendenza funzionale $X \rightarrow A \in F^+$ tale che $A \not\in X$ si ha che $X$ è una superchiave.
+\end{defn}
+Come è evidente dalla definizione, la forma normale di Boyce-Codd è più restrittiva della terza forma normale: ogni schema 
+di relazione in forma normale di Boyce-Codd è in terza forma normale, ma non è vero il viceversa. Infatti, consideriamo 
+il seguente schema di relazione, 
+\begin{center}
+\emph{Orario\_lezioni = $\{$Aula, Giorno, Ora, Corso$\}$}                      
+\end{center}
+su cui sono definite le seguenti dipendenze funzionali 
+\begin{center}
+$Aula \rightarrow Giorno$, $Ora \rightarrow Corso$ (in una certa aula in un certo giorno ad una certa
+ora viene tenuto un solo corso)  
+\end{center}
+\begin{center}
+$Corso \rightarrow Aula$ (un corso viene tenuto sempre nella stessa aula).
+\end{center}
+Poiché la chiave di $Orario\_lezioni$ è $\{Aula\ Giorno\ Ora\}$, nella dipendenza funzionale $Corso \rightarrow Aula$ la
+parte sinistra non è una superchiave e, quindi, lo schema di relazione $Orario\_lezioni$ non è in forma normale di 
+Boyce-Codd pur essendo in terza forma normale. In uno schema che non è in forma normale di Boyce-Codd si presenta ancora 
+il problema della ridondanza nella rappresentazione dei dati (ad esempio in $Orario\_lezioni$ il fatto che un corso si 
+tiene in una certa aula è ripetuto per ogni ora in cui il corso viene tenuto). Sorge quindi il problema di capire se per
+la forma normale di Boyce-Codd valgono risultati analoghi a quelli visti nei paragrafi precedenti per la terza forma
+normale, vale a dire se è valida la seguente affermazione:\\
+
+``Dato uno schema di relazione $R$ e un insieme di dipendenze funzionali $F$ su $R$ esiste sempre una decomposizione 
+$\rho=\{R_1, R_2, \ldots, R_k\}$ di $R$ tale che:
+\begin{itemize}
+ \item $\forall i \in \{1, \ldots n\}$, $R_i$ è in forma normale di Boyce-Codd
+ \item $\rho$ preserva $F$
+ \item ha un join senza perdita''
+\end{itemize}
+
+La risposta a questa domanda è negativa. Infatti, è evidente che qualsiasi decomposizione di $Orario\_lezioni$ che non 
+contenga lo schema di relazione $\{Aula\ Giorno\ Ora\ Corso\}$, non permette di rappresentare la dipendenza funzionale
+$\{Aula\ Giorno\ Ora\} \rightarrow Corso$. Tuttavia è possibile dimostrare che dato uno schema di relazione $R$ e un 
+insieme di dipendenze funzionali F su R esiste sempre una decomposizione $\rho=\{R_1, R_2, \ldots, R_k\}$ di $R$ tale 
+che:
+\begin{itemize}
+ \item $\forall i \in \{1, \ldots k\}$, $R_i$ è in forma normale di Boyce-Codd
+ \item $\rho$ ha un join senza perdita
+\end{itemize}
+e che esiste un algoritmo che produce una tale decomposizione in tempo polinomiale. Tale algoritmo fornirebbe nel caso 
+dell'esempio esaminato la decomposizione: $\{R_1 =\ Aula\ Corso, R_2 =\ Giorno\ Ora\ Corso\}$.
