@@ -3,6 +3,7 @@
 \usepackage[hidelinks]{hyperref}
 \usepackage{ragged2e}
 \usepackage{graphicx}
+\usepackage[ddmmyyyy]{datetime}
 \usepackage{amsthm,amsbsy,multicol,amssymb,mathtools, 
 	    xcolor, mdframed,lmodern,textcomp, geometry}
  \geometry{
@@ -19,7 +20,8 @@
 %titolo del documento%
 \title{\Huge Basi di Dati - Appunti}
 \author{Cristian Di Pietratonio}
-\date{1 novembre 2014}
+\renewcommand{\dateseparator}{-}
+\date{\today}
 
 %importiamo le definizioni di nuove funzioni
 \input{tex_definitions.tex}
