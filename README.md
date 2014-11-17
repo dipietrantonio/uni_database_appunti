@@ -1,7 +1,18 @@
-Appunti di Basi di Dati - Informatica
+Appunti di Basi di Dati
 ====================
+Corso: Informatica
+Università La Sapienza
 
-Appunti in Latex per il corso di Basi di Dati, corso di laurea di Informatica presso La Sapienza.
-Il file principale è il main.tex che importa gli altri mentre ogni altro file .tex rappresenta una "section" degli appunti.
+<a href="https://github.com/Halolegend94/uni_database_appunti/blob/master/main.pdf?raw=true">DOWNLOAD PDF</a>
+_________________________
+1 Novembre 2014
+
+Con questo progetto si intende raccogliere in un unico documento PDF tutto il materiale utile per superare l'esame di Basi di Dati tenuto dalla professoressa Moscarini. 
+Il codice sorgente è scritto in LaTeX, per una migliore qualità del documento e per future modifiche e aggiunte da parte di terzi.
+
+Il file principale è il main.tex che importa gli altri. Ogni altro file .tex rappresenta una "section" degli appunti.
 
 Questi appunti sono un misto tra slide usate a lezione, varie dispense e appunti personali.
+__________________________
+
+Autore/i: Cristian Di Pietrantonio
