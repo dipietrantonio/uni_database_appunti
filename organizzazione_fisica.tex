@@ -183,7 +183,51 @@ ha quel valore per la chiave e 1 accesso in scrittura.\\
   Modifica & costo ricerca + 1 accesso\\
   Cancellazione & costo ricerca + 3 accessi\\
  \end{tabular}
-
 \end{center}
 
+\subsubsection{File hash}
+In questo tipo di organizzazione i record sono ripartiti in \textbf{bucket} (secchi) in base al valore della
+chiave. Se $B$ è il numero dei bucket, questi vengono numerati da $0$ a $B-1$. Dato un valore $v$ per la
+chiave il numero del bucket in cui deve trovarsi un record con chiave $v$ è calcolato mediante una
+funzione che prende il nome di \emph{funzione hash}.
+Ciascun bucket è costituito da uno o più blocchi (come vedremo, affinchè la gestione del file sia
+efficiente è opportuno che il numero dei blocchi in un bucket sia piccolo) ed è organizzato come un
+heap. L’accesso ai bucket avviene attraverso la bucket directory che contiene $B$ elementi
+(normalmente $B$ è sufficientemente piccolo da consentire di mantenere la bucket directory in
+memoria principale durante l’utilizzo del file); l’$i$-esimo elemento contiene l’indirizzo (bucket
+header) del primo blocco dell’$i$-esimo bucket. Tutti i blocchi di un bucket sono collegati tra loro
+mediante puntatori in una lista.
+Una funzione hash per essere ``buona'' deve ripartire uniformemente i record nei bucket, cioè al
+variare del valore della chiave deve assumere con la ``stessa'' probabilità uno dei valori compresi tra
+$0$ e $B-1$. Esiste un’ampia letteratura sulle funzioni hash. In genere, una funzione hash trasforma la
+chiave in un intero, divide questo intero per $B$, e fornisce il resto della divisione come numero di
+bucket in cui deve trovarsi il record con quel valore della chiave. Una strategia per definire una
+funzione hash è, ad esempio, la seguente:
+\begin{enumerate}
+ \item trattare il valore v della chiave come una sequenza di bit
+ \item suddividere tale sequenza in gruppi di bit di uguale lunghezza
+ \item sommare tali gruppi trattandoli come interi
+ \item dividere il risultato per il numero dei bucket (cioè per $B$)
+ \item prendere il resto della divisione come numero del bucket in cui deve trovarsi un record con
+chiave $v$.
+\end{enumerate}
+
+Una qualsiasi operazione (ricerca, inserimento, cancellazione, modifica) su un file hash richiede la
+valutazione di $h(v)$ (dove $v$ è un valore per la chiave e $h$ è la funzione hash) per individuare il bucket
+in cui deve trovarsi il record con chiave $v$; successivamente, l’operazione (ricerca, inserimento,
+cancellazione, modifica) viene effettuata sul bucket che, come già detto, è organizzato come un
+heap. Se la funzione hash distribuisce uniformemente i record nei bucket, ogni bucket è costituito
+da un numero di blocchi che è $1/B$-esimo del numero di blocchi di cui è costituito l’intero file.
+Pertanto il costo richiesto per un’operazione è approssimativamente $1/B$-esimo del costo che
+sarebbe richiesto per fare la stessa operazione se il file fosse organizzato come un heap. Si osservi
+che, poiché l’inserimento di un record viene effettuato sull’ultimo blocco del bucket, è opportuno
+che la bucket directory contenga anche, per ogni bucket, un puntatore all’ultimo record del bucket.
+Da quanto detto appare evidente che quanti più sono i bucket tanto più basso è il costo di ogni
+operazione. D’altra parte limitazioni al numero dei bucket derivano dalle seguenti considerazioni:
+\begin{enumerate}
+ \item ogni bucket deve avere almeno un blocco
+\item se le dimensioni della bucket directory sono tali che non può essere mantenuta in memoria
+principale durante l’utilizzo del file, ulteriori accessi sono necessari per leggere i blocchi della
+bucket directory.
+\end{enumerate}
 
