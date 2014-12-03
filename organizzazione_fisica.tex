@@ -192,14 +192,14 @@ chiave il numero del bucket in cui deve trovarsi un record con chiave $v$ è cal
 funzione che prende il nome di \emph{funzione hash}.
 Ciascun bucket è costituito da uno o più blocchi (come vedremo, affinchè la gestione del file sia
 efficiente è opportuno che il numero dei blocchi in un bucket sia piccolo) ed è organizzato come un
-heap. L’accesso ai bucket avviene attraverso la bucket directory che contiene $B$ elementi
+heap. L'accesso ai bucket avviene attraverso la bucket directory che contiene $B$ elementi
 (normalmente $B$ è sufficientemente piccolo da consentire di mantenere la bucket directory in
-memoria principale durante l’utilizzo del file); l’$i$-esimo elemento contiene l’indirizzo (bucket
-header) del primo blocco dell’$i$-esimo bucket. Tutti i blocchi di un bucket sono collegati tra loro
+memoria principale durante l'utilizzo del file); l'$i$-esimo elemento contiene l'indirizzo (bucket
+header) del primo blocco dell'$i$-esimo bucket. Tutti i blocchi di un bucket sono collegati tra loro
 mediante puntatori in una lista.
 Una funzione hash per essere ``buona'' deve ripartire uniformemente i record nei bucket, cioè al
 variare del valore della chiave deve assumere con la ``stessa'' probabilità uno dei valori compresi tra
-$0$ e $B-1$. Esiste un’ampia letteratura sulle funzioni hash. In genere, una funzione hash trasforma la
+$0$ e $B-1$. Esiste un'ampia letteratura sulle funzioni hash. In genere, una funzione hash trasforma la
 chiave in un intero, divide questo intero per $B$, e fornisce il resto della divisione come numero di
 bucket in cui deve trovarsi il record con quel valore della chiave. Una strategia per definire una
 funzione hash è, ad esempio, la seguente:
@@ -214,20 +214,218 @@ chiave $v$.
 
 Una qualsiasi operazione (ricerca, inserimento, cancellazione, modifica) su un file hash richiede la
 valutazione di $h(v)$ (dove $v$ è un valore per la chiave e $h$ è la funzione hash) per individuare il bucket
-in cui deve trovarsi il record con chiave $v$; successivamente, l’operazione (ricerca, inserimento,
+in cui deve trovarsi il record con chiave $v$; successivamente, l'operazione (ricerca, inserimento,
 cancellazione, modifica) viene effettuata sul bucket che, come già detto, è organizzato come un
 heap. Se la funzione hash distribuisce uniformemente i record nei bucket, ogni bucket è costituito
-da un numero di blocchi che è $1/B$-esimo del numero di blocchi di cui è costituito l’intero file.
-Pertanto il costo richiesto per un’operazione è approssimativamente $1/B$-esimo del costo che
+da un numero di blocchi che è $1/B$-esimo del numero di blocchi di cui è costituito l'intero file.
+Pertanto il costo richiesto per un'operazione è approssimativamente $1/B$-esimo del costo che
 sarebbe richiesto per fare la stessa operazione se il file fosse organizzato come un heap. Si osservi
-che, poiché l’inserimento di un record viene effettuato sull’ultimo blocco del bucket, è opportuno
-che la bucket directory contenga anche, per ogni bucket, un puntatore all’ultimo record del bucket.
+che, poiché l'inserimento di un record viene effettuato sull'ultimo blocco del bucket, è opportuno
+che la bucket directory contenga anche, per ogni bucket, un puntatore all'ultimo record del bucket.
 Da quanto detto appare evidente che quanti più sono i bucket tanto più basso è il costo di ogni
-operazione. D’altra parte limitazioni al numero dei bucket derivano dalle seguenti considerazioni:
+operazione. D'altra parte limitazioni al numero dei bucket derivano dalle seguenti considerazioni:
 \begin{enumerate}
  \item ogni bucket deve avere almeno un blocco
 \item se le dimensioni della bucket directory sono tali che non può essere mantenuta in memoria
-principale durante l’utilizzo del file, ulteriori accessi sono necessari per leggere i blocchi della
+principale durante l'utilizzo del file, ulteriori accessi sono necessari per leggere i blocchi della
 bucket directory.
 \end{enumerate}
 
+\subsubsection{File con indice (indice sparso)}
+Nella presentazione di questo tipo di organizzazione, spesso chiamato \emph{ISAM} (Indexed Sequential
+Access Method), assumeremo che il valore della chiave identifica univocamente un record del file.
+Inoltre, inizialmente, assumeremo che i record non siano puntati.\\\\
+Inizialmente il file viene ordinato in base al valore (crescente) della chiave e viene memorizzato
+lasciando in ogni blocco una certa percentuale (ad esempio il 20\%) di spazio non utilizzato per
+l'inserimento di nuovi record; quindi viene creato un nuovo file, il \textbf{file indice} che
+contiene un record per ogni blocco del file principale, e infine la directory del file indice che 
+generalmente ha dimensioni tali da poter essere mantenuta in memoria principale durante l'utilizzo del file.\\
+Un file indice è un file i cui record consistono di coppie del tipo $(v, b)$, in cui $v$ è un valore della
+chiave e $b$ è l'indirizzo di un blocco del file principale: il valore della chiave di ogni record nel
+blocco di indirizzo $b$ è maggiore o uguale a $v$ e il valore della chiave di ogni record che si trova in
+un blocco che precede quello di indirizzo $b$ è minore di $v$.\\
+Il file indice viene creato nel modo seguente. Per ogni blocco del file principale viene creata una
+coppia costituita dal valore della chiave del primo record nel blocco e dall'indirizzo del blocco;
+l'unica eccezione è rappresentata dal primo blocco per il quale viene preso, anziché il valore della
+chiave del primo record, un valore (denotato con $-\infty$) che è più piccolo di qualsiasi valore che può
+essere assunto dalla chiave.\\
+L'accesso al file principale avviene attraverso il file indice nel modo seguente. Dato un valore $v$
+della chiave, si cerca nel file indice un valore $v'$ della chiave che \emph{ricopre} $v$, cioè una coppia 
+$(v', b')$ aventi le seguenti proprietà:
+\begin{itemize}
+ \item $v' \leq v$)
+ \item o $(v', b')$ è l'ultimo record del file indice oppure, se $(v'', b'')$ è il successivo record 
+ nel file indice, $v<v''$.
+\end{itemize}
+
+Il blocco che ha per indirizzo $b'$ è allora il blocco in cui deve trovarsi il record con chiave $v$.
+Pertanto la ricerca di un record con chiave $v$ richiede un accesso in più oltre quelli necessari per la
+ricerca nel file indice di un valore della chiave che ricopre $v$.
+La chiave del file principale è una chiave anche per il file indice; pertanto i record del file indice
+possono a loro volta essere ordinati in base al valore della chiave. Il fatto che il file indice sia
+ordinato in base al valore della chiave consente di usare metodi più efficienti della scansione
+completa per ricercare sul file indice un valore della chiave che ricopra un dato valore $v$.
+Il più semplice è costituito dalla \textbf{ricerca binaria}.\\ Siano $B_1, B_2, \ldots, B_m$ i blocchi del file indice; si
+comincia con il considerare il blocco $B_{[m/2]}$ e si confronta il valore $w$ della chiave nel primo record
+di tale blocco con $v$; se $v = w$ la ricerca ha termine; se $v < w$ si ripete il procedimento come se il file
+indice fosse costituito dai blocchi $B_1, B_2, \ldots, B_{[m/2]-1}$; se invece $v > w$ e nel blocco esiste un valore
+della chiave che ricopre $v$ la ricerca ha termine, altrimenti si ripete il procedimento come se il file
+indice fosse costituito dai blocchi $B_{[m/2]}, \ldots, B_m$. Il procedimento viene iterato fino a quando
+ci si riduce a considerare un unico blocco; a questo punto si scandisce il blocco per trovare un
+valore della chiave che ricopre $v$. Poiché ad ogni passo il numero di blocchi su cui deve essere
+effettuata la ricerca viene dimezzato, dopo al più $[log_2(m)]$ passi la ricerca è ristretta ad un unico
+blocco.\\
+Un altro metodo è costituito dalla \textbf{ricerca per interpolazione}. Questo tipo di ricerca è basato sulla
+conoscenza della distribuzione dei valori della chiave. In altre parole per poter effettuare questa
+ricerca si deve disporre di una funzione $f$ che dati tre valori $v_1, v_2, v_3$ della chiave fornisce un valore
+che è la frazione dell'intervallo di valori della chiave compresi tra $v_2$ e $v_3$ in cui deve trovarsi $v_1$. 
+In tal caso, se $B_1, B_2, \ldots, B_m$ sono i blocchi del file indice (o di una sua parte) e $v_2$ è il valore della
+chiave nel primo record di $B_1$ e $v_3$ è il valore della chiave nell'ultimo record di $B_m$ allora $v_1$ deve
+essere confrontato con il valore della chiave nel primo record di $B_i$, dove $i = mf(v_1, v_2, v_3)$;
+analogamente a quanto accade nella ricerca binaria, se $v_1$ è minore di tale valore allora il
+5procedimento deve essere ripetuto sui blocchi $B_1, B_2, \ldots, B_{i-1}$, mentre se è maggiore il procedimento
+deve essere ripetuto sui blocchi $B_i, B_{i+1}, \ldots, B_m$, finchè la ricerca si restringe ad un unico blocco. \`E
+stato mostrato che la \textbi{ricerca} per interpolazione richiede circa $1+log_2(log_2(m))$ accessi.\\
+Per \textbi{inserire} un nuovo record nel file principale occorre innanzitutto ricercare il blocco $B_i$ del file
+principale in cui il record deve trovarsi in base al valore della chiave. Se in $B_i$ c'è spazio sufficiente,
+il record viene inserito in modo da rispettare l'ordinamento (quindi spostando eventualmente
+record con chiave maggiore). Altrimenti si possono seguire diverse strategie. Ad esempio si può
+verificare se c'è spazio sufficiente nel blocco successivo $B_{i+1}$; in tal caso, o il nuovo record o un
+record che era precedentemente in $B_i$ diventa il primo record di $B_{i+1}$ e, pertanto, il record del file
+indice che contiene il puntatore a $B_{i+1}$ deve essere modificato. Se $B_{i+1}$ non esiste ($B_i$ è l'ultimo
+blocco del file) oppure è pieno si può prendere in considerazione il blocco $B_{i-1}$ ed eventualmente
+procedere in modo simile ripartendo i record di tra $B_{i-1}$ e $B_i$; anche in questo caso sarà necessario
+apportare una modifica al file indice. Se anche $B_{i-1}$ è pieno oppure se $B_{i-1}$ non esiste ($B_i$ è il primo
+blocco del file), è necessario richiedere al sistema un nuovo blocco che seguirà $B_i$ e ripartire i
+record di $B_i$ tra $B_i$ e il nuovo blocco; quindi occorre inserire nel file indice il record relativo al
+nuovo blocco. In ogni caso occorrerà modificare i bit di ``usato/non usato'' nelle intestazioni dei blocchi coinvolti.\\
+Per \textbi{cancellare} un record dal file principale occorre innanzitutto ricercare il record, quindi
+cancellarlo, spostare i record nel blocco in modo da recuperare lo spazio lasciato libero e modificare
+i bit di ``usato/non usato'' nell'intestazione del blocco. Se il record cancellato è il primo record del
+blocco occorre modificare nel file indice il record relativo al blocco. Se il record cancellato era
+l'unico record del blocco, il blocco viene restituito al sistema e nel file indice occorre cancellare il
+record relativo al blocco (anche in questo caso se il record cancellato è l'unico record del blocco, il
+blocco viene restituito al sistema). In ogni caso occorrerà modificare i bit di ``usato/non usato'' nelle 
+intestazioni dei blocchi coinvolti.\\
+Per \textbi{modificare} un record del file principale occorre innanzitutto ricercare il record; quindi, se la
+modifica non coinvolge campi della chiave, il record viene modificato e il blocco riscritto. Altrimenti la modifica 
+equivale ad una cancellazione seguita da un inserimento.\\\\
+Consideriamo ora il caso in cui il file principale contiene record puntati. In tal caso la fase di inizializzazione 
+non differisce dal caso precedente salvo che è preferibile lasciare più spazio libero nei blocchi per successivi inserimenti. 
+Infatti, poiché i record sono puntati, non possono essere spostati per mantenere l'ordinamento quando si inseriscono nuovi record;
+pertanto, se non c‘è spazio sufficiente in un blocco $B$ per l'inserimento di un nuovo record, occorre
+richiedere al sistema un nuovo blocco che viene collegato a $B$ tramite un puntatore; in tal modo
+ogni record del file indice punta al primo blocco di un bucket e il file indice non viene mai
+modificato (a meno che le dimensioni dei bucket non siano diventate tali da richiedere una
+riorganizzazione dell'intero file). La ricerca di un record con chiave $v$ richiede la ricerca sul file
+indice di un valore della chiave che ricopre $v$ e quindi la scansione del bucket corrispondente. La
+cancellazione di un record richiede la ricerca del record e quindi la modifica dei bit di cancellazione
+nell'intestazione del blocco. La modifica di un record richiede la ricerca del record; quindi, se la
+modifica non coinvolge campi della chiave, il record viene modificato e il blocco riscritto.
+Altrimenti la modifica equivale ad una cancellazione seguita da un inserimento. In quest'ultimo
+caso non è sufficiente modificare il bit di cancellazione del record cancellato, ma è necessario
+inserire in esso un puntatore al nuovo record inserito in modo che questo sia raggiungibile da
+qualsiasi record che contenga un puntatore al record cancellato.
+Poiché non è possibile mantenere il file principale ordinato, se si vuole avere la possibilità di
+esaminare il file seguendo l'ordinamento della chiave occorre inserire in ogni record un puntatore al
+record successivo nell'ordinamento.
+
+\subsubsection{B-tree}
+Questa organizzazione è una generalizzazione del file con indice. Infatti in un file con indice,
+attraverso una ricerca sul file indice, viene individuato il blocco del file principale in cui deve
+trovarsi il record con un dato valore per la chiave. In un B-tree si accede al file attraverso una
+\emph{gerarchia} di indici. L’indice a livello più alto nella gerarchia è costituito da un unico blocco e quindi
+può risiedere in memoria principale durante l’utilizzo del file. Durante la ricerca di un record con un
+dato valore per la chiave si accede agli indici a partire da quello a livello più alto; a mano a mano
+che si scende nella gerarchia di indici si restringe la porzione (insieme di blocchi) del file principale
+in cui deve trovarsi il record desiderato, fino a che, nell’ultimo livello (il più basso nella gerarchia)
+tale porzione è ristretta ad un unico blocco. I blocchi degli indici e del file principale devono essere
+sempre pieni almeno per metà.\\
+Ogni blocco di un file indice è costituito di record contenenti una coppia $(v, b)$ dove $v$ è il valore
+della chiave del primo record della porzione del file principale che è accessibile attraverso il
+puntatore $b$; $b$ può essere un puntatore ad un blocco del file indice a livello immediatamente più
+basso oppure (nei record del file indice nel più basso livello della gerarchia) ad un blocco del file
+principale.\\
+Per \textbi{ricercare} il record del file principale con un dato valore $v$ per la chiave si procede nel modo
+seguente. Si parte dall’indice a livello più alto (che è costituito da un unico blocco) e ad ogni passo
+si esamina un unico blocco. Se il blocco esaminato è un blocco del file principale, tale blocco è
+quello in cui deve trovarsi il record desiderato; se, invece, è un blocco di un file indice, si cerca su
+tale blocco un valore della chiave che ricopre $v$ e si segue il puntatore associato (che sarà o un
+puntatore ad un blocco dell’indice al livello immediatamente inferiore o un blocco del file
+principale). Per valutare il costo di un’operazione di ricerca, assumiamo, per comodità, che il
+numero di record del file principale che possono essere memorizzati in un blocco sia un numero
+dispari $2e-1$, che il numero di record di un file indice che possono essere memorizzati in un blocco
+sia un numero dispari $2d-1$ (cioè, poiché ogni blocco è pieno almeno per metà, ogni blocco del file
+principale contiene almeno $e$ record e ogni blocco di un indice contiene almeno $d$ record). Con tali
+assunzioni il file principale ha al più $n/e$ blocchi, dove $n$ è il numero di record del file principale.
+Poiché ad ogni blocco del file principale corrisponde un record nel file indice al livello $1$ (il più
+basso nella gerarchia) il numero di record del file indice a livello più basso sarà $n/e$ e, per l’ipotesi
+fatta (ogni blocco è pieno almeno per metà), questi $n/e$ record saranno memorizzati in al più $n/(ed)$
+blocchi. Ripetendo tale ragionamento, si ottiene che l’indice a livello $i$ ha $n/(ed^{i-1})$ record
+memorizzati in al più $n/(ed^i)$ blocchi. Sia $k$ il livello più alto della gerarchia; l’indice a livello
+$k$ avrà $n/(ed^{k- 1})$ record memorizzati in al più $n/(ed^k)$ blocchi; poiché tale indice è costituito 
+da un unico blocco $n/(ed^k)\geq 1$. Poiché per ricercare un record del file principale si deve accedere 
+ad un blocco per ogni livello di indice più al blocco del file principale che contiene il record 
+desiderato, il numero di accessi necessari per un operazione di ricerca è $k +1 \leq log_d(n/e)+1$.\\
+Il numero di accessi necessari per effettuare l’inserimento del record con valore $v$ della chiave è
+dato dal numero di accessi necessari per ricercare il blocco in cui deve essere inserito il record con
+chiave $v$ più uno per riscrivere il blocco, se nel blocco c’è spazio sufficiente per inserire il record.
+Se, viceversa, nel blocco non c’è spazio sufficiente per inserire il nuovo record, l’operazione di
+inserimento può richiedere un numero ulteriore di accessi a causa della necessità di mantenere i
+blocchi pieni al meno per metà, come mostra il seguente esempio. Si osservi che, per salvare spazio,
+il primo record in ogni blocco di un file indice è costituto da un puntatore anziché da una coppia
+7chiave-puntatore; tale puntatore permette di accedere alla parte del file principale contenente record
+con valore della chiave minore del valore presente nel secondo record del blocco del file indice.
+Supponiamo che in un certo istante la configurazione del B-tree sia la seguente:
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=430px]{img_5_3_4(1).eps}
+  Figura 1
+\end{figure}
+
+e che si voglia inserire il record con valore della chiave $25$. Poiché il blocco (il terzo da sinistra) del
+file principale in cui dovrebbe essere inserito tale record è pieno occorre richiedere al sistema un
+nuovo blocco e ripartire i record del terzo blocco e il nuovo record fra il terzo blocco e il nuovo
+blocco in modo da soddisfare il vincolo che ogni blocco deve essere pieno almeno per metà. Inoltre,
+poiché il blocco del file indice di primo livello in cui dovrebbe essere inserito il puntatore al nuovo
+blocco del file principale è pieno, occorre procedere per il file indice di livello $1$ allo stesso modo in
+cui si è proceduto per il file principale, richiedendo un nuovo blocco al sistema. Ma allora un
+analogo discorso deve essere fatto per l’indice di livello $2$. Pertanto dopo l’inserimento del record
+con chiave $25$ il B-tree si presenterà come segue:
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=430px]{img_5_3_4(2).eps}
+  Figura 2
+\end{figure}
+
+Come si vede il numero dei livelli degli indici è aumentato di $1$, il che comporta un aumento dei
+costi delle successive operazioni sul file principale.
+Il numero di accessi necessari per effettuare la cancellazione del record con valore $v$ della chiave è
+dato dal numero di accessi necessari per ricercare il blocco in cui si trova il record con chiave v più
+uno per riscrivere il blocco, se il blocco rimane pieno almeno per metà successivamente alla
+cancellazione. Se, viceversa, il blocco non rimane pieno almeno per metà successivamente alla
+cancellazione, l’operazione può richiedere un numero ulteriore di accessi come mostra il seguente
+esempio.\\
+Supponiamo che in un certo istante la configurazione del B-tree quella mostrata in \textsc{Figura 2} e che si
+voglia cancellare il record con chiave $28$. Poiché, a seguito della cancellazione di tale record nel
+blocco rimane un solo record (e quindi non è soddisfatto il vincolo che ogni record debba essere
+pieno al meno per metà), e tale record può trovare posto nel blocco precedente (il terzo da sinistra),
+il blocco può essere restituito al sistema. Inoltre, poiché nel secondo blocco dell’indice di livello
+rimane un solo puntatore possiamo procedere per l’indice di livello $1$ analogamente a come si è
+proceduto per il file principale. Ma allora un analogo discorso deve essere fatto per l’indice di
+livello $2$. Pertanto dopo la cancellazione del record con chiave $28$ il B-tree si presenterà come segue:
+
+\begin{figure}[h!]
+  \centering
+  \includegraphics[width=400px]{img_5_3_4(3).eps}
+  Figura 3
+\end{figure}
+
+Come si vede il numero dei livelli degli indici è diminuito di $1$, il che comporta una diminuzione dei
+costi delle successive operazioni sul file principale.
+Il numero di accessi necessari per effettuare la modifica del record con valore $v$ della chiave è dato
+dal numero di accessi necessari per ricercare il blocco in cui si trova il record con chiave $v$ più uno
+per riscrivere il blocco, se la modifica non coinvolge campi della chiave, altrimenti è dato dalla
+somma degli accessi necessari per la cancellazione del record con chiave $v$ e quelli necessari per
+l’inserimento del record con il nuovo valore della chiave.
