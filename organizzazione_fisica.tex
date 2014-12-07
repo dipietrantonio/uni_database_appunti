@@ -334,11 +334,11 @@ record successivo nell'ordinamento.
 Questa organizzazione è una generalizzazione del file con indice. Infatti in un file con indice,
 attraverso una ricerca sul file indice, viene individuato il blocco del file principale in cui deve
 trovarsi il record con un dato valore per la chiave. In un B-tree si accede al file attraverso una
-\emph{gerarchia} di indici. L’indice a livello più alto nella gerarchia è costituito da un unico blocco e quindi
-può risiedere in memoria principale durante l’utilizzo del file. Durante la ricerca di un record con un
+\emph{gerarchia} di indici. L'indice a livello più alto nella gerarchia è costituito da un unico blocco e quindi
+può risiedere in memoria principale durante l'utilizzo del file. Durante la ricerca di un record con un
 dato valore per la chiave si accede agli indici a partire da quello a livello più alto; a mano a mano
 che si scende nella gerarchia di indici si restringe la porzione (insieme di blocchi) del file principale
-in cui deve trovarsi il record desiderato, fino a che, nell’ultimo livello (il più basso nella gerarchia)
+in cui deve trovarsi il record desiderato, fino a che, nell'ultimo livello (il più basso nella gerarchia)
 tale porzione è ristretta ad un unico blocco. I blocchi degli indici e del file principale devono essere
 sempre pieni almeno per metà.\\
 Ogni blocco di un file indice è costituito di record contenenti una coppia $(v, b)$ dove $v$ è il valore
@@ -347,30 +347,30 @@ puntatore $b$; $b$ può essere un puntatore ad un blocco del file indice a livel
 basso oppure (nei record del file indice nel più basso livello della gerarchia) ad un blocco del file
 principale.\\
 Per \textbi{ricercare} il record del file principale con un dato valore $v$ per la chiave si procede nel modo
-seguente. Si parte dall’indice a livello più alto (che è costituito da un unico blocco) e ad ogni passo
+seguente. Si parte dall'indice a livello più alto (che è costituito da un unico blocco) e ad ogni passo
 si esamina un unico blocco. Se il blocco esaminato è un blocco del file principale, tale blocco è
 quello in cui deve trovarsi il record desiderato; se, invece, è un blocco di un file indice, si cerca su
 tale blocco un valore della chiave che ricopre $v$ e si segue il puntatore associato (che sarà o un
-puntatore ad un blocco dell’indice al livello immediatamente inferiore o un blocco del file
-principale). Per valutare il costo di un’operazione di ricerca, assumiamo, per comodità, che il
+puntatore ad un blocco dell'indice al livello immediatamente inferiore o un blocco del file
+principale). Per valutare il costo di un'operazione di ricerca, assumiamo, per comodità, che il
 numero di record del file principale che possono essere memorizzati in un blocco sia un numero
 dispari $2e-1$, che il numero di record di un file indice che possono essere memorizzati in un blocco
 sia un numero dispari $2d-1$ (cioè, poiché ogni blocco è pieno almeno per metà, ogni blocco del file
 principale contiene almeno $e$ record e ogni blocco di un indice contiene almeno $d$ record). Con tali
 assunzioni il file principale ha al più $n/e$ blocchi, dove $n$ è il numero di record del file principale.
 Poiché ad ogni blocco del file principale corrisponde un record nel file indice al livello $1$ (il più
-basso nella gerarchia) il numero di record del file indice a livello più basso sarà $n/e$ e, per l’ipotesi
+basso nella gerarchia) il numero di record del file indice a livello più basso sarà $n/e$ e, per l'ipotesi
 fatta (ogni blocco è pieno almeno per metà), questi $n/e$ record saranno memorizzati in al più $n/(ed)$
-blocchi. Ripetendo tale ragionamento, si ottiene che l’indice a livello $i$ ha $n/(ed^{i-1})$ record
-memorizzati in al più $n/(ed^i)$ blocchi. Sia $k$ il livello più alto della gerarchia; l’indice a livello
+blocchi. Ripetendo tale ragionamento, si ottiene che l'indice a livello $i$ ha $n/(ed^{i-1})$ record
+memorizzati in al più $n/(ed^i)$ blocchi. Sia $k$ il livello più alto della gerarchia; l'indice a livello
 $k$ avrà $n/(ed^{k- 1})$ record memorizzati in al più $n/(ed^k)$ blocchi; poiché tale indice è costituito 
 da un unico blocco $n/(ed^k)\geq 1$. Poiché per ricercare un record del file principale si deve accedere 
 ad un blocco per ogni livello di indice più al blocco del file principale che contiene il record 
 desiderato, il numero di accessi necessari per un operazione di ricerca è $k +1 \leq log_d(n/e)+1$.\\
-Il numero di accessi necessari per effettuare l’inserimento del record con valore $v$ della chiave è
+Il numero di accessi necessari per effettuare l'inserimento del record con valore $v$ della chiave è
 dato dal numero di accessi necessari per ricercare il blocco in cui deve essere inserito il record con
-chiave $v$ più uno per riscrivere il blocco, se nel blocco c’è spazio sufficiente per inserire il record.
-Se, viceversa, nel blocco non c’è spazio sufficiente per inserire il nuovo record, l’operazione di
+chiave $v$ più uno per riscrivere il blocco, se nel blocco c'è spazio sufficiente per inserire il record.
+Se, viceversa, nel blocco non c'è spazio sufficiente per inserire il nuovo record, l'operazione di
 inserimento può richiedere un numero ulteriore di accessi a causa della necessità di mantenere i
 blocchi pieni al meno per metà, come mostra il seguente esempio. Si osservi che, per salvare spazio,
 il primo record in ogni blocco di un file indice è costituto da un puntatore anziché da una coppia
@@ -390,7 +390,7 @@ blocco in modo da soddisfare il vincolo che ogni blocco deve essere pieno almeno
 poiché il blocco del file indice di primo livello in cui dovrebbe essere inserito il puntatore al nuovo
 blocco del file principale è pieno, occorre procedere per il file indice di livello $1$ allo stesso modo in
 cui si è proceduto per il file principale, richiedendo un nuovo blocco al sistema. Ma allora un
-analogo discorso deve essere fatto per l’indice di livello $2$. Pertanto dopo l’inserimento del record
+analogo discorso deve essere fatto per l'indice di livello $2$. Pertanto dopo l'inserimento del record
 con chiave $25$ il B-tree si presenterà come segue:
 
 \begin{figure}[h!]
@@ -405,15 +405,15 @@ Il numero di accessi necessari per effettuare la cancellazione del record con va
 dato dal numero di accessi necessari per ricercare il blocco in cui si trova il record con chiave v più
 uno per riscrivere il blocco, se il blocco rimane pieno almeno per metà successivamente alla
 cancellazione. Se, viceversa, il blocco non rimane pieno almeno per metà successivamente alla
-cancellazione, l’operazione può richiedere un numero ulteriore di accessi come mostra il seguente
+cancellazione, l'operazione può richiedere un numero ulteriore di accessi come mostra il seguente
 esempio.\\
 Supponiamo che in un certo istante la configurazione del B-tree quella mostrata in \textsc{Figura 2} e che si
 voglia cancellare il record con chiave $28$. Poiché, a seguito della cancellazione di tale record nel
 blocco rimane un solo record (e quindi non è soddisfatto il vincolo che ogni record debba essere
 pieno al meno per metà), e tale record può trovare posto nel blocco precedente (il terzo da sinistra),
-il blocco può essere restituito al sistema. Inoltre, poiché nel secondo blocco dell’indice di livello
-rimane un solo puntatore possiamo procedere per l’indice di livello $1$ analogamente a come si è
-proceduto per il file principale. Ma allora un analogo discorso deve essere fatto per l’indice di
+il blocco può essere restituito al sistema. Inoltre, poiché nel secondo blocco dell'indice di livello
+rimane un solo puntatore possiamo procedere per l'indice di livello $1$ analogamente a come si è
+proceduto per il file principale. Ma allora un analogo discorso deve essere fatto per l'indice di
 livello $2$. Pertanto dopo la cancellazione del record con chiave $28$ il B-tree si presenterà come segue:
 
 \begin{figure}[h!]
@@ -428,4 +428,105 @@ Il numero di accessi necessari per effettuare la modifica del record con valore 
 dal numero di accessi necessari per ricercare il blocco in cui si trova il record con chiave $v$ più uno
 per riscrivere il blocco, se la modifica non coinvolge campi della chiave, altrimenti è dato dalla
 somma degli accessi necessari per la cancellazione del record con chiave $v$ e quelli necessari per
-l’inserimento del record con il nuovo valore della chiave.
+l'inserimento del record con il nuovo valore della chiave.
+
+\subsubsection{File con indice denso}
+Nelle organizzazioni viste nei paragrafi precedenti, escluso l'heap, la maggior parte dei blocchi del
+file principale non sono riempiti completamente; ciò comporta spreco di memoria e aumento dei
+tempi di ricerca. D'altra parte, in un heap i blocchi sono completamente pieni, ma non si ha un
+metodo efficiente per la ricerca di un record con un dato valore per la chiave.
+Un tipo di organizzazione che cerca di cogliere gli aspetti positivi dell'uno e degli altri tipi di
+organizzazione è il \textbf{file con indice denso}. Mentre nel caso di un file con indice sparso visto
+precedentemente, ogni record del file indice contiene un puntatore per ogni blocco del file
+principale, che è ordinato in base al valore della chiave, nel caso di un file con indice denso ogni
+record del file indice contiene un puntatore ad un record del file principale, che non ha nessun tipo
+di ordinamento.\\
+Un indice denso è un file che può avere una qualsiasi delle organizzazioni viste precedentemente.
+Per ricercare, cancellare o modificare un record del file principale, dato un valore per la chiave,
+occorre ricercare il record con quel valore per la chiave nell'indice denso, fare un accesso per
+leggere il blocco del file principale che contiene il record desiderato e, nel caso di modifica o
+cancellazione, un accesso per riscrivere tale blocco. Nel caso di una cancellazione, occorre anche
+cancellare nell'indice denso il record che ha il valore dato per la chiave. Per inserire un record si
+procede nel modo seguente: si inserisce il record alla fine del file principale e quindi si inserisce
+nell'indice denso il corrispondente record.\\
+Apparentemente questo tipo di organizzazione sembra richiedere per ogni operazione qualche
+accesso in più rispetto a quello che richiederebbe la stessa operazione se il file principale avesse la
+stessa organizzazione scelta per l'indice denso. In realtà occorre tener presente che i costi di una
+operazione di ricerca (e quindi di ogni operazione) dipendono dalle dimensioni del file (numero di
+blocchi necessari per memorizzarlo) e che generalmente la dimensione dei record del file indice è
+nettamente più piccola di quella dei record del file principale. Pertanto ogni operazione sul file
+indice ha un costo inferiore di quello che avrebbe la stessa operazione se il file principale avesse la
+stessa organizzazione scelta per l'indice denso.\\
+L'uso di un indice denso permette anche di eliminare i puntatori a record del file principale: basta
+sostituire ogni puntatore ad un record del file principale con il puntatore al corrispondente record
+dell'indice denso: In tal modo per accedere al record occorre un accesso in più; d'altra parte se si
+vuole muovere un record nel file principale è sufficiente modificare il puntatore nel corrispondente
+record del file indice e, quindi, è possibile compattare il file principale riutilizzando lo spazio di
+record cancellati. Un'altra alternativa è quella di sostituire ad ogni puntatore (che non si trovi
+nell'indice denso) al file principale il valore della chiave e in base ad esso ricercare il record
+utilizzando l'indice denso. Questa tecnica permette di compattare sia il file principale che il file
+indice; tuttavia, mentre l'uso di un puntatore ad un record del file principale permette di raggiungere
+il record con un unico accesso e quello di un puntatore al file indice permette di raggiungere il
+record con due accessi, l' uso del valore della chiave come puntatore può richiedere un numero
+superiore di accessi (quelli necessari per la ricerca sul file indice più un accesso al file principale)
+per raggiungere il record.
+
+\subsubsection{Strutture con record nidificati}
+I metodi di organizzazione fisica visti nei paragrafi precedenti consentono la ricerca efficiente di un
+record dato il valore della chiave. Spesso, però, è necessario effettuare su una base di dati un
+diverso tipo di operazione consistente nel ricercare tutti i record che sono in qualche modo correlati
+ad un dato record $r$ (ad esempio tutti i record $ORDINE$ relativi agli ordini fatti da un certo
+$CLIENTE$). Perché questo tipo di ricerca possa essere effettuata in modo efficiente occorre che una
+volta trovato il record $r$ sia possibile ritrovare i record ad esso correlati col minor numero di accessi
+(ad esempio ogni record $ORDINE$ potrebbe trovarsi nello stesso blocco del record relativo al
+$CLIENTE$ che lo ha fatto). In tal caso è implicita un a relazione gerarchica tra il record $r$ e i record
+ad esso correlati. Per dare una rappresentazione lineare di tutte le possibili relazioni gerarchiche tra
+record introduciamo il seguente concetto di pattern:
+\begin{itemize}
+ \item se $R$ è un tipo record, $R$ è un pattern le cui istanze sono tutte le occorrenze di un singolo record di
+tipo $R$;
+ \item se $P_1$, $P_2$, $\ldots, P_n$ sono pattern allora $P_1$, $P_2$, $\ldots, P_n$ è un pattern le cui istanze
+ sono tutte le possibili sequenze $i_1, i_2, \ldots, i_n$ tali che $i_j$ è un'istanza di $P_j$;
+ \item se $P$ è un pattern allora $(P)^*$ è un pattern le cui istanze sono sequenze (eventualmente vuote) di
+istanze di $P$; un'istanza di $(P)^*$ è detta reapeating group.
+\end{itemize}
+
+Il modo più comune di memorizzare strutture gerarchiche è quello di memorizzare sequenzialmente
+i record di ogni singola istanza di un pattern, ad esempio memorizzare sequenzialmente un record
+relativo ad un cliente e i record di tutti gli ordini fatti da quel cliente. Un altro modo è quello di
+rimpiazzare un repeating group con un puntatore ad un blocco che lo contiene; a tale puntatore può
+essere associato il numero di istanze nel repeating group, altrimenti queste devono essere collegate
+in una lista la cui fine è indicata da una marca di fine lista.\\
+La necessità di rappresentare strutture gerarchiche è particolarmente forte nei sistemi gerarchici e
+nei sistemi a rete, dove vengono utilizzati anche altri metodi di organizzazione (ad esempio un
+repeating group può essere sostituito da un array di puntatori ai record del repeating group) oltre i
+due sopra menzionati. Tuttavia ci sono dei sistemi relazionali che consentono di far uso di strutture
+nidificate e, quindi, permettono di memorizzare in uno stesso blocco record appartenenti a relazioni
+diverse.
+Se un tipo record è coinvolto in una struttura nidificata e quindi le occorrenze di quel tipo record
+sono memorizzate in modo che record correlati sono ``vicini'', non è possibile pensare di imporre sui
+record di quel tipo di essere memorizzati in accordo a qualche tipo di organizzazione visto
+precedentemente, come i file hash o i file ordinati (con indice). Pertanto se vogliamo poter accedere
+ad un record in base al valore della chiave dobbiamo creare un indice denso. Ad esempio se
+vogliamo accedere ad un record $ORDINE$ in base al numero dell'ordine e ogni record $ORDINE$ è
+memorizzato ``vicino'' al record $CLIENTE$ relativo al cliente che ha fatto l'ordine, possiamo creare
+un file hash o un file con indice i cui record contengono il numero di un ordine (chiave) e un
+puntatore al relativo record $ORDINE$.
+
+\subsubsection{Indici secondari}
+Gli indici che abbiamo esaminato precedentemente, sia quelli sparsi che quelli densi, consentono di
+ricercare un record in base al valore della chiave e prendono il nome di indici primari. Se vogliamo
+ricercare i record che hanno un dato valore in un campo non chiave dobbiamo ricorrere ad un indice
+secondario. 
+\begin{defn}
+ Un \textbf{indice secondario} è una struttura nidificata con il seguente pattern:
+ \begin{center}
+VALORE(RIFERIMENTO)$^*$  
+ \end{center}
+\end{defn}
+Un'istanza di tale pattern è costituita da un valore del campo non chiave e da una sequenza di
+riferimenti ai record che contengono quel valore in quel campo. Un riferimento può essere costituito
+o da un puntatore al record o dal valore della chiave per quel record (i vantaggi e svantaggi di
+ciascuna di tali scelte sono stati discussi precedentemente). In particolare, una struttura nidificata
+con il pattern suddetto potrebbe essere usata per costruire un indice denso quando si è interessati ad
+ricercare record del file principale in base al valore di un campo non chiave.
