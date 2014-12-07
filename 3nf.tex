@@ -219,7 +219,7 @@ si consideri l'istanza della \emph{base di dati} costituita dalle due istanze le
     
     non è un'istanza legale di $R$, in quanto non soddisfa la dipendenza funzionale
     $B\rightarrow C$.
-
+ \label{esempio_4_2}
  \begin{exmp}
   Si consideri la relazione $Studente = \{Matr, Com, Prov\}$, con $F = $ \{$Matr\rightarrow Com$,
   $Matr\rightarrow Prov$, $Com\rightarrow Prov$\}; essa è in 3FN. Una decomposizione possibile è
@@ -486,6 +486,11 @@ A tal fine, cominciamo con l'introdurre i concetti di \emph{decomposizione} di u
 Sia $R$ uno schema di relazione. Una decomposizione di $R$ è una \emph{famiglia} $\rho = \{R_1, R_2, \ldots, 
 R_k\}$ di sottoinsiemi di $R$ che \emph{ricopre} $R$ ($\bigcup_{i=1}^k R_i = R$).
 \end{defn}
+\begin{exmp}
+Sia $R = ABC$. Le decomposizioni $\{AB, BC\}$ e $\{A, BC\}$ sono valide, mentre non lo è $\{AB, B\}$ poiché
+manca l'attributo $C$.
+\end{exmp}
+
 \subsubsection{Equivalenza tra due insiemi di dipendenze funzionali}
 \begin{defn}
 Siano $F$ e $G$ due insiemi di dipendenze funzionali. $F$ e $G$ sono \emph{equivalenti}, in simboli $F \equiv 
@@ -509,6 +514,23 @@ Sia $R$ uno schema di relazione, $F$ un insieme di dipendenze funzionali su $R$ 
 R_k\}$ una decomposizione di $R$. Diciamo che $\rho$ \emph{preserva} $F$ se $F \equiv \bigcup_{i=1}^k 
 \pi_{R_i}(F)$, dove $\pi_{R_i}(F) = \{X \rightarrow Y\ t.c.\ X \rightarrow Y \in F^+ \wedge XY \subseteq R_i\}$.
 \end{defn}
+
+\begin{exmp}
+ Riprendiamo i dati dell'\linkto{esempio_4_2}{Esempio 4.2}: la relazione $Studente = \{Matr, Com, Prov\}$,
+ con $F = $ \{$Matr\rightarrow Com$, $Matr\rightarrow Prov$, $Com\rightarrow Prov$\}. Due decomposizioni possibili
+ individuate precendentemente sono:
+  \begin{center}
+    $R_1 = \{Matr, Com\}$ con $F_1 = \{Matr\rightarrow Com\}$ \\
+    $R_2 = \{Matr, Prov\}$ con $F_2 = \{Matr\rightarrow Prov\}$ \\
+   \end{center}
+ Si verifica applicando la definizione 4.10 che la dipendenza $Com \rightarrow Prov$ non è preservata, 
+ perché in $R_1$ manca $Prov$ e in $R_2$ manca $Com$. Una decomposizione alternativa per $R_2$ è
+ $\{Com, Prov\}$; in questo modo tutte le dipendenze funzionali sono preservate. In altre parole abbiamo
+ \textbf{proiettato le dipendenze}, ovvero abbiamo preso gli attributi $X$ e $Y$ da una dipendenza funzionale
+ $X \rightarrow Y$ e vedere se essi sono presenti nella relazione esaminata.
+\end{exmp}
+
+
 \subsubsection{Algoritmo per verificare l'equivalenza tra F e G}
 Verificare se una decomposizione preserva un insieme di dipendenze funzionali $F$ richiede, dunque,
 che venga verificata l'equivalenza dei due insiemi di dipendenze funzionali $F$ e $G = \bigcup_{i=1}^k
