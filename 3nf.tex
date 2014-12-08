@@ -56,9 +56,9 @@ legate al fatto che
  \item  i dati di uno studente sono \emph{determinati univocamente} da $Matr$;
  \item i dati di un corso sono \emph{determinati univocamente} da $C\#$.
 \end{itemize}
-Il concetto di ``determina univocamente'' è colto dal concetto formale di \textbf{dipendenza funzionale}.
+Il concetto di ``determina univocamente'' è colto dal concetto formale di \emph{dipendenza funzionale}.
 \begin{defn}
-  Dato uno schema di relazione $R$, una \emph{dipendenza funzionale} su $R$ 
+  Dato uno schema di relazione $R$, una \textbf{dipendenza funzionale} su $R$ 
   è una coppia ordinata di sottoinsiemi non vuoti $X$, $Y$ $\in R$ e viene denotata 
   come $X \rightarrow Y$.
 \end{defn}
@@ -71,18 +71,19 @@ In simboli:
 \begin{center}
 \begin{math}
 (\ \forall (t_1, t_2) \in r\ t.c.\ t_1[X] = t_2[X] \Rightarrow t_1[Y] = t_2[Y]) 
-\Rightarrow (X\rightarrow Y
+\Rightarrow (r
 \end{math}
-soddisfa $r$).
+soddisfa $X\rightarrow Y$).
 \end{center}
 Sia $F$ un insieme di dipendenze funzionali su $R$ ed $r$ un'istanza di $R$. Se $r$ 
 soddisfa tutte le dipendenze in $F$, diciamo che $r$ è un'istanza \emph{legale} di $R$. 
 \begin{defn}
-La \emph{chiusura di F}, denotata con $F^+$, è l'insieme di dipendenze funzionali che 
+La \textbf{chiusura di F}, denotata con $F^+$, è l'insieme di dipendenze funzionali che 
 sono soddisfatte da ogni istanza legale di $R$. 
 \end{defn}
 
 Banalmente si ha che $F$ $\subseteq$ $F^+$.\\
+\label{defn_4_3}
 \begin{defn}
  Dato uno schema di relazione $R$, un insieme di dipendenze funzionali $F$ su $R$ e un
 sottoinsieme $K$ di $R$, diciamo che $K$ è una \textbf{chiave} per $R$ se:
@@ -106,13 +107,13 @@ e $Y$ sottoinsiemi di $R$, con $XY$ l'insieme $X$ $\cup$ $Y$.
   \item $Matr,\ C\# \rightarrow Nome,\ Citt\grave{a},\ Prov,\ Titolo,\ Docente,\ C\_laurea,
   \ Data,\ Voto$;
   \item $C\# \rightarrow Titolo,\ Docente,\ C\_laurea$
-  \item $Matr \rightarrow Nome\, Citt\grave{a},\ Prov$
+  \item $Matr \rightarrow Nome,\ Citt\grave{a},\ Prov$
   \item $Citt\grave{a} \rightarrow Prov$
  \end{itemize}
  Quindi $\{Matr, C\#\}$ costituisce una \emph{chiave} per Università.
 \end{exmp}
 
-Ci sono attributi che \textbf{dipendono parzialmente} dalla chiave. Nell'Esempio 4.1 
+Ci sono attributi che \textbf{dipendono parzialmente} dalla chiave. Nell'\textsc{Esempio 4.1} 
 \{$Titolo$, $Docente$, $C\_laurea$\} dipendono funzionalmente da $C\#$; altri attributi
 invece \textbf{dipendono transitivamente} dalla chiave, ad esempio $Prov$ dipende
 funzionalmente da $Matr$ in quanto $Matr \rightarrow Citt\grave{a} \rightarrow Prov$.\\
@@ -132,29 +133,29 @@ diciamo che:
  chiave di $R$.
 \end{itemize}
 \end{defn}
-Nell'Esempio 4.1, considerando la relazione \emph{Università}, $Matr$ è primo mentre
+Nell'\textsc{Esempio 4.1}, considerando la relazione \emph{Università}, $Matr$ è primo mentre
  \{$Matr$, $C\#$, $Nome$\} è una superchiave.
 \begin{defn}
 Siano $R$ uno schema di relazione ed $F$ un insieme di dipendenze funzionali su $R$.
 \begin{itemize}
- \item $X\rightarrow A$ $\in F^+$ è una dipendenza parziale su $R$ se $A$ non 
+ \item $X\rightarrow A$ $\in F^+$ è una \textbf{dipendenza parziale} su $R$ se $A$ non 
  è primo e $X$ è contenuto propriamente in una chiave di R.
- \item $X\rightarrow A$ $\in F^+$ è una dipendenza transitiva su $R$ se $A$ 
- non è primo e $\forall K \subset R$ si ha che $X$ non è contenuto propriamente 
+ \item $X\rightarrow A$ $\in F^+$ è una \textbf{dipendenza transitiva} su $R$ se $A$ 
+ non è primo e $\forall K \subset R$, dove $K$ è chiave, si ha che $X$ non è contenuto propriamente 
  in $K$ e $K-X \neq \emptyset$.
 \end{itemize}
 \end{defn}
-\begin{prop}
+\begin{defn}
 Siano $R$ uno schema di relazione ed $F$ un insieme di dipendenze funzionali su $R$. 
 $R$ è in 3NF se, $\forall (X\rightarrow A) \in F^+$ t.c. $A\notin X$, si ha che $A$ è
 primo oppure $X$ è una superchiave.
-\end{prop}
+\end{defn}
 \begin{theo}
 Siano $R$ uno schema di relazione e $F$ un insieme di dipendenze funzionali su $R$. Uno
 schema $R$ è in 3NF se e solo se non esistono né dipendenze parziali né dipendenze 
 transitive in $R$.
 \end{theo}
-\textbf{Dimostrazione.} La parte \emph{solo se} deriva banalmente dalla definizione [4.5].\\
+\textbf{Dimostrazione.} La parte \emph{solo se} è banale dopo aver visto la parte \emph{se}.\\
 \emph{Parte se}. Supponiamo per assurdo che $R$ non sia in 3NF nonostante non ci siano
 dipendenze parziali o transitive; in tal caso esiste una dipendenza funzionale $X\rightarrow A$
 $\in F^+$ t.c. $A$ non è primo e $X$ non è una superchiave. Poiché $X$ non è una
@@ -283,7 +284,7 @@ funzionali in $F^+$; sarà quindi necessario calcolare tale insieme.
 
 \subsubsection{L'insieme $F^A$}
 \begin{defn}
-Sia $R$ uno schema di relazione e $F$ un insieme di dipendenze funzionali. Sia $F^A$ l'insieme
+Sia $R$ uno schema di relazione e $F$ un insieme di dipendenze funzionali. Sia $\mathbf{F^A}$ l'insieme
 di dipendenze funzionali definito nel modo seguente:
 \begin{itemize}
  \item $f \in F \Rightarrow f \in F^A$;
@@ -342,7 +343,7 @@ Allo scopo di dimostrare che $F^+ = F^A$, introduciamo il concetto di \emph{chiu
 rispetto ad un insieme di dipendenze funzionali. 
 \begin{defn}
 Siano $R$ uno schema di relazione, $F$ un insieme di dipendenze funzionali su $R$ e $X$ un sottoinsieme di $R$.
-La chiusura di $X$ rispetto ad $F$, denotata con $X^+_F$ (o semplicemente $X^+$, se non sorgono ambiguità) è 
+La \textbf{chiusura di} $\mathbf{X}$ rispetto ad $F$, denotata con $X^+_F$ (o semplicemente $X^+$, se non sorgono ambiguità) è 
 definita nel modo seguente: $X^+_F = \{A\ t.c.\ X \rightarrow A \in F^A\}$.
 \end{defn}
 In parole povere, la chiusura di un insieme di attributi X è l'insieme di tutti gli attributi determinati da $X$
@@ -369,7 +370,7 @@ Siano $R$ uno schema di relazione ed $F$ un insieme di dipendenze funzionali su 
 \end{theo}
 \textbf{Dimostrazione.} Mostreremo che $F^+ \subseteq F^A$ e contemporaneamente $F^+ \subseteq F^A$, equivalente
 a dire che i due insiemi sono uguali.\\
-$\mathbf{F^{\boldsymbol{+}} \boldsymbol{\subseteq} F^A}$. Sia $X \rightarrow Y$ una dipendenza funzionale in $F^A$.
+$\mathbf{F^{\boldsymbol{+}} \boldsymbol{\supseteq} F^A}$. Sia $X \rightarrow Y$ una dipendenza funzionale in $F^A$.
 Dimostriamo che $X\rightarrow Y \in F^+$ per induzione sul numero $i$ di applicazioni di uno degli assiomi di Armstrong.\\\\
 \emph{Base dell'induzione}: $i=0$. In tal caso $X \rightarrow Y \in F$ e quindi, banalmente, 
 $X \rightarrow Y \in F^+$.\\
@@ -397,7 +398,7 @@ un numero di volte minore o uguale a $i–1$. Sia $r$ un'istanza legale di $R$ e
 di $r$ tali che $t_1[X] = t_2[X]$. Per l'ipotesi induttiva da $t_1[X] = t_2[X]$ segue $t_1[Z] = t_2[Z]$; da 
 $t_1[Z] = t_2[Z]$, ancora per l'ipotesi induttiva, segue $t_1[Y] = t_2[Y]$.
 \end{itemize}
-$\mathbf{F^A \boldsymbol{\subseteq} F^{\boldsymbol{+}}}$. Si supponga per assurdo che esista una dipendenza 
+$\mathbf{F^{\boldsymbol{+}} \boldsymbol{\subseteq} F^{A}}$. Si supponga per assurdo che esista una dipendenza 
 funzionale $X \rightarrow Y \in F^+$ tale che $X \rightarrow Y \not\in F^A$. Si mostrerà che esiste 
 un'istanza legale di $R$ che non soddisfa $X \rightarrow Y$ (contraddicendo allora il fatto che $X \rightarrow Y 
 \in F^+$).\\
@@ -434,14 +435,21 @@ $X$ di $R$.\\
 \textsc{Output:} $X^+_F$ nella variabile $Z$\\\\
 \textsc{Begin}\\
 $Z\vcentcolon= X$;\\
-$S\vcentcolon= \{A\ t.c.\ Y \rightarrow V \in F \wedge A \in V \wedge Y \subseteq Z\}$;\\
+$S\vcentcolon= \{A\ t.c.\ (Y \rightarrow V \in F) \wedge (A \in V) \wedge (Y \subseteq Z)\}$;\\
 \textsc{while} $S \not \subseteq Z$\\
 \indent \textsc{begin}\\
 \indent $Z\vcentcolon = Z \cup S$;\\
-\indent $S\vcentcolon= \{A\ t.c.\ Y \rightarrow V \in F \wedge A \in V \wedge Y \subseteq Z\}$;\\
+\indent $S\vcentcolon= \{A\ t.c.\ (Y \rightarrow V \in F) \wedge (A \in V) \wedge (Y \subseteq Z)\}$;\\
 \indent \textsc{end}\\
 \textsc{end}\\
 \end{alg}
+\begin{exmp}
+ Ecco un esempio di esecuzione di tale algoritmo. Sia $R = ABCDEHL$ ed $F=\{A\rightarrow B$, $BC\rightarrow D$,
+ $D\rightarrow HL$, $E\rightarrow D\}$. $X=A$.\\\\
+ Passo 0: $Z^{(0)}=A$ e $S^{(0)}=B$ \\
+ Passo 1: $Z^{(1)}=AB$ mentre $S$ rimane lo stesso.\\
+ L'algoritmo termina e $X^+=A^+=AB$.
+\end{exmp}
 
 \begin{theo}
 L'Algoritmo 4.1 calcola correttamente la chiusura di un insieme di attributi $X$ rispetto ad un insieme $F$ 
@@ -476,14 +484,41 @@ Mostriamo che $r$ è un'istanza legale di $R$. Infatti, se, per assurdo, esistes
 funzionale $V \rightarrow W$ non soddisfatta da $r$, si dovrebbe avere $V \subseteq Z^{(j)}$ e $W \cap 
 (R-Z^{(j)})\not = \emptyset$; ma, in tal caso, si avrebbe $S^{(j)} \not \subseteq Z^{(j)}$ (contraddizione).
 Poiché $r$ è un'istanza legale di $R$ deve soddisfare $X \rightarrow A$; ma, allora, poiché $X = Z^{(0)} 
-\subseteq Z^{(j)}$, $A$ deve essere in $Z^{(j)}$.\hfill $\Box$
+\subseteq Z^{(j)}$, $A$ deve essere in $Z^{(j)}$.\hfill $\Box$\\
+
+Tramite l'\textsc{Algoritmo 4.1} possiamo verificare se un insieme di attributi è una chiave valida per
+uno schema di relazione; basta verificare, per la sua \linkto{defn_4_3}{Definizione 4.3} e per il \linkto{lemma4_1}{Lemma 4.1},
+che la sua chiusura rispetto ad $F$ includa o sia uguale alla relazione e che non lo siano le chiusure
+dei suoi sottoinsiemi. Vediamo un esempio.
+\begin{exmp}
+Sia $R=ABCDEH$ ed $F=\{AB\rightarrow CD$, $C\rightarrow DE$, $E\rightarrow AC\}$. Mostrare che:
+\begin{itemize}
+ \item $ABH$ è chiave per $R$;
+ \item sapendo che è l'unica chiave di $R$, dire perché $R$ non è in 3NF.
+\end{itemize}
+
+\noindent \textbf{Soluzione.}\\
+$(ABH)^+_F = ABCDEH = R$ e inoltre\\
+$(AB)^+_F = ABCDE \not= R$\\
+$(AH)^+_F = AH \not= R$\\
+$(HB)^+_F = HB \not= R$\\
+
+Ne tantomeno lo saranno le chiusure dei singoli attributi. Quindi abbiamo dimostrato che $ABH$ è chiave di $R$.\\
+La relazione $R$ non è in 3NF perché contiene dipendenze parziali e transitive:
+\begin{itemize}
+ \item $AB\rightarrow CD$ è una dipendenza parziale;
+ \item $C\rightarrow DE$, $E\rightarrow AC$ sono dipendenze transitive;
+\end{itemize}
+e ciò va contro la definizione di schema in Terza Forma Normale.
+\end{exmp}
+
 
 \subsection{Decomposizioni che preservano le dipendenze funzionali}
 Si vuole ora formalizzare il concetto di decomposizione che ``preserva un insieme di dipendenze funzionali''.
 A tal fine, cominciamo con l'introdurre i concetti di \emph{decomposizione} di uno schema di relazione ed 
 \emph{equivalenza} tra due insiemi di dipendenze funzionali.\\
 \begin{defn}
-Sia $R$ uno schema di relazione. Una decomposizione di $R$ è una \emph{famiglia} $\rho = \{R_1, R_2, \ldots, 
+Sia $R$ uno schema di relazione. Una \textbf{decomposizione} di $R$ è una famiglia $\rho = \{R_1, R_2, \ldots, 
 R_k\}$ di sottoinsiemi di $R$ che \emph{ricopre} $R$ ($\bigcup_{i=1}^k R_i = R$).
 \end{defn}
 \begin{exmp}
@@ -493,7 +528,7 @@ manca l'attributo $C$.
 
 \subsubsection{Equivalenza tra due insiemi di dipendenze funzionali}
 \begin{defn}
-Siano $F$ e $G$ due insiemi di dipendenze funzionali. $F$ e $G$ sono \emph{equivalenti}, in simboli $F \equiv 
+Siano $F$ e $G$ due insiemi di dipendenze funzionali. $F$ e $G$ sono \textbf{equivalenti}, in simboli $F \equiv 
 G$, se $F^+ = G^+$.
 \end{defn}
 Verificare l'equivalenza di due insiemi $F$ e $G$ di dipendenze funzionali richiede dunque che venga verificata
@@ -534,9 +569,9 @@ R_k\}$ una decomposizione di $R$. Diciamo che $\rho$ \emph{preserva} $F$ se $F \
 \subsubsection{Algoritmo per verificare l'equivalenza tra F e G}
 Verificare se una decomposizione preserva un insieme di dipendenze funzionali $F$ richiede, dunque,
 che venga verificata l'equivalenza dei due insiemi di dipendenze funzionali $F$ e $G = \bigcup_{i=1}^k
-\pi_{R_i}(F)$; poiché, per definizione, $F^+ \supseteq G$, per il Lemma 2 è sufficiente verificare che $F\subseteq 
-G^+$; ciò può essere fatto con il seguente algoritmo (la cui correttezza è una banale conseguenza del Lemma 4.1 e
-del Teorema 3).
+\pi_{R_i}(F)$; poiché, per definizione, $F^+ \supseteq G$, per il \linkto{lemma4_2}{Lemma 4.2} è sufficiente
+verificare che $F\subseteq G^+$; ciò può essere fatto con il seguente algoritmo (la cui correttezza è una 
+banale conseguenza del \linkto{lemma4_1}{Lemma 4.1} e del \linkto{teorema4_3}{Teorema 4.3}).
 
 \begin{alg}
 \textsc{Input:} due insiemi $F$ e $G$ di dipendenze funzionali su $R$;\\
@@ -552,7 +587,7 @@ $successo\vcentcolon=\ true$;\\
 \textsc{end}\\
 \end{alg}
 
-L'Algoritmo 2 richiede che venga calcolato $X^{+}_G$; se si volesse utilizzare a tale scopo l'Algoritmo 1
+\noindent L'\textsc{Algoritmo 2} richiede che venga calcolato $X^{+}_G$; se si volesse utilizzare a tale scopo l'\textsc{Algoritmo 1}
 si dovrebbe prima calcolare $G$, ma, per la definizione di $G$, ciò richiederebbe il calcolo di $F^+$ che
 richiede tempo esponenziale. Il seguente algoritmo permette di calcolare $X^{+}_G$ a partire da $F$.
 
@@ -573,6 +608,26 @@ $S\vcentcolon = \emptyset$;\\
 \indent \textsc{end}\\
 \textsc{end}\\
 \end{alg}
+\begin{exmp}
+Dato $R=ABCDEH$, $F=\{AB\rightarrow CD$, $E \rightarrow H$, $CD\rightarrow E$, $H\rightarrow AB\}$ ed una scomposizione
+di $R$, $\rho=\{ABCD$, $CDEH\}$. $\rho$ preserva $F$?\\
+
+\noindent \textbf{Soluzione.}\\
+Prendiamo la prima dipendenza funzionale in $F$, $AB\rightarrow CD$. Calcoliamo $(AB)^+_G$.\\\\
+$Z^{(0)}= AB$;\\
+$S^{(0)} = (AB \cap ABCD)^+_F \cap ABCD = ABCD$;\\
+$S^{(1)} = S^{(0)} \cup (AB \cap CDEH)^+_F \cap CDEH = S^{(0)} \cup \emptyset$;\\\\
+Dato che $S\subseteq Z$ saltiamo il ciclo \textsc{while} e torniamo all'Algoritmo 1. $CD \subseteq ABCD$ 
+quindi la variabile \emph{successo} rimane uguale a \emph{true}; per ogni altra dipendenza seguiamo lo
+stesso procedimento. Troveremo quindi che:
+\begin{itemize}
+ \item $AB\rightarrow CD \in G^+$
+ \item $E \rightarrow H  \in G^+$
+ \item $CD\rightarrow E \in G^+$
+ \item $H\rightarrow AB  \in G^+$
+\end{itemize}
+quindi $\rho$ preserva $R$.
+\end{exmp}
 
 \begin{theo}
 Sia $R$ uno schema di relazione, $F$ un insieme di dipendenze funzionali su $R$, $\rho =\{R_1, R_2, \ldots, R_k\}$
@@ -604,7 +659,7 @@ definizione di chiusura di un insieme di attributi, $X \subseteq Y \Rightarrow X
 \end{prop}
 Poichè $X = Z^{(0)} \subseteq Z^{(f)}$, dalla Proposizione 4.5 segue che $X^{+}_G \subseteq (Z^{(f)})^{+}_G$. 
 Mostreremo che $Z^{(f)} = (Z^{(f)})^+_G$ da cui segue $X^+_G \subseteq Z^{(f)}.$\\
-Supponiamo per assurdo che $Z^{(f)}\not =(Z^{(f)})^+_G$. Consideriamo l'Algoritmo 4.1 che, per evitare ambiguità,
+Supponiamo per assurdo che $Z^{(f)}\not =(Z^{(f)})^+_G$. Consideriamo l'\textsc{Algoritmo 4.1} che, per evitare ambiguità,
 riscriviamo sostituendo la variabile $W$ alla variabile $Z$ e la variabile $U$ alla variabile $S$:\\
 
 \noindent\textsc{Input:} uno schema di relazione $R$, un insieme $F$ di dipendenze funzionali su $R$, un sottoinsieme
@@ -887,14 +942,14 @@ e che una tale decomposizione può essere calcolata in tempo polinomiale.
 
 A tal fine abbiamo bisogno di introdurre il concetto di copertura minimale di un insieme di dipendenze funzionali.
 \begin{defn}
-Sia $F$ un insieme di dipendenze funzionali. Una \emph{copertura minimale} di $F$ è un insieme $G$ di dipendenze 
+Sia $F$ un insieme di dipendenze funzionali. Una \textbf{copertura minimale} di $F$ è un insieme $G$ di dipendenze 
 funzionali equivalente ad $F$ tale che:
 \begin{enumerate}
  \item per ogni dipendenza funzionale in $G$ la parte destra è un singleton, cioè è costituita da un unico
 attributo (ogni attributo nella parte destra è non ridondante);
- \item $\not\exists X \rightarrow A \in G\ t.c.\ \exists X' \subseteq X\ t.c.\ G \equiv G - \{X \rightarrow A\} 
+ \item $\nexists X \rightarrow A \in G\ t.c.\ \exists X' \subseteq X\ t.c.\ G \equiv G - \{X \rightarrow A\} 
  \cup \{X' \rightarrow A\}$ (ogni attributo nella parte sinistra è non ridondante);
- \item $\not\exists X \rightarrow A \in G\ t.c.\ G \equiv G - \{X \rightarrow A\}$ (ogni dipendenza è non ridondante). 
+ \item $\nexists X \rightarrow A \in G\ t.c.\ G \equiv G - \{X \rightarrow A\}$ (ogni dipendenza è non ridondante). 
 \end{enumerate}
 \end{defn}
 Per ogni insieme di dipendenze funzionali $F$ esiste una copertura minimale che può essere ottenuta in tempo polinomiale
@@ -908,6 +963,8 @@ a partire dall'insieme $G$ equivalente ad $F$ in cui per ogni dipendenza funzion
  \item e successivamente eliminando ricorsivamente ogni dipendenza funzionale $X \rightarrow A\ t.c.\ G \equiv G- 
  \{X \rightarrow A\}$.
 \end{itemize}
+
+%EXMP%
 
 Il seguente algoritmo, dato uno schema di relazione $R$ e un insieme di dipendenze funzionali $F$ su $R$, che è una 
 copertura minimale, permette di calcolare in tempo polinomiale una decomposizione $\rho = \{R_1, R_2, \ldots, R_k\}$ 
