@@ -559,7 +559,7 @@ Mostreremo che il protocollo di locking a due fasi garantisce la serializzabilit
 Sia $T$ un insieme di transazioni. Se ogni transazione in $T$ è a due fasi allora ogni
 schedule di $T$ è serializzabile. 
 \end{theo}
-\texbf{Dimostrazione.} Sia $S$ uno schedule di $T$. Supponiamo, per assurdo, che $S$ non sia serializzabile. Per il
+\textbf{Dimostrazione.} Sia $S$ uno schedule di $T$. Supponiamo, per assurdo, che $S$ non sia serializzabile. Per il
 \linkto{teorema_6_1}{Teorema 6.1}, il grafo di serializzazione $G$ di $S$ contiene un ciclo $t_{i_1}, t_{i_2}, \ldots,
 t_{i_k}$; ciò significa che $T_{i+1}$, $i\in \{1,\ldots k-1\}$, effettua un'operazione di lock, su un item su cui $t_i$
 ha effettuato un'operazione di unlock e che $t_1$ effettua un'operazione di lock, su un item su cui $t_k$ ha effettuato

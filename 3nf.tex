@@ -963,8 +963,97 @@ a partire dall'insieme $G$ equivalente ad $F$ in cui per ogni dipendenza funzion
  \item e successivamente eliminando ricorsivamente ogni dipendenza funzionale $X \rightarrow A\ t.c.\ G \equiv G- 
  \{X \rightarrow A\}$.
 \end{itemize}
+ 
+ Vediamo ora un'applicazione dell'algoritmo per trovare la copertura minimale di un insieme di dipendenze funzionali.
+\begin{exmp}
+Sia dato $F = \{AB\rightarrow CD$, $A\rightarrow CH$, $H\rightarrow D\}$. Vogliamo trovare la copertura minimale, chiamiamola $G$, di $F$.\\
 
-%EXMP%
+\noindent \textbf{Primo passo:} partiamo col trasformare ogni dipendenza che ha più di un attributo a destra in più dipendenze
+con un solo attributo a destra. \`E possibile ``sdoppiare'' una dipendenza funzionale grazie alla regola della \emph{decomposizione};
+cosi facendo modifichiamo l'insieme di partenza ottenendone uno nuovo, $G$, il quale vogliamo che sia equivalente ad $F$.
+Per convenienza, scriviamo in colonna tutte le dipendenze funzionali in $G$.
+
+\begin{multicols}{3}
+\begin{tabular}{|c|c|}
+  \hline
+  $G$\\
+  \hline
+  $AB\rightarrow C$ \\
+  $AB\rightarrow D$ \\
+  $A\rightarrow C$ \\
+  $A\rightarrow H$ \\
+  $H\rightarrow D$ \\
+  \hline
+ \end{tabular}\\
+ 
+ \begin{tabular}{|c|c|}
+  \hline
+  $G$ & $G'$\\
+  \hline
+  $AB\rightarrow C$ & $\mathbf{B}\rightarrow C$\\
+  $\ldots$ & $\ldots$ \\
+  \hline
+ \end{tabular}\\
+ 
+ \emph{\small Primo tentativo}\\\\
+
+ \begin{tabular}{|c|c|}
+  \hline
+  $G$ & $G'$\\
+  \hline
+  $AB\rightarrow C$ & $\mathbf{A}\rightarrow C$\\
+  $\ldots$ & $\ldots$ \\
+  \hline
+ \end{tabular}\\
+  
+  \emph{\small Secondo tentativo}\\
+\end{multicols}
+
+\noindent \textbf{Secondo passo:} bisogna ora ridurre al minimo numero gli attributi nella parte sinistra tale che ogni dipendenza
+rimanga valida. Procediamo a tentativi eliminando ogni attributo finché ciò è possibile, partendo da $AB\rightarrow C$. Proviamo 
+ad eliminare prima $A$, rimanendo cosi con $B\rightarrow C$; dopo questa operazione modifichiamo l'insieme di partenza ottenendone
+uno nuovo, $G'$, il quale vogliamo che sia equivalente ad $G$ (che a sua volta è equivalente ad $F$ ``per costruzione'').\\
+Perché si verifichi ciò deve valere la condizione $B\rightarrow C \in F^+$, che è verificata se e solo se $C \in B^+_F$.
+Calcoliamo quindi $B^+_F$ (che è uguale a $B$): $C$ non è presente nella chiusura, quindi l'eliminazione di $A$ non è 
+lecita. Tentiamo allora di eliminare $A$: $A^+_F=ACHD$, nella quale è presente $C$. L'eliminazione è lecita e ripetiamo lo stesso
+procedimento per ogni dipendenza funzionale in $G$; al termine dell'operazione si eliminano eventuali dipendenze duplicate.
+\begin{multicols}{2}
+\begin{multicols}{2}
+\begin{tabular}{|c|}
+  \hline
+  $G'$\\
+  \hline
+  $A\rightarrow C$\\
+  $A\rightarrow D$\\
+  $A\rightarrow H$\\
+  $H\rightarrow D$\\
+  \hline
+ \end{tabular}\\
+ 
+ \emph{\small Passo 2 completo}\\
+ 
+ \begin{tabular}{|c|}
+  \hline
+  $G''$\\
+  \hline
+  $A\rightarrow C$\\
+  $A\rightarrow H$\\
+  $H\rightarrow D$\\
+  \hline
+ \end{tabular}\\
+ 
+ \emph{\small Passo 3 completo}\\
+\end{multicols}
+\end{multicols}
+
+\noindent \textbf{Terzo passo}: ci concentriamo ora sull'eliminare le dipendenze ridondanti, ovvero ridurre al minimo il numero
+delle dipendenze nell'insieme $G'$, finquando quest'ultimo rimane equivalente ad $F$; anche qui procediamo a tentativi. Per poter
+eliminare $A\rightarrow C \in G'$, deve risultare che $C \in A^+_{(G'-\{A\rightarrow C\})}$: ciò non è vero, quindi tale dipendenza
+non può essere eliminata. Continuiamo con $A\rightarrow D \in G'$: in questo caso $D \in A^+_{(G'-\{A\rightarrow D\})}$ quindi tale 
+dipendenza può essere eliminata. Fatta questa operazione per ogni dipendenza in $G'$ otteniamo $G''$, che è la copertura minimale di
+$F$ cercata.
+\end{exmp}
+
 
 Il seguente algoritmo, dato uno schema di relazione $R$ e un insieme di dipendenze funzionali $F$ su $R$, che è una 
 copertura minimale, permette di calcolare in tempo polinomiale una decomposizione $\rho = \{R_1, R_2, \ldots, R_k\}$ 
