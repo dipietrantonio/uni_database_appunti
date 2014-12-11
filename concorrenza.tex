@@ -58,8 +58,8 @@ Consideriamo le seguenti transazioni
    write(X)\\
    \\
    \\
-   \hline\\
-  \end{tabular}
+   \hline
+  \end{tabular}\\
  \end{multicols}
  
  e i seguenti schedule di $\{t_1,t_2\}$:
@@ -495,12 +495,12 @@ altro item, lo schedule non è serializzabile. L'algoritmo lavora nel modo segue
 Dato uno schedule S:
 \begin{itemize}
  \item crea un grafo diretto $G$ (grafo di serializzazione) i cui nodi corrispondono alle transazioni; in
-tale grafo c'è un arco diretto da $t_i$ a $t_j$ se in $S$ $T_i$ esegue un $unlock(X)$ e $T_j$ esegue il successivo
+tale grafo c'è un arco diretto da $t_i$ a $t_j$ se in $S$ $t_i$ esegue un $unlock(X)$ e $t_j$ esegue il successivo
 $lock(X)$ (il significato intuitivo dell'esistenza di un arco da $t_i$ a $t_j$ è che $t_j$ legge il valore per $X$
 scritto da $t_i$ e quindi se esiste uno schedule seriale equivalente ad $S$ in tale shedule $t_i$ deve
 precedere $t_j$);
 \item verifica se $G$ ha un ciclo. Se $G$ ha un ciclo allora $S$ non è serializzabile; altrimenti esiste un
-ordinamento $S'$ delle transazioni tale che $t_i$ precede $t_j$ se c'è in $G$ un arco diretto da $T_i$ a $T_j$; tale
+ordinamento $S'$ delle transazioni tale che $t_i$ precede $t_j$ se c'è in $G$ un arco diretto da $t_i$ a $t_j$; tale
 ordinamento può essere ottenuto applicando a $G$ il procedimento noto come ordinamento
 topologico consistente nell'eliminare ricorsivamente da un grafo diretto i nodi che non hanno
 archi entranti (l'ordine di eliminazione dei nodi fornisce lo schedule seriale $S'$).
@@ -561,7 +561,7 @@ schedule di $T$ è serializzabile.
 \end{theo}
 \textbf{Dimostrazione.} Sia $S$ uno schedule di $T$. Supponiamo, per assurdo, che $S$ non sia serializzabile. Per il
 \linkto{teorema_6_1}{Teorema 6.1}, il grafo di serializzazione $G$ di $S$ contiene un ciclo $t_{i_1}, t_{i_2}, \ldots,
-t_{i_k}$; ciò significa che $T_{i+1}$, $i\in \{1,\ldots k-1\}$, effettua un'operazione di lock, su un item su cui $t_i$
+t_{i_k}$; ciò significa che $t_{i+1}$, $i\in \{1,\ldots k-1\}$, effettua un'operazione di lock, su un item su cui $t_i$
 ha effettuato un'operazione di unlock e che $t_1$ effettua un'operazione di lock, su un item su cui $t_k$ ha effettuato
 un'operazione di unlock. Pertanto in $S$ $t_1$ effettua un'operazione di lock dopo aver effettuato un'operazione di unlock
 e quindi $t_1$ non è a due fasi (contraddizione).\\
@@ -1009,7 +1009,7 @@ essere letto da qualche altra transazione può causare un effetto di roll-back a
 
 Consideriamo il seguente schedule
 \begin{center}
- \begin{tabular}{|l|l|}
+ \begin{longtable}{|l|l|}
  \hline
  $t_1$ & $t_2$\\
  \hline
@@ -1034,7 +1034,7 @@ unlock(X)& \\
  commit& \\
  unlock(Y)& \\
  \hline
- \end{tabular}
+ \end{longtable}
 \end{center}
 
 Se la transazione $t_1$ viene abortita dopo che ha letto $Y$, il valore di $X$ scritto da $t_1$ è un dato
@@ -1056,7 +1056,6 @@ La condizione 1 garantisce che se una transazione è abortita allora non ha modi
 nella base di dati; la condizione 2 garantisce che quando una transazione legge un item scritto da
 un'altra transazione quest'ultima non può essere abortita (quindi nessuna transazione legge dati
 sporchi).\\
-
 Perché la transazione $t_1$ nell'esempio precedente soddisfi il protocollo di locking a due fasi stretto
 deve essere modificata nel modo seguente.
 
