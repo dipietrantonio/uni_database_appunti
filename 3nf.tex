@@ -778,7 +778,7 @@ ha un join senza perdita.
 
 Il seguente esempio mostra come tale algorimo viene applicato.\\
 \begin{exmp}
- Sia $R=ABCDE$ uno schema di relazione, $F=\{C\rightarrow D,\ DH\rightarrow C,\ D\rightarrow H,\ A \rightarrow BC\}$
+ Sia $R=ABCDEH$ uno schema di relazione, $F=\{C\rightarrow D,\ DH\rightarrow C,\ D\rightarrow H,\ A \rightarrow BC\}$
  un insieme di dipendenze funzionali su $R$ e $\rho = \{AE, ABDH, CDE\}$ una scomposizione di $R$. Quello che 
  vogliamo sapere è: $\rho$ ha un join senza perdita?\\
  Come indicato dall'Algoritmo 4.4, si costruisca una tabella che ha come colonne gli attributi di $R$ e come 
@@ -800,7 +800,7 @@ Il seguente esempio mostra come tale algorimo viene applicato.\\
  \end{center}
  
  Ora, per ogni dipendenza funzionale $A\rightarrow Y \in F$, controlliamo se ci sono due righe (tuple) $t_1$
- e $t_2$ tali che $t_1[X] = t_2[X]$ e $t_1[Y] \not= t_2[Y]$. In questo caso abbiamo le dipendenzefunzionali $D\rightarrow H$ e 
+ e $t_2$ tali che $t_1[X] = t_2[X]$ e $t_1[Y] \not= t_2[Y]$. In questo caso abbiamo le dipendenze funzionali $D\rightarrow H$ e 
  $A \rightarrow BC$ verifica tale condizione; per convenienza conviene segnare, ad ogni iterazione dell'algoritmo, quali 
  dipendenze funzionali verifichino la suddetta condizione. Usiamo la seguente tabella dove le colonne sono le iterazioni, 
  e le righe rappresentano le dipendenze funzionali. Inseriremo una ``$\checkmark$'' quando una dipendenza funzionale 
