@@ -614,26 +614,28 @@ Dato $R=ABCDEH$, $F=\{AB\rightarrow CD$, $E \rightarrow H$, $CD\rightarrow E$, $
 di $R$, $\rho=\{ABCD$, $CDEH\}$. $\rho$ preserva $F$?\\
 
 \noindent \textbf{Soluzione.}\\
-Prendiamo la prima dipendenza funzionale in $F$, $AB\rightarrow CD$. Calcoliamo $(AB)^+_G$.\\\\
-$Z^{(0)}= AB$;\\
-$S^{(0)} = (AB \cap ABCD)^+_F \cap ABCD = ABCD$;\\
-$S^{(1)} = S^{(0)} \cup (AB \cap CDEH)^+_F \cap CDEH = S^{(0)} \cup \emptyset$;\\\\
+Prendiamo la prima dipendenza funzionale in $F$, $AB\rightarrow CD$. Notiamo che $AB \cup CD$ è presente in una delle due
+relazioni della scomposizione, quindi tale dipendenza funzionale è per certo facente parte di $G^+$. Lo stesso vale per
+$E\cup H$, $CD\cup E$. Rimane solo da verificare $H\rightarrow AB$ tramite l'algoritmo.\\\\
+$Z^{(0)}= H$;\\
+$S^{(0)} = (H \cap ABCD)^+_F \cap ABCD = \emptyset$;\\
+$S^{(1)} = S^{(0)} \cup (H \cap CDEH)^+_F \cap CDEH = \emptyset \cup CDEH$;\\\\
 Dato che $S\not\subseteq Z$ eseguiamo il ciclo \textsc{while}:\\\\
-$Z^{(1)}= ABCD$;\\
+$Z^{(1)}= CDEH$;\\
 Entriamo nel for:\\
-\indent $S^{(2)} = S^{(1)} \cup [(ABCD \cap ABCD)^+_F \cap ABCD] = ABCD$;\\
-\indent $S^{(3)} = S^{(2)} \cup [(ABCD \cap CDEH)^+_F \cap CDEH] = ABCDEH$;\\
+\indent $S^{(2)} = S^{(1)} \cup [(CDEH \cap ABCD)^+_F \cap ABCD] = ABCDEH$;\\
+\indent $S^{(3)} = S^{(2)} \cup [(CDEH \cap CDEH)^+_F \cap CDEH] = ABCDEH$;\\
 
 \noindent Terminato il ciclo for notiamo che un'altra volta $S\not\subseteq Z$, quindi rieseguiamo il ciclo while:\\\\
 $Z^{(2)}= ABCDEH$;\\
 entriamo nel for:\\
-\indent $S^{(4)} = S^{(3)} \cup [(ABCDEH \cap ABCD)^+_F \cap ABCD] = ABCD$;\\
+\indent $S^{(4)} = S^{(3)} \cup [(ABCDEH \cap ABCD)^+_F \cap ABCD] = ABCDEH$;\\
 \indent $S^{(5)} = S^{(4)} \cup [(ABCDEH \cap CDEH)^+_F \cap CDEH] = ABCDEH$;\\
 
 \noindent Notiamo che essenzialmente $S$ non è cambiato ma $Z$ si, quindi ora $S \subseteq Z$ e si 
-esce dal ciclo \textsc{while} per tornare all'Algoritmo 1. $CD \subseteq ABCDEH$ 
-quindi la variabile \emph{successo} rimane uguale a \emph{true}; per ogni altra dipendenza seguiamo lo
-stesso procedimento. Troveremo quindi che: $AB\rightarrow CD \in G^+$, $E \rightarrow H  \in G^+$, 
+esce dal ciclo \textsc{while} per tornare all'Algoritmo 1. $H \subseteq ABCDEH$ 
+quindi la variabile \emph{successo} rimane uguale a \emph{true};Troviamo quindi che: 
+$AB\rightarrow CD \in G^+$, $E \rightarrow H  \in G^+$, 
 $CD\rightarrow E \in G^+$, $H\rightarrow AB  \in G^+$. Ne segue $\rho$ preserva $R$.
 \end{exmp}
 
