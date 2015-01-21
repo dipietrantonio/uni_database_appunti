@@ -553,16 +553,16 @@ R_k\}$ una decomposizione di $R$. Diciamo che $\rho$ \emph{preserva} $F$ se $F \
 
 \begin{exmp}
  Riprendiamo i dati dell'\linkto{esempio_4_2}{Esempio 4.2}: la relazione $Studente = \{Matr, Com, Prov\}$,
- con $F = $ \{$Matr\rightarrow Com$, $Matr\rightarrow Prov$, $Com\rightarrow Prov$\}. Due decomposizioni possibili
- individuate precendentemente sono:
+ con $F = $ \{$Matr\rightarrow Com$, $Matr\rightarrow Prov$, $Com\rightarrow Prov$\}. Una decomposizione possibile
+ individuata precendentemente è:
   \begin{center}
     $R_1 = \{Matr, Com\}$ con $F_1 = \{Matr\rightarrow Com\}$ \\
     $R_2 = \{Matr, Prov\}$ con $F_2 = \{Matr\rightarrow Prov\}$ \\
    \end{center}
  Si verifica applicando la definizione 4.10 che la dipendenza $Com \rightarrow Prov$ non è preservata, 
- perché in $R_1$ manca $Prov$ e in $R_2$ manca $Com$. Una decomposizione alternativa per $R_2$ è
+ perché in $R_1$ manca $Prov$ e in $R_2$ manca $Com$. Una scelta alternativa per $R_2$ è
  $\{Com, Prov\}$; in questo modo tutte le dipendenze funzionali sono preservate. In altre parole abbiamo
- \textbf{proiettato le dipendenze}, ovvero abbiamo preso gli attributi $X$ e $Y$ da una dipendenza funzionale
+ \textbf{proiettato le dipendenze}, ovvero abbiamo preso gli insiemi di attributi $X$ e $Y$ da una dipendenza funzionale
  $X \rightarrow Y$ e vedere se essi sono presenti nella relazione esaminata.
 \end{exmp}
 
@@ -585,7 +585,7 @@ $successo\vcentcolon=\ true$;\\
 \indent $calcola\ X_{G}^+$;\\
 \indent \textsc{if} $Y \not\subseteq X^+_G$ \textsc{then} $successo=false$;\\
 \indent \textsc{end}\\
-\textsc{end}\\
+\textsc{end}
 \end{alg}
 
 \noindent L'\textsc{Algoritmo 2} richiede che venga calcolato $X^{+}_G$; se si volesse utilizzare a tale scopo l'\textsc{Algoritmo 1}
@@ -600,12 +600,12 @@ decomposizione $\rho =\{R_1, R_2, \ldots, R_k\}$ di $R$, un sottoinsieme $X$ di 
 $Z\vcentcolon = X$;\\
 $S\vcentcolon = \emptyset$;\\
 \textsc{for} $j\vcentcolon = 1$ \textsc{to} $k$\\
-\indent$S \vcentcolon= S \cup (Z \cap R_j)^{+}_F \cap R_j$;\\
+\indent$S \vcentcolon= S \cup [(Z \cap R_j)^{+}_F \cap R_j]$;\\
 \textsc{while} $S \not\subseteq Z$\\
 \indent \textsc{Begin}\\
 \indent $Z\vcentcolon = Z \cup S$;\\
 \indent \textsc{for} $j\vcentcolon= 1$ \textsc{to} $k$\\
-\indent \indent $S\vcentcolon= S \cup (Z \cap R_j)^{+}_F \cap R_j$;\\
+\indent \indent $S\vcentcolon= S \cup [(Z \cap R_j)^{+}_F \cap R_j]$;\\
 \indent \textsc{end}\\
 \textsc{end}\\
 \end{alg}
@@ -618,16 +618,23 @@ Prendiamo la prima dipendenza funzionale in $F$, $AB\rightarrow CD$. Calcoliamo 
 $Z^{(0)}= AB$;\\
 $S^{(0)} = (AB \cap ABCD)^+_F \cap ABCD = ABCD$;\\
 $S^{(1)} = S^{(0)} \cup (AB \cap CDEH)^+_F \cap CDEH = S^{(0)} \cup \emptyset$;\\\\
-Dato che $S\subseteq Z$ saltiamo il ciclo \textsc{while} e torniamo all'Algoritmo 1. $CD \subseteq ABCD$ 
+Dato che $S\not\subseteq Z$ eseguiamo il ciclo \textsc{while}:\\\\
+$Z^{(1)}= ABCD$;\\
+Entriamo nel for:\\
+\indent $S^{(2)} = S^{(1)} \cup [(ABCD \cap ABCD)^+_F \cap ABCD] = ABCD$;\\
+\indent $S^{(3)} = S^{(2)} \cup [(ABCD \cap CDEH)^+_F \cap CDEH] = ABCDEH$;\\
+
+\noindent Terminato il ciclo for notiamo che un'altra volta $S\not\subseteq Z$, quindi rieseguiamo il ciclo while:\\\\
+$Z^{(2)}= ABCDEH$;\\
+entriamo nel for:\\
+\indent $S^{(4)} = S^{(3)} \cup [(ABCDEH \cap ABCD)^+_F \cap ABCD] = ABCD$;\\
+\indent $S^{(5)} = S^{(4)} \cup [(ABCDEH \cap CDEH)^+_F \cap CDEH] = ABCDEH$;\\
+
+\noindent Notiamo che essenzialmente $S$ non è cambiato ma $Z$ si, quindi ora $S \subseteq Z$ e si 
+esce dal ciclo \textsc{while} per tornare all'Algoritmo 1. $CD \subseteq ABCDEH$ 
 quindi la variabile \emph{successo} rimane uguale a \emph{true}; per ogni altra dipendenza seguiamo lo
-stesso procedimento. Troveremo quindi che:
-\begin{itemize}
- \item $AB\rightarrow CD \in G^+$
- \item $E \rightarrow H  \in G^+$
- \item $CD\rightarrow E \in G^+$
- \item $H\rightarrow AB  \in G^+$
-\end{itemize}
-quindi $\rho$ preserva $R$.
+stesso procedimento. Troveremo quindi che: $AB\rightarrow CD \in G^+$, $E \rightarrow H  \in G^+$, 
+$CD\rightarrow E \in G^+$, $H\rightarrow AB  \in G^+$. Ne segue $\rho$ preserva $R$.
 \end{exmp}
 
 \begin{theo}
