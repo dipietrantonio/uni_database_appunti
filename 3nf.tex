@@ -37,7 +37,7 @@ concetti in tre relazioni distinte
 \end{center}
 
 tali anomalie vengono eliminate. Tuttavia è possibile riscontrare il permanere di simili 
-anomalie concernenti le città:per eliminare queste ultime anomalie che hanno la stessa 
+anomalie concernenti le città: per eliminare queste ultime anomalie che hanno la stessa 
 origine di quelle viste precedentemente, posso utilizzare lo \emph{schema} seguente:
 \begin{center}
   $Studente(Matr,Nome,Citt\grave{a})$\\
@@ -48,7 +48,7 @@ origine di quelle viste precedentemente, posso utilizzare lo \emph{schema} segue
 
 \subsection{La Terza Forma Normale}
 Si è constatato che ci sono schemi migliori di altri. Esistono dunque \emph{regole 
-e proprietà formali} che ci permettono di costruire un \emph{buono} schema?\\
+e proprietà formali} che ci permettono di costruire un \emph{buono} schema?
 Se si analizzano le anomalie nella relazione $Universit\grave{a}$ si nota che sono 
 legate al fatto che
 \begin{itemize}
@@ -62,6 +62,7 @@ Il concetto di ``determina univocamente'' è colto dal concetto formale di \emph
   è una coppia ordinata di sottoinsiemi non vuoti $X$, $Y$ $\in R$ e viene denotata 
   come $X \rightarrow Y$.
 \end{defn}
+
 \begin{prop}
 Un'istanza $r$ di $R$ \emph{soddisfa} la dipendenza funzionale $X \rightarrow Y$
 se per ogni coppia di tuple $t_1$, $t_2$ $\in r$ si ha che se $t_1[X] = t_2[X] 
@@ -264,8 +265,8 @@ risultato:
 \end{exmp}
 Una istanza di una relazione contiene i dati di una certa realtà che lo schema della 
 base di dati intende rappresentare e si assumono come riferimenti veritieri. Pertanto 
-quando si decompone uno schema si vuole che ogni sua istanza sia ricostruibile da 
-un'istanza dello schema ottenuto dalla decomposizione.
+quando si decompone uno schema si vuole che ogni sua istanza sia ricostruibile dalle istanze
+delle relazioni nella decomposizione dello schema.
 \begin{prop}
 Una decomposizione di uno schema di relazione deve avere i seguenti requisiti:
 \begin{itemize}
@@ -368,7 +369,7 @@ Con le conoscenze acquisite finora siamo in grado di dimostrare che $F^+ = F^A$.
 \begin{theo}
 Siano $R$ uno schema di relazione ed $F$ un insieme di dipendenze funzionali su $R$. Si ha che $F^+ = F^A$.
 \end{theo}
-\textbf{Dimostrazione.} Mostreremo che $F^+ \subseteq F^A$ e contemporaneamente $F^+ \subseteq F^A$, equivalente
+\textbf{Dimostrazione.} Mostreremo che $F^+ \supseteq F^A$ e contemporaneamente $F^+ \subseteq F^A$, equivalente
 a dire che i due insiemi sono uguali.\\
 $\mathbf{F^{\boldsymbol{+}} \boldsymbol{\supseteq} F^A}$. Sia $X \rightarrow Y$ una dipendenza funzionale in $F^A$.
 Dimostriamo che $X\rightarrow Y \in F^+$ per induzione sul numero $i$ di applicazioni di uno degli assiomi di Armstrong.\\\\
