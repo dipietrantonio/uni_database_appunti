@@ -634,7 +634,7 @@ entriamo nel for:\\
 
 \noindent Notiamo che essenzialmente $S$ non è cambiato ma $Z$ si, quindi ora $S \subseteq Z$ e si 
 esce dal ciclo \textsc{while} per tornare all'Algoritmo 1. $H \subseteq ABCDEH$ 
-quindi la variabile \emph{successo} rimane uguale a \emph{true};Troviamo quindi che: 
+quindi la variabile \emph{successo} rimane uguale a \emph{true}. Troviamo quindi che: 
 $AB\rightarrow CD \in G^+$, $E \rightarrow H  \in G^+$, 
 $CD\rightarrow E \in G^+$, $H\rightarrow AB  \in G^+$. Ne segue $\rho$ preserva $R$.
 \end{exmp}
@@ -667,7 +667,7 @@ Quindi $Z^{(i)} \subseteq X^{+}_G$.\\
 Presi comunque due insiemi di attributi $X$ ed $Y$ e un insieme di dipendenze funzionali $F$ si ha, per la 
 definizione di chiusura di un insieme di attributi, $X \subseteq Y \Rightarrow X^{+}_F \subseteq Y^{+}_F$. 
 \end{prop}
-Poichè $X = Z^{(0)} \subseteq Z^{(f)}$, dalla Proposizione 4.5 segue che $X^{+}_G \subseteq (Z^{(f)})^{+}_G$. 
+Poichè $X = Z^{(0)} \subseteq Z^{(f)}$, dalla Proposizione 4.4 segue che $X^{+}_G \subseteq (Z^{(f)})^{+}_G$. 
 Mostreremo che $Z^{(f)} = (Z^{(f)})^+_G$ da cui segue $X^+_G \subseteq Z^{(f)}.$\\
 Supponiamo per assurdo che $Z^{(f)}\not =(Z^{(f)})^+_G$. Consideriamo l'\textsc{Algoritmo 4.1} che, per evitare ambiguità,
 riscriviamo sostituendo la variabile $W$ alla variabile $Z$ e la variabile $U$ alla variabile $S$:\\
@@ -677,11 +677,11 @@ $X$ di $R$.\\
 \textsc{Output:} $X^+_F$ nella variabile $W$\\\\
 \textsc{Begin}\\
 $W\vcentcolon= X$;\\
-$U\vcentcolon= \{A\ t.c.\ Y \rightarrow V \in F \wedge A \in V \wedge Y \subseteq W\}$;\\
+$U\vcentcolon= \{A\ t.c.\ (Y \rightarrow V \in F) \wedge (A \in V) \wedge (Y \subseteq W)\}$;\\
 \textsc{while} $U \not \subseteq W$\\
 \indent \textsc{begin}\\
 \indent $W\vcentcolon = W \cup U$;\\
-\indent $U\vcentcolon= \{A\ t.c.\ Y \rightarrow V \in F \wedge A \in V \wedge Y \subseteq W\}$;\\
+\indent $U\vcentcolon= \{A\ t.c.\ (Y \rightarrow V \in F) \wedge (A \in V) \wedge (Y \subseteq W)\}$;\\
 \indent \textsc{end}\\
 \textsc{end}\\
 
@@ -691,13 +691,13 @@ $Z^{(f)}\not =(Z^{(f)})^+_G$, deve esistere un attributo $B$ che appartiene a $U
 a $W^{(0)} =Z^{(f)}$ (altrimenti si avrebbe $Z^{(f)} =(Z^{(f)})^+_G$). D'altra parte si ha:
 \begin{center}
 \begin{math}
-U^{(0)} = \{A\ t.c.\ Y \rightarrow V \in G \wedge A \in V \wedge Y \subseteq W^{(0)}\}
+U^{(0)} = \{A\ t.c.\ (Y \rightarrow V \in G) \wedge (A \in V) \wedge (Y \subseteq W^{(0)})\}
 \end{math}
 \end{center}
 e quindi, per la definizione di $G$, deve esistere $j$ tale che:
 \begin{center}
  \begin{math}
-  B \in \{A\ t.c.\ Y \rightarrow V \in F^+ \wedge A \in V \wedge Y \subseteq W^{(0)} \wedge YV \subseteq R_j\}
+  B \in \{A\ t.c.\ (Y \rightarrow V \in F^+) \wedge (A \in V) \wedge (Y \subseteq W^{(0)}) \wedge (YV \subseteq R_j)\}
  \end{math}
 \end{center}
 Da $Y \subseteq W^{(0)} \wedge YV \subseteq R_j$ segue che:
@@ -707,7 +707,7 @@ Da $Y \subseteq W^{(0)} \wedge YV \subseteq R_j$ segue che:
  \end{math}
 \end{center}
 Inoltre dal fatto che $Y \rightarrow V \in F^+$ segue, per il \linkto{lemma4_1}{Lemma 4.1}, che $V \subseteq Y^+_F$
-e, quindi, per la [a] e per la Proposizione 4.5 si ha che $V \subseteq (Z^{(f)} \cap R_j)^+_F$. Infine 
+e, quindi, per la [a] e per la Proposizione 4.4 si ha che $V \subseteq (Z^{(f)} \cap R_j)^+_F$. Infine 
 poichè $YV \subseteq R_j$ si ha:
 \begin{center}
  \begin{math}
