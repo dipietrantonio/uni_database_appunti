@@ -745,7 +745,7 @@ istanza legale $r$ di $R$, indicato con $m_{\rho}(r) =\pi_{R_1}(r) \bowtie \pi_{
 \emph{Prova di }[1]. Sia $t$ una tupla di $r$. $\forall i \in \{1, \ldots, k\}$, $t[R_i] \in \pi_{R_i}(r)$ e
 quindi $t \in m_{\rho}(r)$.\\
 \emph{Prova di }[2]. Per il punto [1] si ha $r \subseteq m_{\rho}(r)$ e, quindi, $\pi_{R_i}(r) \subseteq 
-\pi_{R_i}(m_{\rho}(r))$. E' sufficiente, pertanto, mostrare che $\pi_{R_i}(r) \supseteq \pi_{R_i}(m_{\rho}(r))$.
+\pi_{R_i}(m_{\rho}(r))$. \`E sufficiente, pertanto, mostrare che $\pi_{R_i}(r) \supseteq \pi_{R_i}(m_{\rho}(r))$.
 Banalmente, per ogni tupla $t \in m_\rho(r)$ e per ogni $i \in \{1, \ldots, k\}$, deve esistere una tupla
 $t' \in r\ t.c.\ t[R_i] = t'[R_i]$.\\
 \emph{Prova di }[3]. Per il punto [2] si ha $\pi_{R_i}(m_\rho(r)) = \pi_{R_i}(r)$. Pertanto
@@ -811,7 +811,7 @@ Il seguente esempio mostra come tale algorimo viene applicato.\\
  
  Ora, per ogni dipendenza funzionale $A\rightarrow Y \in F$, controlliamo se ci sono due righe (tuple) $t_1$
  e $t_2$ tali che $t_1[X] = t_2[X]$ e $t_1[Y] \not= t_2[Y]$. In questo caso abbiamo le dipendenze funzionali $D\rightarrow H$ e 
- $A \rightarrow BC$ verifica tale condizione; per convenienza conviene segnare, ad ogni iterazione dell'algoritmo, quali 
+ $A \rightarrow BC$ che verificano tale condizione; per convenienza conviene segnare, ad ogni iterazione dell'algoritmo, quali 
  dipendenze funzionali verifichino la suddetta condizione. Usiamo la seguente tabella dove le colonne sono le iterazioni, 
  e le righe rappresentano le dipendenze funzionali. Inseriremo una ``$\checkmark$'' quando una dipendenza funzionale 
  verifica la condizione; ``$\cdot$'' altrimenti:\\
@@ -826,9 +826,10 @@ Il seguente esempio mostra come tale algorimo viene applicato.\\
   \end{tabular}
  \end{center}
  
- Tornando alla tabella precedente, visto che l'ultima dipendenza funzionale verifica la condizione cercata nelle righe 1 e 2,
+ Tornando alla tabella precedente, visto che, ad esempio, l'ultima dipendenza funzionale verifica la condizione cercata nelle righe 1 e 2,
  andiamo a modificare i valori di ogni attributo $Y$, in questo caso $Y= BC$; dato che $t_1[B]\not= a_j$ abbiamo che il valore
- della cella diviene uguale a $t_2[B]$, mentre $t_1[C]\vcentcolon= t_2[C]$. Dopo queste modifiche, al termine della \textbf{prima 
+ della cella diviene uguale a $t_2[B]$, mentre $t_1[C]\vcentcolon= t_2[C]$. Eseguiamo l'operazione anche per l'altra dipendenza che 
+ verifica tale condizione. Dopo queste modifiche, al termine della \textbf{prima 
  iterazione} si ha la seguente situazione:
  \begin{multicols}{2}
    \begin{center}
@@ -916,7 +917,7 @@ termina indicando che $\rho$ ha un join senza perdita.
 Sia $R$ uno schema di relazione, $F$ un insieme di dipendenze funzionali su $R$ e $\rho =\{R_1, R_2, \ldots, R_k\}$
 una decomposizione di $R$. L'Algoritmo 4.4 decide correttamente se $\rho$ ha un join senza perdita.
 \end{theo}
-\textbf{Dimostrazione.} Occorre dimostrare che: quando l'algoritmo termina la tabella r ha una tupla con tutte `a' 
+\textbf{Dimostrazione.} Occorre dimostrare che: quando l'algoritmo termina la tabella $r$ ha una tupla con tutte `a' 
 $\Leftrightarrow$ $\rho$ ha un join senza perdita. Verrà dimostrata solo la parte ``solo se'' (per uno sketch della 
 prova della parte ``se'' consultare il testo di Ullman).\\
 \emph{Parte solo se.} Supponiamo per assurdo $\rho$ abbia un join senza perdita e che quando l'algoritmo
@@ -950,7 +951,7 @@ $\rho = \{R_1, R_2, \ldots, R_k\}$ di $R$ tale che:
 e che una tale decomposizione può essere calcolata in tempo polinomiale. 
 \end{prop}
 
-A tal fine abbiamo bisogno di introdurre il concetto di copertura minimale di un insieme di dipendenze funzionali.
+A tal fine abbiamo bisogno di introdurre il concetto di \emph{copertura minimale} di un insieme di dipendenze funzionali.
 \begin{defn}
 Sia $F$ un insieme di dipendenze funzionali. Una \textbf{copertura minimale} di $F$ è un insieme $G$ di dipendenze 
 funzionali equivalente ad $F$ tale che:
@@ -976,7 +977,7 @@ a partire dall'insieme $G$ equivalente ad $F$ in cui per ogni dipendenza funzion
  
  Vediamo ora un'applicazione dell'algoritmo per trovare la copertura minimale di un insieme di dipendenze funzionali.
 \begin{exmp}
-Sia dato $F = \{AB\rightarrow CD$, $A\rightarrow CH$, $H\rightarrow D\}$. Vogliamo trovare la copertura minimale, chiamiamola $G$, di $F$.\\
+Sia dato $F = \{AB\rightarrow CD$, $A\rightarrow CH$, $H\rightarrow D\}$. Vogliamo trovare la copertura minimale di $F$.\\
 
 \noindent \textbf{Primo passo:} partiamo col trasformare ogni dipendenza che ha più di un attributo a destra in più dipendenze
 con un solo attributo a destra. \`E possibile ``sdoppiare'' una dipendenza funzionale grazie alla regola della \emph{decomposizione};
@@ -1019,8 +1020,8 @@ Per convenienza, scriviamo in colonna tutte le dipendenze funzionali in $G$.
   \emph{\small Secondo tentativo}\\
 \end{multicols}
 
-\noindent \textbf{Secondo passo:} bisogna ora ridurre al minimo numero gli attributi nella parte sinistra tale che ogni dipendenza
-rimanga valida. Procediamo a tentativi eliminando ogni attributo finché ciò è possibile, partendo da $AB\rightarrow C$. Proviamo 
+\noindent \textbf{Secondo passo:} bisogna ora ridurre al minimo numero gli attributi nella parte sinistra in modo tale che l'insieme di partenza
+e di arrivo siano equivalenti. Procediamo a tentativi eliminando ogni attributo finché ciò è possibile, partendo da $AB\rightarrow C$. Proviamo 
 ad eliminare prima $A$, rimanendo cosi con $B\rightarrow C$; dopo questa operazione modifichiamo l'insieme di partenza ottenendone
 uno nuovo, $G'$, il quale vogliamo che sia equivalente ad $G$ (che a sua volta è equivalente ad $F$ ``per costruzione'').\\
 Perché si verifichi ciò deve valere la condizione $B\rightarrow C \in F^+$, che è verificata se e solo se $C \in B^+_F$.
@@ -1057,7 +1058,7 @@ procedimento per ogni dipendenza funzionale in $G$; al termine dell'operazione s
 \end{multicols}
 
 \noindent \textbf{Terzo passo}: ci concentriamo ora sull'eliminare le dipendenze ridondanti, ovvero ridurre al minimo il numero
-delle dipendenze nell'insieme $G'$, finquando quest'ultimo rimane equivalente ad $F$; anche qui procediamo a tentativi. Per poter
+delle dipendenze nell'insieme $G'$, fin quando quest'ultimo rimane equivalente ad $F$; anche qui procediamo a tentativi. Per poter
 eliminare $A\rightarrow C \in G'$, deve risultare che $C \in A^+_{(G'-\{A\rightarrow C\})}$: ciò non è vero, quindi tale dipendenza
 non può essere eliminata. Continuiamo con $A\rightarrow D \in G'$: in questo caso $D \in A^+_{(G'-\{A\rightarrow D\})}$ quindi tale 
 dipendenza può essere eliminata. Fatta questa operazione per ogni dipendenza in $G'$ otteniamo $G''$, che è la copertura minimale di
@@ -1105,7 +1106,7 @@ L'Algoritmo 4.5 permette di calcolare in tempo polinomiale una decomposizione $\
 \textbf{Dimostrazione.}\\
 \emph{$\rho$ preserva $F$.} Sia $G = \bigcup_{i=1}^k \pi_{R_i}(F)$. Poiché per ogni dipendenza funzionale $X 
 \rightarrow A \in F$ si ha che $XA \in \rho$, si ha che $G \supseteq F$ e, quindi $G^+ \supseteq F^+$. 
-L'inclusione $G^+ \subseteq F^+$ è banalmente verificata in quanto per definizione, $G\subseteq F?+$. \\
+L'inclusione $G^+ \subseteq F^+$ è banalmente verificata in quanto, per definizione, $G\subseteq F^+$. \\
 \emph{Ogni schema di relazione in $\rho$ è in 3NF.}
 Se $S \in \rho$, ogni attributo in $S$ fa parte della chiave e quindi, banalmente, $S$ è in 3NF. Se $R \in \rho$
 esiste una dipendenza funzionale in $F$ che coinvolge tutti gli attributi in $R$. Poiché $F$ è una copertura minimale
@@ -1146,10 +1147,10 @@ $Z$ dall'Algoritmo 4.1 quando calcola $K^+$ sia $A_1, A_2, \ldots, A_n$, e suppo
 \{1, \ldots, n\}$, l'attributo $A_i$ venga aggiunto a $Z$ a causa della presenza in $F$ della dipendenza $Y_i 
 \rightarrow A_i$ dove 
 \begin{center}
-$Y_i \rightarrow Z^{(i-1)} = KA_1A_2\ldots A_{i-1} \subseteq K^+$. 
+$Y_i \subseteq Z^{(i-1)} = KA_1A_2\ldots A_{i-1} \subseteq K^+$. 
 \end{center}
 
-Per dimostrare che $\rho$ ha un join senza perdita mostreremo che quando l'Algoritmo 4.4 è applicato a $\rho$
+Per dimostrare che $\sigma$ ha un join senza perdita mostreremo che quando l'Algoritmo 4.4 è applicato a $\sigma$
 viene prodotta una tabella che ha una riga con tutte `a'. Senza perdita di generalità, supponiamo che l'Algoritmo 4.4
 esamini le dipendenze funzionali $Y_1 \rightarrow A_1, Y_2 \rightarrow A_2, \ldots, Y_n \rightarrow A_n$ in questo ordine.
 Dimostreremo per induzione su $i$ che dopo che è stata considerata la dipendenza funzionale $Y_i \rightarrow A_i$ nella 
