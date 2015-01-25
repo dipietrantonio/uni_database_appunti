@@ -272,7 +272,7 @@ serializzabile. Inoltre quando le transazioni vengono sottomesse al sistema in m
 difficile stabilire quando uno schedule comincia e quando finisce. Quindi l'approccio seguito nei
 sistemi è quello di determinare metodi che garantiscano la serializzabilità di uno schedule
 eliminando così la necessità di dover testare ogni volta la serializzabilità di uno schedule. Uno di
-4tali metodi consiste nell'imporre dei protocolli, cioè delle regole, alle transazioni in modo da
+tali metodi consiste nell'imporre dei protocolli, cioè delle regole, alle transazioni in modo da
 garantire la serializzabilità di ogni schedule. Questi protocolli usano tecniche di \emph{locking} (cioè di
 controllo dell'accesso ai dati) per prevenire l'accesso concorrente ai dati. Altri metodi di controllo
 usano i \textbf{timestamp} delle transazioni, cioè degli identificatori delle transazioni che vengono generati
@@ -381,7 +381,7 @@ Uno schedule legale di $t_1$ e $t_2$ è il seguente:
 Il più semplice modello per le transazioni è quello che considera una transazione come una
 sequenza di operazioni di lock e unlock. Si assume che ogni operazione di lock su un item $X$ implica
 la lettura di $X$ e ogni operazione di unlock di un item $X$ implica la scrittura di $X$. Il nuovo valore
-dell'item viene calcolato da una funzione che è associata in modo univoco ad ogni coppia lockunlock
+dell'item viene calcolato da una funzione che è associata in modo univoco ad ogni coppia lock-unlock
 ed ha per argomenti tutti gli item letti (locked) dalla transazione prima dell'operazione di
 unlock. I valori che un item assume durante l'esecuzione di una transazione sono formule costruite
 applicando le funzioni suddette ai valori iniziali degli item. Due schedule sono equivalenti se le

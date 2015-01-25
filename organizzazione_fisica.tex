@@ -5,7 +5,7 @@ richieste dell'utente il più rapidamente possibile: questo obiettivo può esser
 ad una particolare organizzazione fisica dei dati. In questo capitolo verrà mostrato come il database
 è organizzato a livello fisico, ovvero come questo viene salvato sull'unità di memoria 
 di massa (disco rigido); nel prossimo paragrafo sarà quindi necessario illustrare brevemente come il
-sistema operativo gestisce la lettura e scrittura di tali dispositivi.
+sistema operativo gestisce la lettura e scrittura di tale dispositivo.
 
 \subsection{La memoria secondaria}
 Il computer necessita di una \emph{memoria secondaria} dove poter salvare in modo permanente
@@ -15,7 +15,7 @@ meccanica è illustrata nella seguente figura.
  \includegraphics[width=300px]{img_5_1.eps}
 \end{center}
 L'unità di memoria è composta da più \textbf{piatti}, di solito tre, ognuno dei quali è suddiviso
-in \textbf{tracce}: esse sono come cerchi concentrici che ripartizionano tutta la superficie del
+in \textbf{tracce}: esse sono come cerchi concentrici che partizionano tutta la superficie del
 piatto. Al momento della \emph{formattazione}, durante la quale viede data una struttura logica per 
 poter memorizzare i dati, impostando la struttura del filesystem che vi verrà creato sopra, vengono
 creati i \textbf{settori} (o \textbf{blocchi} o pagine) di dimensione fissa, che varia da $2^9$ a $2^{12}$
@@ -35,8 +35,8 @@ notevolmente superiore a quello di elaborazione dei dati in memoria principale. 
 \subsection{Memorizzare le relazioni}
 
 \subsubsection{Record}
-Ad ogni relazione corrisponde un file di record che hanno tutti lo stesso tipo (numero e 
-tipo dei campi): ad ogni attributo corrisponde un \emph{campo}, che sono di tipo elementare (interi,
+Ad ogni relazione corrisponde un file di record che sono tutti dello stesso tipo (numero e 
+tipo dei campi): ad ogni attributo corrisponde un \emph{campo}, che è di tipo elementare (interi,
 reali, stringhe di caratteri), ed ad ogni tupla corrisponde un record. In un record, oltre ai campi 
 che corrispondono agli attributi, ci possono essere altri campi che contengono informazioni sul 
 record stesso o puntatori ad altri record.\\
@@ -83,10 +83,7 @@ suddiviso in aree (sottoblocchi) di lunghezza fissa ciascuna delle quali può co
 bisogna inserire un record nel blocco si cerca un area non usata; se il bit ``usato/non usato'' è in ciascun record
 ciò può richiedere la scansione di tutto il blocco; per evitare ciò si possono raccogliere tutti i bit
 ``usato/non usato'' in uno o più byte all'inizio del blocco. 
-In un blocco ci possono essere informazioni sul blocco stesso o puntatori ad altri blocchi.
-Se un blocco contiene solo record di lunghezza fissa è suddiviso in aree (sottoblocchi) di lunghezza fissa
-ciascuna delle quali può contenere un record; i bit ``usato/non usato'' sono raccolti in uno o più byte 
-all'inizio del blocco.\\
+In un blocco ci possono essere informazioni sul blocco stesso o puntatori ad altri blocchi.\\
 
 Se un blocco contiene record di lunghezza variabile per accedere ai record si possono usare due
 strategie:
@@ -120,10 +117,10 @@ senso in cui viene usato nella teoria relazionale, in quanto un valore della chi
 identifica univocamente un record nel file.
 Le operazioni elementari su questi tipi di file sono dunque:
 \begin{itemize}
- \item la ricerca di uno o più record con un dato valore per la chiave;
- \item l'inserimento di un record con un dato valore per la chiave;
- \item la cancellazione di uno o più record con un dato valore per la chiave;
- \item la modifica di uno o più record con un dato valore per la chiave. 
+ \item la ricerca di uno o più record con un dato valore per chiave;
+ \item l'inserimento di un record con un dato valore per chiave;
+ \item la cancellazione di uno o più record con un dato valore per chiave;
+ \item la modifica di uno o più record con un dato valore per chiave. 
 \end{itemize}
 
 \subsubsection{Heap}
@@ -149,7 +146,7 @@ trovano nell'ultimo blocco. La \textbi{modifica} di tutti i record con un dato v
 accessi in lettura per la ricerca di tutti i record che hanno quel valore per la chiave e $c$ accessi in
 scrittura, dove $c$ è il numero di blocchi contenenti record con quel valore per la chiave.\\\\
 Se la chiave di ricerca identifica univocamente un record nel file, la ricerca di un record con un dato
-valore per la chiave richiede in media $[b/2]$ accessi.Per ottenere il costo medio occorre somma i costi 
+valore per la chiave richiede in media $[b/2]$ accessi. Per ottenere il costo medio occorre sommare i costi 
 per accedere ai singoli record e quindi dividere tale somma per il numero dei record. Infatti, per la 
 ricerca di un record che si trova nell'$i$-esimo blocco sono necessari $i$ accessi (in lettura); 
 pertanto se denotiamo con $n$ il numero di record nel file e con $B$ il numero di record che possono 
@@ -174,20 +171,10 @@ nell'intestazione del blocco) e, se in tal modo si è ottenuto uno spazio suffic
 record che si trova nell'ultimo blocco, procedere come nel caso precedente. La modifica di un
 record con un dato valore per la chiave richiede $[b/2]$ accessi in lettura per la ricerca del record che
 ha quel valore per la chiave e 1 accesso in scrittura.\\
-\begin{center}
- \begin{tabular}{l|l}
-  \textbf{Operazione} & \textbf{Costo}\\
-  \hline
-  Inserimento & 2 accessi\\
-  Ricerca & $[b/2]$ accessi\\
-  Modifica & costo ricerca + 1 accesso\\
-  Cancellazione & costo ricerca + 3 accessi\\
- \end{tabular}
-\end{center}
 
 \subsubsection{File hash}
 In questo tipo di organizzazione i record sono ripartiti in \textbf{bucket} (secchi) in base al valore della
-chiave. Se $B$ è il numero dei bucket, questi vengono numerati da $0$ a $B-1$. Dato un valore $v$ per la
+chiave. Se $B$ è il numero dei bucket, questi vengono numerati da $0$ a $B-1$. Dato un valore $v$ per
 chiave il numero del bucket in cui deve trovarsi un record con chiave $v$ è calcolato mediante una
 funzione che prende il nome di \emph{funzione hash}.
 Ciascun bucket è costituito da uno o più blocchi (come vedremo, affinchè la gestione del file sia
@@ -253,7 +240,7 @@ L'accesso al file principale avviene attraverso il file indice nel modo seguente
 della chiave, si cerca nel file indice un valore $v'$ della chiave che \emph{ricopre} $v$, cioè una coppia 
 $(v', b')$ aventi le seguenti proprietà:
 \begin{itemize}
- \item $v' \leq v$)
+ \item $v' \leq v$
  \item o $(v', b')$ è l'ultimo record del file indice oppure, se $(v'', b'')$ è il successivo record 
  nel file indice, $v<v''$.
 \end{itemize}
@@ -283,7 +270,7 @@ In tal caso, se $B_1, B_2, \ldots, B_m$ sono i blocchi del file indice (o di una
 chiave nel primo record di $B_1$ e $v_3$ è il valore della chiave nell'ultimo record di $B_m$ allora $v_1$ deve
 essere confrontato con il valore della chiave nel primo record di $B_i$, dove $i = mf(v_1, v_2, v_3)$;
 analogamente a quanto accade nella ricerca binaria, se $v_1$ è minore di tale valore allora il
-5procedimento deve essere ripetuto sui blocchi $B_1, B_2, \ldots, B_{i-1}$, mentre se è maggiore il procedimento
+procedimento deve essere ripetuto sui blocchi $B_1, B_2, \ldots, B_{i-1}$, mentre se è maggiore il procedimento
 deve essere ripetuto sui blocchi $B_i, B_{i+1}, \ldots, B_m$, finchè la ricerca si restringe ad un unico blocco. \`E
 stato mostrato che la \textbi{ricerca} per interpolazione richiede circa $1+log_2(log_2(m))$ accessi.\\
 Per \textbi{inserire} un nuovo record nel file principale occorre innanzitutto ricercare il blocco $B_i$ del file
@@ -374,7 +361,7 @@ Se, viceversa, nel blocco non c'è spazio sufficiente per inserire il nuovo reco
 inserimento può richiedere un numero ulteriore di accessi a causa della necessità di mantenere i
 blocchi pieni al meno per metà, come mostra il seguente esempio. Si osservi che, per salvare spazio,
 il primo record in ogni blocco di un file indice è costituto da un puntatore anziché da una coppia
-7chiave-puntatore; tale puntatore permette di accedere alla parte del file principale contenente record
+chiave-puntatore; tale puntatore permette di accedere alla parte del file principale contenente record
 con valore della chiave minore del valore presente nel secondo record del blocco del file indice.
 Supponiamo che in un certo istante la configurazione del B-tree sia la seguente:
 \begin{figure}[h!]
@@ -407,11 +394,11 @@ uno per riscrivere il blocco, se il blocco rimane pieno almeno per metà success
 cancellazione. Se, viceversa, il blocco non rimane pieno almeno per metà successivamente alla
 cancellazione, l'operazione può richiedere un numero ulteriore di accessi come mostra il seguente
 esempio.\\
-Supponiamo che in un certo istante la configurazione del B-tree quella mostrata in \textsc{Figura 2} e che si
+Supponiamo che in un certo istante la configurazione del B-tree sia quella mostrata in \textsc{Figura 2} e che si
 voglia cancellare il record con chiave $28$. Poiché, a seguito della cancellazione di tale record nel
 blocco rimane un solo record (e quindi non è soddisfatto il vincolo che ogni record debba essere
 pieno al meno per metà), e tale record può trovare posto nel blocco precedente (il terzo da sinistra),
-il blocco può essere restituito al sistema. Inoltre, poiché nel secondo blocco dell'indice di livello
+il blocco può essere restituito al sistema. Inoltre, poiché nel secondo blocco dell'indice di livello 1
 rimane un solo puntatore possiamo procedere per l'indice di livello $1$ analogamente a come si è
 proceduto per il file principale. Ma allora un analogo discorso deve essere fatto per l'indice di
 livello $2$. Pertanto dopo la cancellazione del record con chiave $28$ il B-tree si presenterà come segue:
@@ -459,7 +446,7 @@ indice ha un costo inferiore di quello che avrebbe la stessa operazione se il fi
 stessa organizzazione scelta per l'indice denso.\\
 L'uso di un indice denso permette anche di eliminare i puntatori a record del file principale: basta
 sostituire ogni puntatore ad un record del file principale con il puntatore al corrispondente record
-dell'indice denso: In tal modo per accedere al record occorre un accesso in più; d'altra parte se si
+dell'indice denso. In tal modo per accedere al record occorre un accesso in più; d'altra parte se si
 vuole muovere un record nel file principale è sufficiente modificare il puntatore nel corrispondente
 record del file indice e, quindi, è possibile compattare il file principale riutilizzando lo spazio di
 record cancellati. Un'altra alternativa è quella di sostituire ad ogni puntatore (che non si trovi
