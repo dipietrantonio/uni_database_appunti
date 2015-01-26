@@ -382,7 +382,7 @@ Il più semplice modello per le transazioni è quello che considera una transazi
 sequenza di operazioni di lock e unlock. Si assume che ogni operazione di lock su un item $X$ implica
 la lettura di $X$ e ogni operazione di unlock di un item $X$ implica la scrittura di $X$. Il nuovo valore
 dell'item viene calcolato da una funzione che è associata in modo univoco ad ogni coppia lock-unlock
-ed ha per argomenti tutti gli item letti (locked) dalla transazione prima dell'operazione di
+ed ha per argomenti tutti gli item letti (locked) dalla transazione \emph{prima} dell'operazione di
 unlock. I valori che un item assume durante l'esecuzione di una transazione sono formule costruite
 applicando le funzioni suddette ai valori iniziali degli item. Due schedule sono equivalenti se le
 formule che danno i valori finali per ciascun item sono le stesse per i due schedule.\\
@@ -414,7 +414,22 @@ Consideriamo ad esempio le due transazioni seguenti:
  \end{multicols}
 
 e il seguente schedule $S$ di $t_1$ e $t_2$:
+
 \begin{center}
+\begin{multicols}{3}
+ \begin{flushright}
+\begin{tabular}{r}
+   \\
+   legge $X_0$\\
+   scrive $f_1(X_0)$\\
+   \\
+   \\
+   legge $f_3(Y_0)$\\
+   scrive $f_2(X_0, f_3(Y_0))$\\ 
+   \\
+   \\
+  \end{tabular}
+  \end{flushright}
  \begin{tabular}{|l|l|}
  \hline
  $t_1$ & $t_2$\\
@@ -429,6 +444,22 @@ e il seguente schedule $S$ di $t_1$ e $t_2$:
    &unlock(X)\\
    \hline
   \end{tabular}
+  \begin{flushleft}
+  \begin{tabular}{l}
+   \\
+   \\
+   \\
+   legge $Y_0$\\
+   scrive $f_3(Y_0)$\\
+    \\
+   \\
+   legge $f_1(X_0)$\\
+   scrive $f_4(f_1(X_0),Y_0)$\\ 
+
+  \end{tabular}
+  \end{flushleft}
+  
+\end{multicols}
 \end{center}
 Se indichiamo con $X_0$ e $Y_0$ i valori iniziali di $X$ e $Y$, abbiamo che il valore finale per $X$ prodotto da $S$
 è dato dalla formula $f_4(f_1(X_0), Y_0)$. D'altra parte il valore finale per $X$ prodotto dallo schedule
@@ -464,6 +495,20 @@ non è equivalente a nessuno schedule seriale di $\{t_1, t_2\}$.\\
 
 e il seguente schedule $S$ di $t_1$ e $t_2$:
 \begin{center}
+\begin{multicols}{3}
+ \begin{flushright}
+\begin{tabular}{r}
+   \\
+   legge $X_0$\\
+   scrive $f_1(X_0)$\\
+   \\
+   \\
+   legge $Y_0$\\
+   scrive $f_2(X_0, Y_0)$\\ 
+   \\
+   \\
+  \end{tabular}
+  \end{flushright}
  \begin{tabular}{|l|l|}
  \hline
  $t_1$ & $t_2$\\
@@ -478,6 +523,21 @@ e il seguente schedule $S$ di $t_1$ e $t_2$:
    &unlock(Y)\\
    \hline
   \end{tabular}
+  \begin{flushleft}
+  \begin{tabular}{l}
+   \\
+   \\
+   legge $f_1(X_0)$\\
+   scrive $f_3(f_1(X_0))$\\
+    \\
+   \\
+   legge $f_2(X_0, Y_0)$\\
+   scrive $f_4(f_1(X_0),f_2(X_0, Y_0))$\\ 
+
+  \end{tabular}
+  \end{flushleft}
+  
+\end{multicols}
 \end{center}
 
 Se di nuovo indichiamo con $X_0$ e $Y_0$ i valori iniziali di $X$ e $Y$, abbiamo che il valore finale per $X$ e $Y$
@@ -487,8 +547,8 @@ formule coincidono con quelle prodotte dallo schedule seriale \{$t_1, t_2\}$, lo
 La serializzabilità di uno schedule in questo semplice modello, può essere testata mediante un
 semplice algoritmo su grafi diretti. L'idea su cui si basa tale algoritmo è la seguente. Dato uno
 schedule, per ogni item si esamina l'ordine in cui le varie transazioni fanno un lock su quell'item; se
-lo schedule è serializzabile questo ordine deve essere consistente con quello di uno schedule seriale;
-pertanto se l'ordine imposto sulle transazioni da un certo item è diverso da quello imposto da un
+lo schedule è serializzabile questo ordine deve essere consistente con quello di uno schedule seriale.
+Se l'ordine imposto sulle transazioni da un certo item è diverso da quello imposto da un
 altro item, lo schedule non è serializzabile. L'algoritmo lavora nel modo seguente.
 
 \begin{alg}
