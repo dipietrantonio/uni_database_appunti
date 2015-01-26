@@ -3,9 +3,10 @@ Appunti di Basi di Dati
 Corso: Informatica
 Università La Sapienza
 
+CONSIGLIO di non stampare ancora la dispensa in quanto ancora soggetta a correzioni
 <a href="https://github.com/Halolegend94/uni_database_appunti/blob/master/main.pdf?raw=true">DOWNLOAD PDF</a>
 _________________________
-1 Novembre 2014
+25 Gennaio 2015
 
 Con questo progetto si intende raccogliere in un unico documento PDF tutto il materiale utile per superare l'esame di Basi di Dati tenuto dalla professoressa Moscarini. 
 Il codice sorgente è scritto in LaTeX, per una migliore qualità del documento e per future modifiche e aggiunte da parte di terzi.
@@ -16,3 +17,4 @@ Questi appunti sono un misto tra slide usate a lezione, varie dispense e appunti
 __________________________
 
 Autore/i: Cristian Di Pietrantonio
+
