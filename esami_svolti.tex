@@ -13,8 +13,8 @@ Il compito sarà diviso in tre parti:
  \item \textbf {Algebra relazionale}: vi verrà chiesto di esprimere in tale linguaggio
  un'interrogazione ad un database per ottenere particolari informazioni. Su questa prima parte
  non c'è molto da dire, si applicano semplicemente i vari operatori a seconda della richiesta; 
- si useranno in congiunzione la \emph{proiezione}, \emph{la selezione} e il molto 
- ``gettonato'' \textbf{join}. Vi verranno date tipicamente tre relazioni: il pattern che si ripete
+ si useranno in congiunzione la \emph{proiezione}, \emph{la selezione} e il \textbf{join}. 
+ Vi verranno date tipicamente tre relazioni: il pattern che si ripete
  è che due relazioni non hanno nessun attributo in comune e rappresentano due ``realtà 
  disgiunte'', mentre la terza ha due attributi (oltre a diversi altri) che rimandano alle chiavi 
  delle altre due tabelle. In questo modo è possibile mettere tutte e tre in relazione con il join 
@@ -130,9 +130,411 @@ dove le $\bigl\lfloor X \bigr\rfloor$ indicano la parte intera inferiore di $X$ 
   Il costo della ricerca è misurato contando il numero di accessi a blocchi. In un \textbf{file ISAM} varia tra 2 e 
   $log_2(NumBlocchiFI) + 1$, per via della ricerca binaria (da 1 a $log_2(NumBlocchiFI)$) più un accesso ad un blocco
   nel File Principale. In un \textbf{file B-Tree} il costo della ricerca è dato dall'altezza dell'albero che rappresenta
-  la gerarchia degli indici (che è uguale al numero delle iterazioni della formula per calcolare il 
+  la gerarchia degli indici (che è uguale al numero di iterazioni della formula per calcolare il 
   numero di blocchi nel File Indice) più un accesso al blocco cercato nel File Principale.
   
+  \subsection{Esame 16/01/2013}
+  \subsubsection{Esercizio 1}
+  Dato il seguente schema di una base di dati contenente dati su corsi universitari, aule e orario delle lezioni:
+  \begin{center}
+  AULA(Id, Nome, N-posti, Edificio)\\
+  CORSO(Id, Titolo, Anno, Docente) \\
+  ORARIO(Id-Aula, GiornoSettimana, Fascia-oraria, Id-Corso)\\ 
+  \end{center}
+  esprimere in algebra relazionale le seguenti interrogazioni:
+  \begin{enumerate}
+   \item Si desidera conoscere quando e dove (cioè: giorno della settimana, fascia oraria, aula ed edificio in cui 
+   si trova l'aula) si svolgono le lezioni di Basi di Dati tenute dal docente Moscarini.
+   \item Dati delle aule in cui non si svolgono lezioni di corsi del I anno.
+  \end{enumerate}
+  \noindent\textbf{\fontsize{14pt}{1em}Soluzione.}\\
+  Per sintetizzare la scrittura, altrimenti troppo lunga, assegneremo ad ogni attributo che verrà usato
+  nell'espressione una lettera.
+  
+  \begin{multicols}{3}
+  \begin{flushleft}
+   $A = Orario.Id-Corso$\\
+   $B = Orario.Id-Aula$\\
+   $C = Orario.GiornoSettimana$\\
+   $D = Orario.Fascia-oraria$\\
+   $E = Corso.Id$\\
+   $F = Corso.Titolo$\\
+   $G = Corso.Anno$\\
+   $H = Corso.Docente$\\
+   $I = Aula.Id$\\
+   $J = Aula.Nome$\\
+   $K = Aula.N-posti$\\
+   $L = Aula.Edificio$\\
+  \end{flushleft}
+  \end{multicols}
+
+   \noindent(1) $\pi_{C, D, J, L}((AULA)\bowtie_{B=I}((\sigma_{F=``Basi\ di\ Dati'' \wedge H=``Moscardini''}(CORSO))\bowtie_{A=E}(ORARIO)))$\\
+   (2) $\pi_{I, J, K, L}((AULA)\bowtie_{B=I}((\sigma_{G!=1}(CORSO))\bowtie_{A=E}(ORARIO)))$\\
+
+  \subsubsection{Esercizio 2}
+ Dati $R=ABCDEHI$ e $F=\{AB\rightarrow CD, B\rightarrow E, E\rightarrow AC, H\rightarrow B\}$
+ \begin{itemize}
+  \item Mostrare che $HI$ è una chiave di $R$;
+  \item Sapendo che $HI$ è l'unica  chiave di $R$, mostrare che $R$ non è in terza forma normale;
+  \item Trovare una decomposizione $\rho$ di $R$ tale che:
+    \begin{itemize}
+     \item ogni schema in $\rho$ è in terza forma normale
+    \item $\rho$ preserva $F$
+    \end{itemize}
+ \end{itemize}
+ 
+ \noindent\textbf{\fontsize{14pt}{1em}Soluzione.}\\
+ $HI$ è chiave per $R$ $\Leftrightarrow HI \rightarrow R\in F^+ \Leftrightarrow R \subseteq (HI)^+_F \wedge
+ R \not\subseteq (H)^+_F \wedge R \not\subseteq (I)^+_F$. Calcoliamo allora le suddette chiusure 
+ e verifichiamo tali condizioni.\\\\
+ $(HI)^+_F = HIBEACD \supseteq R$;\\
+ $(H)^+_F = HBEACD \not\supseteq R$;\\
+ $(I)^+_F = I \not\supseteq R$;\\\\
+Quindi $HI$ è chiave per $R$. $R$ inoltre non è in terza forma normale perché prendendo certe dipendenze in $F$, ad esempio 
+$AB \rightarrow CD$, si ha che $AB$ non è superchiave e $CD$ non è primo; ciò va contro la definizione di schema in 3NF.\\
+Per rispondere al terzo punto bisogna trovare la copertura minimale di $F$:
+\begin{center}
+ \begin{tabular}{l|l|l}
+  $G$ & $G'$ & $G''$\\
+  \hline
+  $AB\rightarrow C$ & $B\rightarrow C$ & \textbackslash \\
+  $AB \rightarrow D$ & $B \rightarrow D$ & $B \rightarrow D$\\
+  $B \rightarrow E$ & $B \rightarrow E$ & $B \rightarrow E$\\ 
+  $E \rightarrow A$ & $E \rightarrow A$ & $E \rightarrow A$\\
+  $E \rightarrow C$ & $E \rightarrow C$ & $E \rightarrow C$\\
+  $H \rightarrow B$ & $H \rightarrow B$ & $H \rightarrow B$\\ 
+ \end{tabular}
+\end{center}
+Quindi si esegue l'algoritmo 4.5 ed esce $\rho= \{I, BD, BE, EA, EC, HB\}$.
+
+\subsubsection{Esercizio 3}
+Abbiamo un file di 288.000 record. Ogni record occupa 49 byte di cui 10 per la chiave. Ogni blocco contiene 2048 byte. 
+Un puntatore a blocco occupa 4 byte. Usiamo una organizzazione B-tree riempiendo al minimo sia i blocchi del file 
+principale che quelli del file indice.
+\begin{enumerate}
+ \item Quanti blocchi dobbiamo utilizzare per il file principale? 
+ \item Quanti blocchi dobbiamo utilizzare per il file indice?
+ \item Qual è il costo per la ricerca di un record? 
+\end{enumerate}
+
+\noindent\textbf{\fontsize{14pt}{1em}Soluzione.}\\
+Come visto nel paragrafo Tecniche Risolutive, si calcola prima il numero di record per blocco. Il testo dice che 
+ogni blocco è riempito al minimo, che in un B-Tree equivale a dire riempito a metà. Applichiamo la formula:
+\begin{center}
+ $RecBlocco = \Bigl\lceil \dfrac{2048}{2*49} \Bigr\rceil = 21$.\\
+\end{center}
+Quindi calcoliamo il numero di blocchi nel file principale
+\begin{center}
+ $NumBlocchiFP = \Bigl\lceil \dfrac{288.000}{21} \Bigr\rceil = 13.715$.\\
+\end{center}
+Calcoliamo ora il numero di record in un blocco del file indice
+\begin{center}
+ $RecBloccoI = \Bigl\lceil \dfrac{1024-4}{10+4} \Bigr\rceil = 73$.\\
+\end{center}
+Il numero di blocchi nel file indice è dato dalla somma di questi tre valori:
+\begin{center}
+ Blocchi al livello I $= \Bigl\lceil \frac{13.715}{73} \Bigr\rceil = 188$.\\
+ 
+ Blocchi al livello II $= \Bigl\lceil \frac{188}{73} \Bigr\rceil = 3$.\\
+ 
+ Blocchi al livello III $= \Bigl\lceil \frac{3}{73} \Bigr\rceil = 1$.\\
+ Totale = $202$.
+\end{center}
+Ne deriva che il costo di ricerca è dato da 3 (numero di livelli) + 1 (accesso al blocco nel File Principale).
+
+\subsection{Esame 10/06/2013}
+  \subsubsection{Esercizio 1}
+  Dato il seguente schema di una base di dati contenente dati relativi a musei:
+  \begin{center}
+  MUSEO (Codice, Nome, Indirizzo, Regione)\\
+  PITTORE (Codice, Nome, Cognome, Soprannome, DataNascita, DataMorte)\\
+  QUADRO (Codice, Titolo, Autore, Anno, Museo)\\
+  \end{center}
+  NOTE:\\
+  L'attributo Codice è chiave per le relazioni\\
+  L'attributo Autore nella tabella QUADRO è il codice dell'autore del quadro\\
+  L'attributo Museo nella tabella QUADRO è il codice del museo in cui il quadro è conservato\\
+  L'attributo Anno nella tabella QUADRO è l'anno di realizzazione dell'opera\\
+
+  Esprimere in algebra relazionale le seguenti interrogazioni:
+  \begin{enumerate}
+   \item Quali quadri del Pinturicchio sono conservati nei musei della Toscana. Restituire come risultato titolo del quadro e 
+   nome ed indirizzo del museo.
+   \item In quali musei della Toscana non è conservato alcun quadro del XV secolo? Restituire come risultato nome e indirizzo del museo.   
+  \end{enumerate}
+  \noindent\textbf{\fontsize{14pt}{1em}Soluzione.}\\
+  Per sintetizzare la scrittura, altrimenti troppo lunga, assegneremo ad ogni attributo che verrà usato
+  nell'espressione una lettera.
+  
+  \begin{multicols}{3}
+  \begin{flushleft}
+   $A =Quadro.Autore$\\
+   $B = Quadro.Museo$\\
+   $C = Pittore.Codice$\\
+   $D = Pittore.Soprannome$\\
+   $E = Museo.Codice$\\
+   $F = Museo.Regione$\\
+   $G = Museo.Nome$\\
+   $H = Museo.Indirizzo$\\
+   $I = Quadro.Anno$\\
+   $J = Quadro.Titolo$\\
+  \end{flushleft}
+  \end{multicols}
+
+ \noindent(1) $\pi_{J, H, G}((\sigma_{F=``Toscana''}(MUSEO))\bowtie_{E=B}((\sigma_{D=``Pinturicchio''}(PITTORE))\bowtie_{A=C}(QUADRO)))$\\
+ (2) $\pi_{H, G}((\sigma_{F=``Toscana''}(MUSEO))\bowtie_{E=B}(\sigma_{I < 1500 \wedge I > 1599}(QUADRO)))$\\
+
+  \subsubsection{Esercizio 2}
+ Dati $R=ABCDEHI$ e $F=\{A\rightarrow BC, AB\rightarrow D, C\rightarrow ED, AD\rightarrow E\}$
+ \begin{itemize}
+  \item Mostrare che $AHI$ è una chiave di $R$;
+  \item Sapendo che $AHI$ è l'unica  chiave di $R$, mostrare che $R$ non è in terza forma normale;
+  \item Fornire una decomposizione $\rho$ di $R$ tale che:
+   \begin{itemize}   
+     \item ogni schema in $\rho$ è in terza forma normale
+    \item $\rho$ preserva $F$
+    \item $\rho$ ha un join senza perdita
+    \end{itemize}
+ \end{itemize}
+ 
+ \noindent\textbf{\fontsize{14pt}{1em}Soluzione.}\\
+ $AHI$ è chiave per $R$ $\Leftrightarrow AHI \rightarrow R\in F^+ \Leftrightarrow R \subseteq (AHI)^+_F$. Inoltre, la chiusura
+ di ogni sottoinsieme di $AHI$ non contiene $R$.
+ Calcoliamo le chiusure e verifichiamo le condizioni necessarie.\\\\
+ $(AHI)^+_F = ABCDEHI \supseteq R$;\\
+ $(AH)^+_F = ABCDEH \not\supseteq R$;\\
+ $(AI)^+_F = IABCDE \not\supseteq R$;\\
+ $(HI)^+_F = HI \not\supseteq R$;\\
+ Ne tanto meno la chiusura dei singoli attributi contiene $R$. Quindi $AHI$ è chiave per $R$. $R$ non è in 3NF perché contiene
+ la dipendenza $AB\rightarrow B$ dove $AB$ non è superchiave e $D$ non è primo.\\
+
+Per rispondere al terzo punto bisogna trovare la copertura minimale di $F$:
+\begin{center}
+ \begin{tabular}{l|l|l}
+  $G$ & $G'$ & $G''$\\
+  \hline
+  $A\rightarrow B$ & $A\rightarrow B$ & $A\rightarrow B$ \\
+  $A \rightarrow C$ & $A \rightarrow C$ & $A \rightarrow C$\\
+  $AB \rightarrow D$ & $A \rightarrow D$ & \textbackslash \\ 
+  $C \rightarrow E$ & $C \rightarrow E$ & $C \rightarrow E$\\
+  $C \rightarrow D$ & $C \rightarrow D$ & $C \rightarrow D$\\
+  $AD \rightarrow E$ & $A \rightarrow E$ & \textbackslash\\ 
+ \end{tabular}
+\end{center}
+Quindi si esegue l'algoritmo 4.5 ed esce $\rho^1= \{HI, AB, AC, CE, CD\}$. La scomposizione cercata è
+$\rho = \{AHI\} \cup \rho^1$.
+
+\subsubsection{Esercizio 3}
+\`E dato un file di 1.750.000 record. Ogni record occupa 130 byte, di cui 35 per la chiave. Un puntatore a blocco occupa 5 byte.
+Un blocco di memoria contiene 2048 byte. Utilizziamo un indice ISAM, e supponiamo che ogni blocco sia per i dati che per l'indice 
+sia utilizzato al massimo. 
+\begin{enumerate}
+ \item Quanti blocchi dobbiamo utilizzare per il file principale? 
+ \item Quanti blocchi dobbiamo utilizzare per il file indice?
+ \item Quale è il numero massimo di accessi per ricercare un record del file principale, utilizzando 
+ la ricerca binaria sul file indice?
+\end{enumerate}
+
+\noindent\textbf{\fontsize{14pt}{1em}Soluzione.}\\
+Come visto nel paragrafo Tecniche Risolutive, si calcola prima il numero di record per blocco. Il testo dice che 
+ogni blocco è riempito al massimo. Applichiamo la formula:
+\begin{center}
+ $RecBlocco = \Bigl\lfloor \dfrac{2048}{130} \Bigr\rfloor = 15$.\\
+\end{center}
+Quindi calcoliamo il numero di blocchi nel file principale
+\begin{center}
+ $NumBlocchiFP = \Bigl\lceil \dfrac{1.750.000}{15} \Bigr\rceil = 116.667$.\\
+\end{center}
+Calcoliamo ora il numero di record in un blocco del file indice
+\begin{center}
+ $RecBloccoI = \Bigl\lfloor \dfrac{2048-5}{35+5} \Bigr\rfloor = 51$.\\
+\end{center}
+Il numero di blocchi nel file indice è dato dalla seguente formula:
+\begin{center}
+  $NumBlocchiFI= \Bigl\lceil \dfrac{116.667}{51} \Bigr\rceil = 2.288$.\\
+\end{center}
+Il numero massimo di accessi con la ricerca binaria sul file indice è quando l'algoritmo deve scorrere tutta l'altezza
+dell'albero binario, quindi si ha $\lceil log_2(2.288)\rceil$ più 1 accesso al File Principale per un totale di 13 accessi.
+
+ 
+\subsection{Esame 1/07/2013}
+  \subsubsection{Esercizio 1}
+  Dato il seguente schema di una base di dati contenente dati su corsi universitari, aule e orario delle lezioni:
+  \begin{center}
+  AULA(Id, Nome, N-posti, Edificio)\\
+  CORSO(Id, Titolo, Anno, Docente)\\ 
+  ORARIO(Id-Aula, GiornoSettimana, Fascia-oraria, Id-Corso)\\
+  \end{center}
+
+  Esprimere in algebra relazionale le seguenti interrogazioni:
+  \begin{enumerate}
+   \item Per tutte le lezioni che si svolgono di venerdì in Aula Cabibbo si desidera conoscere il titolo del corso,
+   il nome del docente e la fascia oraria.
+   \item Titoli dei  corsi del terzo anno le cui lezioni non si svolgono il lunedì. 
+  \end{enumerate}
+  \noindent\textbf{\fontsize{14pt}{1em}Soluzione.}\\
+  Per sintetizzare la scrittura, altrimenti troppo lunga, assegneremo ad ogni attributo che verrà usato
+  nell'espressione una lettera.
+  
+  \begin{multicols}{3}
+  \begin{flushleft}
+   $A = Orario.Id-Corso$\\
+   $B = Orario.Id-Aula$\\
+   $C = Orario.GiornoSettimana$\\
+   $D = Orario.Fascia-oraria$\\
+   $E = Corso.Id$\\
+   $F = Corso.Titolo$\\
+   $G = Corso.Anno$\\
+   $H = Corso.Docente$\\
+   $I = Aula.Id$\\
+   $J = Aula.Nome$\\
+   $K = Aula.N-posti$\\
+   $L = Aula.Edificio$\\
+  \end{flushleft}
+  \end{multicols}
+
+ \noindent(1) $\pi_{F, H, D}((CORSO)\bowtie_{A=E}((\sigma_{J=``Cabibbo''}(AULA))\bowtie_{B=I}(\sigma_{C=``Venerdi''}(ORARIO))))$\\
+ (2) $\pi_{F}((\sigma_{G=3}(CORSO))\bowtie_{E=A}(\sigma_{C!=``Lunedi''}(ORARIO)))$\\
+
+  \subsubsection{Esercizio 2}
+ 
+ \begin{itemize}
+  \item Dati $R=ABCDE$, $F=\{AB\rightarrow CD, CD\rightarrow E, E\rightarrow AB\}$ e $\rho_{ABCD, CDE}$, decidere se $\rho$
+  preserva $F$.
+  \item Dati lo schema di relazione $R=ABCDE$, l'insieme di dipendenze funzionali $F=\{AE\rightarrow C, D\rightarrow CE, B\rightarrow AE\}$
+  e la decomposizione $\rho =\{ACD, BD, BCE\}$ decidere se $\rho$ ha un join senza perdita. 
+ \end{itemize}
+ 
+ \noindent\textbf{\fontsize{14pt}{1em}Soluzione.}\\
+ Per rispondere al primo punto utilizziamo l'Algoritmo 4.2 e 4.3. Sappiamo che se gli attributi di una dipendenza sono presenti
+ tutti in una relazione della scoposizione, tale dipendenza è sicuramente in $G^+$.\\
+ $AB\rightarrow CD \in G^+$? Si\\
+ $CD\rightarrow E \in G^+$? Si\\
+ $E\rightarrow AB \in G^+$? Da verificare con l'algoritmo\\
+ 
+ \noindent Calcoliamo $E^+_G$\\
+ $Z^{(0)}=E$\\
+ $S^{(0)}=(E\cap CDE)^+_F \cap CDE= CDE$\\
+ $Z^{(1)}=CDE$\\
+ $S^{(1)}=CDE \cup (CDE \cap ABCD)^+_F \cap ABCD= ABCDE$\\
+ $Z^{(2)}=ABCDE$\\
+ $S^{(2)}=ABCDE$\\
+ 
+ \noindent Dato che $AB \subseteq Z^{(2)} = ABCDE$, ne segue che $E\rightarrow AB \in G^+$ e quindi $\rho$ preserva $F$.\\
+ 
+\noindent Per rispondere al secondo punto bisogna usare l'algoritmo 4.4, quindi costruiamo la tabella ed eseguiamo l'algoritmo:
+
+\begin{multicols}{2}
+   \begin{center}
+  \begin{tabular}{c|c|c|c|c|c}
+    & \textbf{A} & \textbf{B} &\textbf{C} &\textbf{D}     &\textbf{E}\\
+   \hline
+   \textbf{ACD} & $a_1$       & $b_{1,2}$ & $a_3$ & $a_4$ & $b_{1,5}$ \\
+   \hline
+   \textbf{BD}  &$b_{2,1}$    & $a_2$     & $b_{2,3}$ & $a_4$ & $b_{2,5}$ \\
+   \hline
+   \textbf{BCE} & $b_{3,1}$   & $a_2$  & $a_3$ & $b_{3,4}$ & $a_5$\\
+  \end{tabular}
+ \end{center}
+ 
+  \begin{center}
+  \begin{tabular}{l|c}
+   & $I_1$\\
+   \hline
+   $AE\rightarrow C$ & $\cdot$\\
+   $D\rightarrow CE$ & $\checkmark$\\
+   $B \rightarrow AE$ & $\checkmark$\\
+  \end{tabular}
+ \end{center}
+ \end{multicols}
+ 
+\begin{multicols}{2}
+   \begin{center}
+  \begin{tabular}{c|c|c|c|c|c}
+    & \textbf{A} & \textbf{B} &\textbf{C} &\textbf{D}     &\textbf{E}\\
+   \hline
+   \textbf{ACD} & $a_1$       & $b_{1,2}$ & $a_3$ & $a_4$ & $b_{1,5}$ \\
+   \hline
+   \textbf{BD}  & $\mathbf{b_{3,1}}$  & $a_2$ & $\mathbf{a_3}$ & $a_4$ & $\mathbf{a_5}$ \\
+   \hline
+   \textbf{BCE} & $b_{3,1}$   & $a_2$  & $a_3$ & $b_{3,4}$ & $a_5$\\
+  \end{tabular}
+ \end{center}
+ 
+  \begin{center}
+  \begin{tabular}{l|c|c}
+   & $I_1$ & $I_2$\\
+   \hline
+   $AE\rightarrow C$ & $\cdot$ & $\cdot$\\
+   $D\rightarrow CE$& $\checkmark$& $\checkmark$\\
+   $B \rightarrow AE$ & $\checkmark$& $\cdot$\\
+  \end{tabular}
+ \end{center}
+ \end{multicols}
+
+ \begin{multicols}{2}
+   \begin{center}
+  \begin{tabular}{c|c|c|c|c|c}
+    & \textbf{A} & \textbf{B} &\textbf{C} &\textbf{D} &\textbf{E}\\
+   \hline
+   \textbf{ACD} & $a_1$  & $b_{1,2}$ & $a_3$ & $a_4$ & $\mathbf{a_5}$ \\
+   \hline
+   \textbf{BD}  & $b_{3,1}$ & $a_2$ & $a_3$ & $a_4$ & $a_5$ \\
+   \hline
+   \textbf{BCE} & $b_{3,1}$   & $a_2$  & $a_3$ & $b_{3,4}$ & $a_5$\\
+  \end{tabular}
+ \end{center}
+ 
+  \begin{center}
+  \begin{tabular}{l|c|c|c}
+   & $I_1$ & $I_2$ & $I_3$\\
+   \hline
+   $AE\rightarrow C$ & $\cdot$ & $\cdot$ & $\cdot$\\
+   $D\rightarrow CE$ & $\checkmark$ & $\checkmark$ & $\cdot$\\
+   $B \rightarrow AE$ & $\checkmark$ & $\cdot$ & $\cdot$\\
+  \end{tabular}
+ \end{center}
+ \end{multicols}
+ 
+Alla terza iterazione non ci sono più dipendenze non rispettate dall'istanza di $R$, ma non c'è una riga con tutte ``a''.
+L'algoritmo termina qui, dichiarando che $\rho$ ha una perdita nel Join.
+\subsubsection{Esercizio 3}
+Abbiamo un file di 353.000 record. Ogni record occupa 47 byte di cui 10 per la chiave. Ogni blocco contiene 2048 byte. 
+Un puntatore a blocco occupa 4 byte. Usiamo una organizzazione B-tree riempiendo al minimo sia i blocchi del file 
+principale che quelli del file indice.
+
+\begin{enumerate}
+ \item Quanti blocchi dobbiamo utilizzare per il file principale? 
+ \item Quanti blocchi dobbiamo utilizzare per il file indice?
+ \item Qual è il costo di una ricerca?
+\end{enumerate}
+
+\noindent\textbf{\fontsize{14pt}{1em}Soluzione.}\\
+Come visto nel paragrafo Tecniche Risolutive, si calcola prima il numero di record per blocco.
+\begin{center}
+ $RecBlocco = \Bigl\lceil \dfrac{2048}{2*47} \Bigr\rceil = 22$.\\
+\end{center}
+Quindi calcoliamo il numero di blocchi nel file principale
+\begin{center}
+ $NumBlocchiFP = \Bigl\lceil \dfrac{353.000}{22} \Bigr\rceil = 16.046$.\\
+\end{center}
+Calcoliamo ora il numero di record in un blocco del file indice
+\begin{center}
+ $RecBloccoI = \Bigl\lfloor \dfrac{1024-4}{14} \Bigr\rfloor = 73$.\\
+\end{center}
+Il numero di blocchi nel file indice è dato dalla somma dei seguenti valori:
+\begin{center}
+ Blocchi al livello I $= \Bigl\lceil \frac{16.046}{73} \Bigr\rceil = 220$.\\
+
+ Blocchi al livello II $= \Bigl\lceil \frac{220}{73} \Bigr\rceil = 4$.\\
+
+ Blocchi al livello III $= \Bigl\lceil \frac{4}{73} \Bigr\rceil = 1$.\\
+ 
+ Totale = 225 blocchi.
+\end{center}
+
+Il costo della ricerca è 4 accessi.
+
 
 
   
