@@ -12,19 +12,133 @@ Il compito sarà diviso in tre parti:
 \begin{enumerate}
  \item \textbf {Algebra relazionale}: vi verrà chiesto di esprimere in tale linguaggio
  un'interrogazione ad un database per ottenere particolari informazioni. Su questa prima parte
- non c'è molto da dire, si applicano semplicemente i vari operatori a seconda della richiesta; si useranno in 
- congiunzione la \emph{proiezione}, \emph{la selezione} e il molto 
+ non c'è molto da dire, si applicano semplicemente i vari operatori a seconda della richiesta; 
+ si useranno in congiunzione la \emph{proiezione}, \emph{la selezione} e il molto 
  ``gettonato'' \textbf{join}. Vi verranno date tipicamente tre relazioni: il pattern che si ripete
- è che due relazioni non hanno nessun attributo in comune e rappresentano due ``realtà disgiunte'', mentre la terza
- ha due attributi (oltre a diversi altri) che rimandano alle chiavi delle altre due tabelle. In questo modo è possibile 
- mettere tutte e tre in relazione con il join (impostando tali attributi in comune come ``$\Theta$ del join'').
- \item \textbf {Terza forma normale}: il secondo esercizio chiede essenzialmente di applicare alcuni dei cinque
- algoritmi visti nella \textsc{Sezione 4} di questa dispensa per verificare delle proprietà. Tipica richiesta
- è dimostrare che un dato insieme di attributi è chiave per R, oppure vi sarà chiesto di trovare una scomposizione
- che preservi delle determinate proprietà. Le tecniche per risolvere questo tipo di esercizi sono ampiemente illustrate nei vari
- esempi nella sezione apposita, quindi non le ripeteremo qui. Unica nota è che quando vi si chiede se la relazione è in \emph{3NF}
- è consigliato utilizzare la \textsc{Definizione 4.6}.
- \item \textbf{Organizzazione fisica}: con la terza parte vuole si vuole testare se lo studente ha assimilato 
- in maniera adeguata i modi in cui può ossere organizzato fisicamente il database, quindi si consiglia di studiare bene la \textsc{Sezione 5}
+ è che due relazioni non hanno nessun attributo in comune e rappresentano due ``realtà 
+ disgiunte'', mentre la terza ha due attributi (oltre a diversi altri) che rimandano alle chiavi 
+ delle altre due tabelle. In questo modo è possibile mettere tutte e tre in relazione con il join 
+ (impostando tali attributi in comune come ``$\Theta$ del join'').
+ \item \textbf {Terza forma normale}: il secondo esercizio chiede essenzialmente di applicare 
+ alcuni dei cinque algoritmi visti nella \textsc{Sezione 4} di questa dispensa per verificare 
+ delle proprietà. Tipica richiesta è dimostrare che un dato insieme di attributi è chiave per R, 
+ oppure vi sarà chiesto di trovare una scomposizione che preservi un insieme di dipendenze. Le 
+ tecniche per risolvere questo tipo di esercizi sono ampiemente illustrate nei vari esempi nella 
+ sezione apposita, quindi non le ripeteremo qui. Unica nota è che quando vi si chiede se la 
+ relazione è in \emph{3NF} è consigliato utilizzare la \textsc{Definizione 4.6}.
+ \item \textbf{Organizzazione fisica}: con la terza parte vuole si vuole testare se lo studente ha
+ assimilato in maniera adeguata i modi in cui può ossere organizzato fisicamente il database, quindi 
+ si consiglia di studiare bene la \textsc{Sezione 5}. Spiegheremo più a fondo questo esercizio nel 
+ prossimo paragrafo.
 \end{enumerate}
+
+\subsubsection{Risoluzione Esercizio 3: ``blocchi necessari per..''}
+Questo esercizio si suddivide (solitamente) in tre punti, ciascuno dei quali vi chiede
+\begin{enumerate}
+\item Quanti blocchi dobbiamo utilizzare per il file principale? 
+\item Quanti blocchi dobbiamo utilizzare per il file indice?
+\item Qual è il costo per la ricerca di un record? 
+\end{enumerate}
+
+Per rispondere a queste domande bisogna conoscere alcuni dati, presenti nel testo dell'esercizio. Nella lista 
+seguente saranno elencati tali dati, ed ognuno sarà indicato da un nome di variabile che sarà utilizzato nel 
+descrivere le formule risolutive:
+
+\begin{itemize}
+ \item Numero di record nel file (principale)$[\mathbf{nRecord}]$: di solito è un numero nell'ordine delle centinaia 
+ di migliaia;
+ \item byte occupati da un singolo record$[\mathbf{btRecord}]$: viene specificato anche quanto è grande la \emph{chiave}$[\mathbf{btChiave}]$
+ dato che servirà in un secondo momento;
+ \item byte occupati da un blocco$[\mathbf{btBlocco}]$: viene specificato se, nel momento dell'inizializzazione, 
+ il blocco deve essere riempito a pieno, a metà, al minimo o a una certa percentuale. Può capitare
+ che i blocchi del file principale siano riempiti in un certo modo mentre quelli del file indice in 
+ un altro;
+ \item byte occupati da un puntatore ad un blocco $[\mathbf{btPuntatore}]$.
+ \item \emph{tipo di organizzaizione} utilizzata dal file. \`E un dato essenziale per poter svolgere
+ l'esercizio.
+\end{itemize}
+La tipologia dell'organizzazione è la prima informazione da prendere in considerazione, perché caratterizzerà
+la risoluzione delle domande dell'esercizio.\\\\
+
+\noindent\textbf{\fontsize{14pt}{1em}Domanda 1}\\
+Si calcola prima il numero di record presenti in un blocco del file principale: tale numero è
+\begin{center}
+$RecBlocco = \Bigl\lfloor \dfrac{btBlocco}{btRecord} \Bigr\rfloor$
+\end{center}
+dove le $\bigl\lfloor X \bigr\rfloor$ indicano la parte intera inferiore di $X$ (esempio: $\bigl\lfloor 4,5 
+\bigr\rfloor = 5$). Utilizzeremo anche la parte intera superiore di $\bigl\lceil X \bigr\rceil$ (esempio: $\bigl\lfloor 4,5 
+\bigr\rfloor = 4$).\\
+
+ Già a questo punto, al variare del tipo di organizzazione del file, variano alcuni dettagli della formula per il calcolo di
+ $RecBlocco$.
+ \begin{itemize}
+  \item La formula enunciata prima è valida quando è richiesto che il blocco venga \textbf{riempito completamente} dai record e 
+ l'organizzazione del file è il \emph{B-tree} o l'\emph{ISAM} (file a indice sparso).
+  \item Con \emph{B-tree} o l'\emph{ISAM}, spesso è richiesto che il blocco sia \textbf{pieno fino ad una certa percentuale} $P$:
+  sarà allora necessario prima calcolare il $P\%$ di $btBlocco$, che indicheremo con $PercBlocco$ = $(P * btBlocco)/100$. Il numero
+  di record in un blocco sarà
+  \begin{center}
+  $RecBlocco = \Bigl\lceil \dfrac{PercBlocco}{btRecord} \Bigr\rceil$.
+  \end{center}
+  Notiamo che si prende \emph{la parte superiore} del valore, visto che esso non può scendere sotto la data percentuale mentre, 
+   dato che c'è dello spazio libero, il blocco può ``permettersi di ospitare'' un record in più\footnote{Si può riflettere sulla
+  veridicità della proposizione attraverso la seguente analogia.
+  Dobbiamo versare delle bottiglie di vino in una botte da 15 litri, la quale va riempita con almeno 11 litri. 
+  Ogni bottiglia contiene 3,3 litri di vino ed è un'unità inscindibile (leggasi: non possiamo smezzare una bottiglia); quante bottiglie
+  devo utilizzare? Per versare 11 litri nella botte abbiamo bisogno di $11/3,3=3,3$ bottiglie. A questo punto è evidente che 
+  possiamo decidere di usare 4 bottiglie (analoga parte superiore) o usare 3 bottiglie (parte inferiore). Se decidiamo di versare 
+  3 bottiglie non raggiungiamo la soglia degli $11$ litri (solo $9,9$). Scegliere di versare 4 bottiglie (ovvero 
+  la parte superiore) per un totale di $13,2$ litri a botte, in questi casi è la cosa migliore.}.  
+  \item Un caso particolare del punto 2 è quando l'organizzazione è il \emph{B-Tree} ed richiesto che il numero di record in un blocco
+  sia il \textbf{minimo}. Il minimo di byte che posso mettere in un blocco di un B-tree è \emph{la metà} della sua capacità
+  (per via della ricerca binaria), quindi si ha che
+   \begin{center}
+  $RecBlocco = \Bigl\lceil \dfrac{btBlocco}{2*btRecord} \Bigr\rceil$.\\
+  \end{center}
+ \end{itemize}
+ 
+  Una volta in possesso del valore $RecBlocco$ possiamo rispondere alla domanda 1 attraverso la formula
+  \begin{center}
+   $NumBlocchiFP = \Bigl\lceil\dfrac{nRecord}{RecBlocco}\Bigr\rceil$
+  \end{center}
+  dove $NumBlocchiFP$ è il numero di blocchi utilizzati nel file principale. Tale valore intero è dato \emph{sempre} dalla parte 
+  superiore della frazione.\\
+  
+  \noindent\textbf{\fontsize{14pt}{1em}Domanda 2}\\
+  Troviamo innanzitutto il numero di record per blocco che indicheremo con $RecBloccoI$, dove il suffisso ``$I$''
+  ci ricorda che è un blocco dell'indice. Dato che un blocco del File Indice contiene un puntatore ad un altro blocco
+  e lo spazio ($btPuntatore$) occupato da esso non può essere messo a disposizione dei record; tenendo a mente questo e che un record
+  del File Indice è dato dalla coppia $(puntatore,\ chiave)$, abbiamo che
+  \begin{center}
+   $RecBloccoI = \Bigl\lfloor \dfrac{btBlocco - btPuntatore}{btPuntatore + btChiave}\Bigr\rfloor$
+  \end{center}
+  \`E da tenere a mente che il discorso fatto per la domanda 1 è valido anche per la domanda 2, visto che stiamo calcolando
+  sempre il numero di record in un blocco.\\
+  
+  Calcolato $RecBloccoI$ e ricordando che ogni blocco nel File Principale corrisponde a un record nel File Indice, il numero 
+  dei blocchi nel File indice è:
+  \begin{itemize}
+   \item per un \textbf{file ISAM}, $NumBlocchiFI = \Bigl\lceil \dfrac{NumBlocchiFP}{RecBloccoI}\Bigr\rceil$;
+   \item per un \textbf{file B-Tree}, il quale ha il File Indice organizzato come una gerarchia di indici,
+   la somma dei valori che $NumBlocchiFI$ assume applicando la formula del punto precedente
+   in modo ricorsivo, sostituendo ogni volta a NumBlocchiFP il valore trovato alla chiamata ricorsiva precedente, fino a quando
+   $NumBlocchiFI < RecBloccoI$. Raggiunta questa condizione, il valore di quella formula è 1, ed è l'ultimo valore da sommare.
+   Tale formula deriva dal fatto che ogni blocco di un certo livello è rappresentato da un record al livello piu alto.
+  \end{itemize}
+  
+  \noindent\textbf{\fontsize{14pt}{1em}Domanda 3}\\
+  Il costo della ricerca è misurato contando il numero di accessi a blocchi. In un \textbf{file ISAM} varia tra 2 e 
+  $log_2(NumBlocchiFI) + 1$, per via della ricerca binaria (da 1 a $log_2(NumBlocchiFI)$) più un accesso ad un blocco
+  nel File Principale. In un \textbf{file B-Tree} il costo della ricerca è dato dall'altezza dell'albero che rappresenta
+  la gerarchia degli indici (che è uguale al numero delle iterazioni della formula per calcolare il 
+  numero di blocchi nel File Indice) più un accesso al blocco cercato nel File Principale.
+  
+
+
+  
+ 
+
+
+
+
 

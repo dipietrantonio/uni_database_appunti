@@ -1161,6 +1161,7 @@ allora non si possono verificare né dealdock né livelock. Infatti per la condi
 transazione che mantiene un lock può essere in attesa di un lock mantenuto da un'altra transazione;
 inoltre, la condizione 2 garantisce che dopo un tempo finito ogni transazione raggiunge la testa della
 coda e quindi viene eseguita.\\
+
 Il protocollo conservativo esaminato presenta due inconvenienti. Infatti l'esecuzione di una
 transazione può essere ritardata dal fatto che non può ottenere un lock anche se molti passi della
 transazione potrebbero essere eseguiti senza quel lock; inoltre una transazione è costretta a
