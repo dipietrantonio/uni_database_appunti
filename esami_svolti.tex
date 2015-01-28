@@ -18,7 +18,13 @@ Il compito sarà diviso in tre parti:
  è che due relazioni non hanno nessun attributo in comune e rappresentano due ``realtà 
  disgiunte'', mentre la terza ha due attributi (oltre a diversi altri) che rimandano alle chiavi 
  delle altre due tabelle. In questo modo è possibile mettere tutte e tre in relazione con il join 
- (impostando tali attributi in comune come ``$\Theta$ del join'').
+ (impostando tali attributi in comune come ``$\Theta$ del join''). La seconda espressione algebrica
+ vi chiede di solito di ritornare una relazione contenente elementi che \emph{non} hanno una 
+ determinata caratteristica (es: tutti i musei a Roma che non hanno opere di Picasso); i dati e il 
+ testo dell'esercizio vi vogliono mettere in condizione di dover usare \textbf{l'operatore differenza},
+ ovvero bisogna trovare prima tutti gli elementi che presentano tale proprietà per poi sottrarli 
+ all'insieme di tutti gli elementi (di una stessa relazione s'instende). Vedremo negli esercizi 
+ svolti degli esempi che chiariranno le idee.
  \item \textbf {Terza forma normale}: il secondo esercizio chiede essenzialmente di applicare 
  alcuni dei cinque algoritmi visti nella \textsc{Sezione 4} di questa dispensa per verificare 
  delle proprietà. Tipica richiesta è dimostrare che un dato insieme di attributi è chiave per R, 
@@ -169,8 +175,12 @@ dove le $\bigl\lfloor X \bigr\rfloor$ indicano la parte intera inferiore di $X$ 
   \end{multicols}
 
    \noindent(1) $\pi_{C, D, J, L}((AULA)\bowtie_{B=I}((\sigma_{F=``Basi\ di\ Dati'' \wedge H=``Moscardini''}(CORSO))\bowtie_{A=E}(ORARIO)))$\\
-   (2) $\pi_{I, J, K, L}((AULA)\bowtie_{B=I}((\sigma_{G!=1}(CORSO))\bowtie_{A=E}(ORARIO)))$\\
+   (2) $\pi_{I, J, K, L}(AULA)-$ \\ $- \pi_{I, J, K, L}((AULA)\bowtie_{B=I}((\sigma_{G=1}(CORSO))\bowtie_{A=E}(ORARIO)))$\\
 
+   Nel punto (2) prima si prendono le aule che ospitano corsi del primo anno, poi le sottraggo alla relazione che contiene tutte
+   le aule. \textbf{IMPORTANTE:} per poter effettuare tale operazione, le due relazioni sulle queli agisce l'operatore devono avere
+   lo stesso tipo di attributi. A tal fine, prima di effettuare la differenza, applichiamo la proiezione su entrambi i membri per far
+   coincidere gli attributi (che sono poi gli attributi da noi cercati).
   \subsubsection{Esercizio 2}
  Dati $R=ABCDEHI$ e $F=\{AB\rightarrow CD, B\rightarrow E, E\rightarrow AC, H\rightarrow B\}$
  \begin{itemize}
@@ -198,14 +208,14 @@ Per rispondere al terzo punto bisogna trovare la copertura minimale di $F$:
   $G$ & $G'$ & $G''$\\
   \hline
   $AB\rightarrow C$ & $B\rightarrow C$ & \textbackslash \\
-  $AB \rightarrow D$ & $AB \rightarrow D$ & $AB \rightarrow D$\\
+  $AB \rightarrow D$ & $B \rightarrow D$ & $B \rightarrow D$\\
   $B \rightarrow E$ & $B \rightarrow E$ & $B \rightarrow E$\\ 
   $E \rightarrow A$ & $E \rightarrow A$ & $E \rightarrow A$\\
   $E \rightarrow C$ & $E \rightarrow C$ & $E \rightarrow C$\\
   $H \rightarrow B$ & $H \rightarrow B$ & $H \rightarrow B$\\ 
  \end{tabular}
 \end{center}
-Quindi si esegue l'algoritmo 4.5 ed esce $\rho= \{I, ABD, BE, EA, EC, HB\}$.
+Quindi si esegue l'algoritmo 4.5 ed esce $\rho= \{I, BD, BE, EA, EC, HB\}$.
 
 \subsubsection{Esercizio 3}
 Abbiamo un file di 288.000 record. Ogni record occupa 49 byte di cui 10 per la chiave. Ogni blocco contiene 2048 byte. 
@@ -282,7 +292,8 @@ Ne deriva che il costo di ricerca è dato da 3 (numero di livelli) + 1 (accesso 
   \end{multicols}
 
  \noindent(1) $\pi_{J, H, G}((\sigma_{F=``Toscana''}(MUSEO))\bowtie_{E=B}((\sigma_{D=``Pinturicchio''}(PITTORE))\bowtie_{A=C}(QUADRO)))$\\
- (2) $\pi_{H, G}((\sigma_{F=``Toscana''}(MUSEO))\bowtie_{E=B}(\sigma_{I < 1500 \wedge I > 1599}(QUADRO)))$\\
+ (2) $\pi_{H, G}(\sigma_{F=``Toscana''}(MUSEO)) -$\\
+ $- \pi_{H, G}((\sigma_{F=``Toscana''}(MUSEO))\bowtie_{E=B}(\sigma_{I > 1499 \wedge I < 1600}(QUADRO)))$\\
 
   \subsubsection{Esercizio 2}
  Dati $R=ABCDEHI$ e $F=\{A\rightarrow BC, AB\rightarrow D, C\rightarrow ED, AD\rightarrow E\}$
@@ -394,7 +405,7 @@ dell'albero binario, quindi si ha $\lceil log_2(2.288)\rceil$ più 1 accesso al 
   \end{multicols}
 
  \noindent(1) $\pi_{F, H, D}((CORSO)\bowtie_{A=E}((\sigma_{J=``Cabibbo''}(AULA))\bowtie_{B=I}(\sigma_{C=``Venerdi''}(ORARIO))))$\\
- (2) $\pi_{F}((\sigma_{G=3}(CORSO))\bowtie_{E=A}(\sigma_{C!=``Lunedi''}(ORARIO)))$\\
+ (2) $\pi_{F}(\sigma_{G=3}(CORSO)) -\pi_{F}((\sigma_{G=3}(CORSO))\bowtie_{E=A}(\sigma_{C=``Lunedi''}(ORARIO)))$\\
 
   \subsubsection{Esercizio 2}
  
@@ -520,7 +531,7 @@ Quindi calcoliamo il numero di blocchi nel file principale
 \end{center}
 Calcoliamo ora il numero di record in un blocco del file indice
 \begin{center}
- $RecBloccoI = \Bigl\lfloor \dfrac{1024-4}{14} \Bigr\rfloor = 73$.\\
+ $RecBloccoI = \Bigl\lceil \dfrac{1024-4}{14} \Bigr\rceil = 73$.\\
 \end{center}
 Il numero di blocchi nel file indice è dato dalla somma dei seguenti valori:
 \begin{center}
@@ -582,11 +593,11 @@ Il costo della ricerca è 4 accessi.
   \end{multicols}
 
  \noindent(1) $\pi_{L, F, G, H, I, J}((PITTORE)\bowtie_{E=M}((\sigma_{B=``Galleria\ Borghese''}(MUSEO))\bowtie_{A=N}(QUADRO)))$\\
- (2) $\pi_{B,C}((\sigma_{D=``Roma''}(MUSEO))\bowtie_{A=N}((\sigma_{H!=``Caravaggio''}(PITTORE))\bowtie_{E=M}(QUADRO)))$\\
+ (2) $\pi_{B,C}(\sigma_{D=``Roma''}(MUSEO)) - $\\ 
+ $-\pi_{B,C}((\sigma_{D=``Roma''}(MUSEO))\bowtie_{A=N}((\sigma_{H=``Caravaggio''}(PITTORE))\bowtie_{E=M}(QUADRO)))$\\
 
-  \subsubsection{Esercizio 2}
- 
- \begin{itemize}
+ \subsubsection{Esercizio 2}
+\begin{itemize}
   \item Dato lo schema di relazione $R = ABCDEHI$ e il seguente insieme di dipendenze funzionali $F=\{AB\rightarrow CD, 
   D\rightarrow EH, DH\rightarrow I, I\rightarrow AB\}$ dire se la decomposizione $\rho =\{ABCD, DEH, DHI\}$ preserva $F$.
 
@@ -699,6 +710,7 @@ Il costo della ricerca è 4 accessi.
 A questo punto ci accorgiamo di aver ottenuto una riga con tutte ``a'', quindi l'algoritmo termina. La decomposizione $\rho$ 
 ha un Join senza perdita.
 
+ 
 \subsubsection{Esercizio 3}
 \`E dato un file di 1.750.000 record. Ogni record occupa 130 byte. Un puntatore a blocco occupa 5 byte. 
 Un blocco di memoria contiene 2048 byte. Il file ha un’organizzazione hash con 300 buckets.
@@ -707,37 +719,11 @@ Un blocco di memoria contiene 2048 byte. Il file ha un’organizzazione hash con
  \item Quale è il numero medio di accessi per ricercare un record del file?
 \end{enumerate}
 
-\noindent\textbf{\fontsize{14pt}{1em}Soluzione.}\\
-Bisogna distribuire uniformemente i record nei bucket. Ogni bucket contiene
-%%%%DA FINIRE%%%
-\begin{center}
- $\Bigl\lfloor \dfrac{1.750.000}{300} \Bigr\rfloor = 5.833$ record.\\
-\end{center}
+???
 
-\begin{center}
- $RecBlocco = \Bigl\lceil \dfrac{2048}{2*47} \Bigr\rceil = 22$.\\
-\end{center}
-Quindi calcoliamo il numero di blocchi nel file principale
-\begin{center}
- $NumBlocchiFP = \Bigl\lceil \dfrac{353.000}{22} \Bigr\rceil = 16.046$.\\
-\end{center}
-Calcoliamo ora il numero di record in un blocco del file indice
-\begin{center}
- $RecBloccoI = \Bigl\lfloor \dfrac{1024-4}{14} \Bigr\rfloor = 73$.\\
-\end{center}
-Il numero di blocchi nel file indice è dato dalla somma dei seguenti valori:
-\begin{center}
- Blocchi al livello I $= \Bigl\lceil \frac{16.046}{73} \Bigr\rceil = 220$.\\
-
- Blocchi al livello II $= \Bigl\lceil \frac{220}{73} \Bigr\rceil = 4$.\\
-
- Blocchi al livello III $= \Bigl\lceil \frac{4}{73} \Bigr\rceil = 1$.\\
- 
- Totale = 225 blocchi.
-\end{center}
 
 \newpage
-\subsection{Esame 10/09/2013}
+\subsection{Esame 12/11/2013}
   \subsubsection{Esercizio 1}
   Dato il seguente schema di una base di dati contenente dati relativi a musei:
   \begin{center}
@@ -766,7 +752,7 @@ Il numero di blocchi nel file indice è dato dalla somma dei seguenti valori:
   \begin{flushleft}
    $A = Museo.CodM$\\
    $B = Museo.Nome$\\
-   $C = Museo.Citta$\\
+   $C = Museo.Citt\grave{a}$\\
    $D = Pittore.CodP$\\
    $E = Pittore.Nome$\\
    $F = Pittore.Cognome$\\
@@ -780,160 +766,81 @@ Il numero di blocchi nel file indice è dato dalla somma dei seguenti valori:
   \end{flushleft}
   \end{multicols}
 
- \noindent(1) $\pi_{K, E, F, B}((PITTORI)\bowtie_{D=L}((\sigma_{C=``Roma''}(MUSEO))\bowtie_{A=M}(QUADRO)))$
-
+ \noindent(1) $\pi_{K, E, F, B}((PITTORI)\bowtie_{D=L}((\sigma_{C=``Roma''}(MUSEO))\bowtie_{A=M}(QUADRO)))$\\
+ (2) $\pi_{A,B,C}((\sigma_{C=``Roma''}(MUSEO))) - $\\ $ - \pi_{A,B,C}((\sigma_{C=``Roma''}(MUSEO))\bowtie_{A=M}((QUADRO)\bowtie_{L=D}(\sigma_{I>1900}(PITTORE))))$\\
+  
+  Nel punto (2) prendiamo prima tutti i musei di Roma che contengono opere di autori morti dopo il 1900, in seguito li 
+  sottraiamo alla relazione contentente tutti i musei di Roma, dando cosi la relazione richiesta.
   \subsubsection{Esercizio 2}
- 
- \begin{itemize}
-  \item Dato lo schema di relazione $R = ABCDEHI$ e il seguente insieme di dipendenze funzionali $F=\{AB\rightarrow CD, 
-  D\rightarrow EH, DH\rightarrow I, I\rightarrow AB\}$ dire se la decomposizione $\rho =\{ABCD, DEH, DHI\}$ preserva $F$.
+   Dati $R=ABCDEH$ e $F=\{AB\rightarrow CD, B\rightarrow E, E\rightarrow D\}$
 
-  \item Dato lo schema di relazione $R = ABCDE$ e il seguente insieme di dipendenze funzionali $F=\{E\rightarrow AB, D\rightarrow E,
-  BC\rightarrow D, B\rightarrow C\}$ dire se la decomposizione $\rho =\{AB, BD, ACD, DE\}$ ha un join senza perdita.
- \end{itemize}
- 
+ \begin{enumerate}
+  \item Mostrare che $ABH$ è una chiave di $R$
+  \item Sapendo che $ABH$ è l’unica chiave di $R$, mostrare che $R$ non è in terza forma normale
+  \item Trovare una decomposizione $\rho$ di $R$ tale che:
+   \begin{itemize}
+    \item ogni schema in $\rho$ è in terza forma normale
+    \item $\rho$ preserva $F$
+    \item $\rho$ ha un join senza perdita
+   \end{itemize}
+ \end{enumerate}
+
  \noindent\textbf{\fontsize{14pt}{1em}Soluzione.}\\
  Per rispondere al primo punto utilizziamo l'Algoritmo 4.2 e 4.3. Sappiamo che se gli attributi di una dipendenza sono presenti
  tutti in una relazione della scoposizione, tale dipendenza è sicuramente in $G^+$.\\
- $AB\rightarrow CD \in G^+$? Si\\
- $D\rightarrow EH \in G^+$? Si\\
- $BC\rightarrow D \in G^+$? Si\\
- $I\rightarrow AB \in G^+$? Da verificare con l'algoritmo\\
  
- \noindent Calcoliamo $E^+_G$\\
- $Z^{(0)}=I$\\
- $S^{(0)}=(I\cap DHI)^+_F \cap DHI= DHI$\\
- $Z^{(1)}=DHI$\\
- $S^{(1)}=DHI \cup [(DHI \cap ABCD)^+_F \cap ABCD] \cup [(DHI \cap DEH)^+_F \cap DEH] = ABCDEHI$\\
- $Z^{(2)}=ABCDEHI$\\
- $S^{(2)}=ABCDEHI$\\
+ \noindent$ABH$ è chiave $\Leftrightarrow R\subseteq (ABH)^+_F$ ed $R$ non è contenuto nella chiusura di nessun sottoinsieme di
+ attributi di $ABH$.\\
+ $(ABH)^+_F= ABHCDE \supseteq R$\\
+ $(AB)^+_F = ABCDE \not\supseteq R$\\
+ $(AH)^+_F = AH \not\supseteq R$\\
+ $(BH)^+_F= BHED \not\supseteq R$\\
+ ne tanto meno R sarà contenuto nelle chiusure dei singoli attributi. $R$ tuttavia non è in terza forma normale perché $F^+$ 
+ contiene dipendenze come $AB\rightarrow CD$, dove $AB$ non è superchiave e $CD$ non è primo.\\
  
- \noindent Dato che $AB \subseteq Z^{(2)} = ABCDEHI$, ne segue che $I\rightarrow AB \in G^+$ e quindi $\rho$ preserva $F$.\\
+ \noindent Per trovare la decomposizione richiesta bisogna prima trovare la copertura minimale di $F$:\\
  
-\noindent Per rispondere al secondo punto bisogna usare l'algoritmo 4.4, quindi costruiamo la tabella ed eseguiamo l'algoritmo:
-
-\begin{multicols}{2}
-   \begin{center}
-  \begin{tabular}{c|c|c|c|c|c}
-    & \textbf{A} & \textbf{B} &\textbf{C} &\textbf{D}     &\textbf{E}\\
-   \hline
-   \textbf{AB} & $a_1$ & $a_2$ & $b_{1,3}$ & $b_{1,4}$ & $b_{1,5}$ \\
-   \hline
-   \textbf{BD}  &$b_{2,1}$ & $a_2$  & $b_{2,3}$ & $a_4$ & $b_{2,5}$ \\
-   \hline
-   \textbf{ACD} & $a_1$ & $b_{3,2}$  & $a_3$ & $a_4$ & $b_{3,5}$\\
-    \hline
-   \textbf{DE} & $b_{4,1}$   & $b_{4,2}$  & $b_{4,3}$ & $a_4$ & $a_5$\\
-  \end{tabular}
- \end{center}
+ \begin{tabular}{l|l|l}
+ $G$ & $G'$ & $G''$\\
+ \hline
+ $AB \rightarrow C$ & $AB \rightarrow C$ & $AB \rightarrow C$\\
+ $AB \rightarrow D$ & $B \rightarrow D$ & $B \rightarrow D$\\
+ $D \rightarrow E$ & $D \rightarrow E$ & $D \rightarrow E$\\
+ $E \rightarrow D$ & $E \rightarrow D$ & $E \rightarrow D$\\
+ \end{tabular}\\
  
-  \begin{center}
-  \begin{tabular}{l|c}
-   & $I_1$\\
-   \hline
-   $E\rightarrow AB$ & $\cdot$ \\
-   $D\rightarrow E$ & $\checkmark$ \\
-   $BC\rightarrow D$ & $\cdot$ \\
-   $B\rightarrow C$ & $\checkmark$ \\
-   \end{tabular}
- \end{center}
- \end{multicols}
+ \noindent Applicando l'Algoritmo 4.5 troviamo $\rho^1= \{H, ABC, BD, DE\}$, alla quale aggiungiamo la chiave di $R$
+ per ottenere la scomposizione richiesta $\rho = \rho^1 \cup \{ABH\}$.
  
- \begin{multicols}{2}
-   \begin{center}
-  \begin{tabular}{c|c|c|c|c|c}
-    & \textbf{A} & \textbf{B} &\textbf{C} &\textbf{D}     &\textbf{E}\\
-   \hline
-   \textbf{AB} & $a_1$ & $a_2$ & $\mathbf{b_{2,3}}$ & $b_{1,4}$ & $b_{1,5}$ \\
-   \hline
-   \textbf{BD}  &$b_{2,1}$ & $a_2$  & $b_{2,3}$ & $a_4$ & $\mathbf{a_5}$ \\
-   \hline
-   \textbf{ACD} & $a_1$ & $b_{3,2}$  & $a_3$ & $a_4$ & $\mathbf{a_5}$\\
-    \hline
-   \textbf{DE} & $b_{4,1}$   & $b_{4,2}$  & $b_{4,3}$ & $a_4$ & $a_5$\\
-  \end{tabular}
- \end{center}
- 
-  \begin{center}
-  \begin{tabular}{l|c|c}
-   & $I_1$ & $I_2$\\
-   \hline
-   $E\rightarrow AB$ & $\cdot$ & $\checkmark$ \\
-   $D\rightarrow E$ & $\checkmark$ & $\cdot$ \\
-   $BC\rightarrow D$ & $\cdot$ & $\checkmark$ \\
-   $B\rightarrow C$ & $\checkmark$ & $\cdot$ \\
-   \end{tabular}
- \end{center}
- \end{multicols}
- Da notare che se si sceglie bene l'ordine delle tuple alle quali applicare l'algoritmo, è possibile risparmiarsi qualche iterazione.
- Infatti scegliendo, ad esempio, per prima $t_3[E]$ e $t_4[E]$ e poi $t_2[E]$ e $t_3[E]$, otteniamo 
- le colonne $A$ e $B$ riempite con sole ``$a$'' in una sola iterazione. 
-  \begin{multicols}{2}
-   \begin{center}
-  \begin{tabular}{c|c|c|c|c|c}
-    & \textbf{A} & \textbf{B} &\textbf{C} &\textbf{D}     &\textbf{E}\\
-   \hline
-   \textbf{AB} & $a_1$ & $a_2$ & $b_{2,3}$ & $\mathbf{a_4}$ & $b_{1,5}$ \\
-   \hline
-   \textbf{BD}  &$\mathbf{a_1}$ & $a_2$  & $b_{2,3}$ & $a_4$ & $a_5$ \\
-   \hline
-   \textbf{ACD} & $a_1$ & $\mathbf{a_2}$  & $a_3$ & $a_4$ & $a_5$\\
-    \hline
-   \textbf{DE} & $\mathbf{a_1}$ & $\mathbf{a_2}$  & $b_{4,3}$ & $a_4$ & $a_5$\\
-  \end{tabular}
- \end{center}
- 
-  \begin{center}
-  \begin{tabular}{l|c|c|c}
-   & $I_1$ & $I_2$ & $I_3$\\
-   \hline
-   $E\rightarrow AB$ & $\cdot$ & $\checkmark$ \\
-   $D\rightarrow E$ & $\checkmark$ & $\cdot$ \\
-   $BC\rightarrow D$ & $\cdot$ & $\checkmark$ \\
-   $B\rightarrow C$ & $\checkmark$ & $\cdot$ \\
-   \end{tabular}
- \end{center}
- \end{multicols}
-A questo punto ci accorgiamo di aver ottenuto una riga con tutte ``a'', quindi l'algoritmo termina. La decomposizione $\rho$ 
-ha un Join senza perdita.
-
 \subsubsection{Esercizio 3}
-\`E dato un file di 1.750.000 record. Ogni record occupa 130 byte. Un puntatore a blocco occupa 5 byte. 
-Un blocco di memoria contiene 2048 byte. Il file ha un’organizzazione hash con 300 buckets.
+Abbiamo un file di 288.000 record. Ogni record occupa 49 byte di cui 10 per la chiave. Ogni blocco contiene 2048 byte.
+Un puntatore a blocco occupa 4 byte. Usiamo una organizzazione ISAM riempiendo i blocchi del file principale all'$80\%$.
 \begin{enumerate}
- \item Quanti blocchi di memoria occupa il file?
- \item Quale è il numero medio di accessi per ricercare un record del file?
+ \item  Quanti blocchi dobbiamo utilizzare per il file principale? 
+ \item Quanti blocchi dobbiamo utilizzare per il file indice?
+ \item Qual è il costo massimo per la ricerca di un record? 
 \end{enumerate}
 
 \noindent\textbf{\fontsize{14pt}{1em}Soluzione.}\\
-Bisogna distribuire uniformemente i record nei bucket. Ogni bucket contiene
-%%%%DA FINIRE%%%
-\begin{center}
- $\Bigl\lfloor \dfrac{1.750.000}{300} \Bigr\rfloor = 5.833$ record.\\
-\end{center}
+Innanzitutto calcoliamo l'$80\%$ di 2048. $\lceil2048 \cdot 0,8\rceil = 1639$
 
+Calcoliamo il numero di recod per blocco
 \begin{center}
- $RecBlocco = \Bigl\lceil \dfrac{2048}{2*47} \Bigr\rceil = 22$.\\
+ $RecBlocco = \Bigl\lceil \dfrac{1639}{49} \Bigr\rceil = 34$.\\
 \end{center}
 Quindi calcoliamo il numero di blocchi nel file principale
 \begin{center}
- $NumBlocchiFP = \Bigl\lceil \dfrac{353.000}{22} \Bigr\rceil = 16.046$.\\
+ $NumBlocchiFP = \Bigl\lceil \dfrac{288.000}{34} \Bigr\rceil = 8.471$.\\
 \end{center}
 Calcoliamo ora il numero di record in un blocco del file indice
 \begin{center}
- $RecBloccoI = \Bigl\lfloor \dfrac{1024-4}{14} \Bigr\rfloor = 73$.\\
+ $RecBloccoI = \Bigl\lceil \dfrac{1639-4}{14} \Bigr\rceil = 117$.\\
 \end{center}
-Il numero di blocchi nel file indice è dato dalla somma dei seguenti valori:
+Il numero di blocchi nel file indice è dato dalla formula:
 \begin{center}
- Blocchi al livello I $= \Bigl\lceil \frac{16.046}{73} \Bigr\rceil = 220$.\\
-
- Blocchi al livello II $= \Bigl\lceil \frac{220}{73} \Bigr\rceil = 4$.\\
-
- Blocchi al livello III $= \Bigl\lceil \frac{4}{73} \Bigr\rceil = 1$.\\
- 
- Totale = 225 blocchi.
+ $\Bigl\lceil \dfrac{8.471}{117} \Bigr\rceil = 73$.
 \end{center}
-
+Il costo massimo per la ricerca è $\lceil log_2(8.471)\rceil + 1 = 15$
   
  
 
