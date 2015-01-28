@@ -64,7 +64,12 @@ descrivere le formule risolutive:
  l'esercizio.
 \end{itemize}
 La tipologia dell'organizzazione è la prima informazione da prendere in considerazione, perché caratterizzerà
-la risoluzione delle domande dell'esercizio.\\\\
+la risoluzione delle domande dell'esercizio. Il seguente paragrafo tratta la risoluzione di esercizi dove il file
+è organizzato come \textbf{B-Tree} o \textbf{ISAM} (file a indice sparso). Una volta apprese le tecniche illustrate
+per questi due tipi di file verrà affrontato l'argomento del file \textbf{Hash}, il quale presenta delle sostanziali
+distinzioni per via della sua struttura.\\
+
+\noindent\textbf{\fontsize{16pt}{1em}File B-Tree e ISAM}\\
 
 \noindent\textbf{\fontsize{14pt}{1em}Domanda 1}\\
 Si calcola prima il numero di record presenti in un blocco del file principale: tale numero è
@@ -137,7 +142,50 @@ dove le $\bigl\lfloor X \bigr\rfloor$ indicano la parte intera inferiore di $X$ 
   $log_2(NumBlocchiFI) + 1$, per via della ricerca binaria (da 1 a $log_2(NumBlocchiFI)$) più un accesso ad un blocco
   nel File Principale. In un \textbf{file B-Tree} il costo della ricerca è dato dall'altezza dell'albero che rappresenta
   la gerarchia degli indici (che è uguale al numero di iterazioni della formula per calcolare il 
-  numero di blocchi nel File Indice) più un accesso al blocco cercato nel File Principale.
+  numero di blocchi nel File Indice) più un accesso al blocco cercato nel File Principale.\\
+  
+  \noindent\textbf{\fontsize{16pt}{1em}File Hash}\\
+  Per il file Hash valgono le suddette considerazioni, tenendo conto però che un file HASH ha i record distribuiti in egual misura
+  in gruppi di blocchi chiamati bucket. I blocchi in un bucket sono organizzati come una \emph{linked list}, il primo blocco punta al
+  secondo, il secondo al terzo e cosi via. Gli indirizzi dei primi blocchi dei bucket sono conservati in un file indice composto solo
+  sa puntatori. Ci sono quindi tanti puntatori quanti bucket. Detto ciò vogliamo rispondere alle seguenti domande: quanti blocchi di
+  memoria occupa il file? Quale è il numero medio di accessi per ricercare un record del file?\\
+\begin{multicols}{2}
+Calcoliamo innanzitutto il numero di record per blocco richiesto per la directory; 
+\begin{center}
+ $puntatori \times blocco = \Bigl\lfloor \dfrac{btBlocco}{btPuntatore} \Bigr\rfloor$
+\end{center}
+quindi i blocchi richiesti dalla directory sono
+\begin{center}
+ $BlocchiDir = \Bigl\lceil \dfrac{totBucket}{puntatori \times blocco} \Bigr\rfloor$
+\end{center}
+Passiamo al file principale, diviso in bucket. Calcoliamo il numero di record per blocco
+\begin{center}
+ $RecBlocco = \Bigl\lfloor \dfrac{btBlocco-btPuntatore}{btRecord} \Bigr\rfloor$
+\end{center}
+I record totali devono essere ripartiti uniformemente nei bucket
+\begin{center}
+ $record \times bucket = \Bigl\lceil \dfrac{nRecord}{totBucket} \Bigr\rceil$
+\end{center}
+Ora il numero totale di blocchi nel file principale è dato dal numero di blocchi in un bucket
+moltiplicato per il numero di bucket.
+\begin{center}
+ $BlocchiFP = \Bigl\lceil \dfrac{record \times bucket}{RecBlocco} \Bigr\rceil \cdot totBucket$
+\end{center}
+Quindi in totale il file occupa $BlocchiFP + BlocchiDir$. Il costo medio di 
+una ricerca è dato da
+\begin{center}
+ $\Bigl\lceil \Bigl\lceil \dfrac{record \times bucket}{RecBlocco} \Bigr\rceil \cdot \dfrac{1}{2} \Bigr\rceil$
+\end{center}
+visto che si cerca dentro un solo bucket ed essendo il costo medio si suppone che il record
+cercato sia a metà bucket.
+\end{multicols}
+  
+  
+  
+  
+  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+  %%%%%%%%%%%%%%%%%%INIZIO ESAMI%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
   \newpage
   \subsection{Esame 16/01/2013}
   \subsubsection{Esercizio 1}
@@ -713,7 +761,7 @@ ha un Join senza perdita.
  
 \subsubsection{Esercizio 3}
 \`E dato un file di 1.750.000 record. Ogni record occupa 130 byte. Un puntatore a blocco occupa 5 byte. 
-Un blocco di memoria contiene 2048 byte. Il file ha un’organizzazione hash con 300 buckets.
+Un blocco di memoria contiene 2048 byte. Il file ha un’organizzazione hash con 300 bucket.
 \begin{enumerate}
  \item Quanti blocchi di memoria occupa il file?
  \item Quale è il numero medio di accessi per ricercare un record del file?
@@ -722,26 +770,26 @@ Un blocco di memoria contiene 2048 byte. Il file ha un’organizzazione hash con
 Calcoliamo innanzitutto il numero di record per blocco richiesto per la directory; in questo
 caso i record contengono solo i puntatori al primo blocco di un bucket.
 \begin{center}
- $puntatori X blocco = \Bigl\lfloor \dfrac{2048}{5} \Bigr\rfloor = 409$
+ $puntatori \times blocco = \Bigl\lfloor \dfrac{2048}{5} \Bigr\rfloor = 409$
 \end{center}
 quindi i blocchi richiesti dalla directory sono
 \begin{center}
  $BlocchiDir = \Bigl\lceil \dfrac{300}{409} \Bigr\rfloor = 1$
 \end{center}
-Passiamo al file principale, diviso in buckets. Calcoliamo il numero di record per blocco
+Passiamo al file principale, diviso in bucket. Calcoliamo il numero di record per blocco
 \begin{center}
  $\Bigl\lfloor \dfrac{2048-5}{130} \Bigr\rfloor = 15$
 \end{center}
-I record totali devono essere ripartiti uniformemente nei buckets
+I record totali devono essere ripartiti uniformemente nei bucket
 \begin{center}
- $record X buckets = \Bigl\lceil \dfrac{1.750.000}{300} \Bigr\rceil = 5834$
+ $record \times bucket = \Bigl\lceil \dfrac{1.750.000}{300} \Bigr\rceil = 5834$
 \end{center}
 Ora il numero totale di blocchi nel file principale è dato dal numero di blocchi in un bucket
-moltiplicato per il numero di buckets.
+moltiplicato per il numero di bucket.
 \begin{center}
  $BlocchiFP = \Bigl\lceil \dfrac{5834}{15} \Bigr\rceil \cdot 300 = 116.700$
 \end{center}
-Quindi in totale il file occupa 116.700 + 1 (per l'accesso alla directory) blocchi. Il costo medio di 
+Quindi in totale il file occupa 116.700 + 1 (quello della directory) blocchi. Il costo medio di 
 una ricerca è dato da
 \begin{center}
  $\Bigl\lceil \Bigl\lceil \dfrac{5834}{15} \Bigr\rceil \cdot \dfrac{1}{2} \Bigr\rceil$
