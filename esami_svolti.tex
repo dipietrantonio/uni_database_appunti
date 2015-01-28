@@ -81,7 +81,7 @@ dove le $\bigl\lfloor X \bigr\rfloor$ indicano la parte intera inferiore di $X$ 
   \item La formula enunciata prima è valida quando è richiesto che il blocco venga \textbf{riempito completamente} dai record e 
  l'organizzazione del file è il \emph{B-tree} o l'\emph{ISAM} (file a indice sparso).
   \item Con \emph{B-tree} o l'\emph{ISAM}, spesso è richiesto che il blocco sia \textbf{pieno fino ad una certa percentuale} $P$:
-  sarà allora necessario prima calcolare il $P\%$ di $btBlocco$, che indicheremo con $PercBlocco$ = $(P * btBlocco)/100$. Il numero
+  sarà allora necessario prima calcolare il $P\%$ di $btBlocco$, che indicheremo con $PercBlocco$ = $(P \cdot btBlocco)/100$. Il numero
   di record in un blocco sarà
   \begin{center}
   $RecBlocco = \Bigl\lceil \dfrac{PercBlocco}{btRecord} \Bigr\rceil$.
@@ -99,7 +99,7 @@ dove le $\bigl\lfloor X \bigr\rfloor$ indicano la parte intera inferiore di $X$ 
   sia il \textbf{minimo}. Il minimo di byte che posso mettere in un blocco di un B-tree è \emph{la metà} della sua capacità
   (per via della ricerca binaria), quindi si ha che
    \begin{center}
-  $RecBlocco = \Bigl\lceil \dfrac{btBlocco}{2*btRecord} \Bigr\rceil$.\\
+  $RecBlocco = \Bigl\lceil \dfrac{btBlocco}{2\cdot btRecord} \Bigr\rceil$.\\
   \end{center}
  \end{itemize}
  
@@ -230,8 +230,8 @@ principale che quelli del file indice.
 \noindent\textbf{\fontsize{14pt}{1em}Soluzione.}\\
 Come visto nel paragrafo Tecniche Risolutive, si calcola prima il numero di record per blocco. Il testo dice che 
 ogni blocco è riempito al minimo, che in un B-Tree equivale a dire riempito a metà. Applichiamo la formula:
-\begin{center}
- $RecBlocco = \Bigl\lceil \dfrac{2048}{2*49} \Bigr\rceil = 21$.\\
+ \begin{center}
+ $RecBlocco = \Bigl\lceil \dfrac{2048}{2\cdot 49} \Bigr\rceil = 21$.\\
 \end{center}
 Quindi calcoliamo il numero di blocchi nel file principale
 \begin{center}
@@ -523,7 +523,7 @@ principale che quelli del file indice.
 \noindent\textbf{\fontsize{14pt}{1em}Soluzione.}\\
 Come visto nel paragrafo Tecniche Risolutive, si calcola prima il numero di record per blocco.
 \begin{center}
- $RecBlocco = \Bigl\lceil \dfrac{2048}{2*47} \Bigr\rceil = 22$.\\
+ $RecBlocco = \Bigl\lceil \dfrac{2048}{2\cdot 47} \Bigr\rceil = 22$.\\
 \end{center}
 Quindi calcoliamo il numero di blocchi nel file principale
 \begin{center}
@@ -718,8 +718,43 @@ Un blocco di memoria contiene 2048 byte. Il file ha un’organizzazione hash con
  \item Quanti blocchi di memoria occupa il file?
  \item Quale è il numero medio di accessi per ricercare un record del file?
 \end{enumerate}
+\begin{multicols}{2}
+Calcoliamo innanzitutto il numero di record per blocco richiesto per la directory; in questo
+caso i record contengono solo i puntatori al primo blocco di un bucket.
+\begin{center}
+ $puntatori X blocco = \Bigl\lfloor \dfrac{2048}{5} \Bigr\rfloor = 409$
+\end{center}
+quindi i blocchi richiesti dalla directory sono
+\begin{center}
+ $BlocchiDir = \Bigl\lceil \dfrac{300}{409} \Bigr\rfloor = 1$
+\end{center}
+Passiamo al file principale, diviso in buckets. Calcoliamo il numero di record per blocco
+\begin{center}
+ $\Bigl\lfloor \dfrac{2048-5}{130} \Bigr\rfloor = 15$
+\end{center}
+I record totali devono essere ripartiti uniformemente nei buckets
+\begin{center}
+ $record X buckets = \Bigl\lceil \dfrac{1.750.000}{300} \Bigr\rceil = 5834$
+\end{center}
+Ora il numero totale di blocchi nel file principale è dato dal numero di blocchi in un bucket
+moltiplicato per il numero di buckets.
+\begin{center}
+ $BlocchiFP = \Bigl\lceil \dfrac{5834}{15} \Bigr\rceil \cdot 300 = 116.700$
+\end{center}
+Quindi in totale il file occupa 116.700 + 1 (per l'accesso alla directory) blocchi. Il costo medio di 
+una ricerca è dato da
+\begin{center}
+ $\Bigl\lceil \Bigl\lceil \dfrac{5834}{15} \Bigr\rceil \cdot \dfrac{1}{2} \Bigr\rceil$
+\end{center}
+visto che si cerca dentro un solo bucket ed essendo il costo medio si suppone che il record
+cercato sia a metà bucket.
+\end{multicols}
 
-???
+
+
+
+
+
 
 
 \newpage
