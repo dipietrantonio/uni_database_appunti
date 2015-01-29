@@ -555,9 +555,9 @@ altro item, lo schedule non è serializzabile. L'algoritmo lavora nel modo segue
 Dato uno schedule S:
 \begin{itemize}
  \item crea un grafo diretto $G$ (grafo di serializzazione) i cui nodi corrispondono alle transazioni; in
-tale grafo c'è un arco diretto da $t_i$ a $t_j$ se in $S$ $t_i$ esegue un $unlock(X)$ e $t_j$ esegue il successivo
-$lock(X)$ (il significato intuitivo dell'esistenza di un arco da $t_i$ a $t_j$ è che $t_j$ legge il valore per $X$
-scritto da $t_i$ e quindi se esiste uno schedule seriale equivalente ad $S$ in tale shedule $t_i$ deve
+tale grafo c'è un arco diretto da $t_i$ a $t_j$ se, in $S$, $t_i$ esegue un $unlock(X)$ e $t_j$ esegue il successivo
+$lock(X)$ (il significato intuitivo dell'esistenza di un arco da $t_i$ a $t_j$ è che $t_j$ legge il valore di $X$
+scritto da $t_i$ e quindi, se esiste uno schedule seriale equivalente ad $S$, in tale shedule $t_i$ deve
 precedere $t_j$);
 \item verifica se $G$ ha un ciclo. Se $G$ ha un ciclo allora $S$ non è serializzabile; altrimenti esiste un
 ordinamento $S'$ delle transazioni tale che $t_i$ precede $t_j$ se c'è in $G$ un arco diretto da $t_i$ a $t_j$; tale
@@ -567,7 +567,19 @@ archi entranti (l'ordine di eliminazione dei nodi fornisce lo schedule seriale $
 \end{itemize}
 \end{alg}
 
-Il seguente teorema prova la correttezza dell'algoritmo.
+Ecco i grafi dei due schedule visti prima: il primo ha un ciclo, infatti lo schedule non è serializzabile.
+\begin{multicols}{2}
+ \includegraphics[width=170px]{grafo1.eps}\\
+ \includegraphics[width=170px]{grafo2.eps}
+\end{multicols}
+
+Considerando invece il seguente grafo, una possibile eliminazione ricorsiva dei nodi con archi non entranti
+produce il seguente schedule seriale: $t_4$, $t_7$, $t_5$, $t_1$, $t_8$, $t_9$, $t_2$, $t_3$, $t_6$.\\
+\begin{center}
+\includegraphics[width=200px]{ordinamento_topologico.eps}\\ 
+\end{center}
+
+\noindent Il seguente teorema prova la correttezza dell'algoritmo.
 \label{teorema_6_1}
 \begin{theo}
 L'Algoritmo 1 determina correttamente se uno schedule è serializzabile. 
@@ -653,9 +665,9 @@ un'operazione di lock dopo aver effettuato un'operazione di unlock; consideriamo
    unlock(X)\\
    unlock(Y)\\
   \hline
-  
   \end{tabular} 
  \end{multicols}
+ 
 
  il seguente schedule $S$ di $t_1$ e $t_2$ non è serializzabile
 \begin{center}
