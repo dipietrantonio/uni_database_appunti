@@ -124,10 +124,9 @@ dove le $\bigl\lfloor X \bigr\rfloor$ indicano la parte intera inferiore di $X$ 
    $RecBloccoI = \Bigl\lfloor \dfrac{btBlocco - btPuntatore}{btPuntatore + btChiave}\Bigr\rfloor$
   \end{center}
   Se si tratta di un B-tree, al valore ottenuto dalla formula bisogna aggiungere +1. Esso rappresenta quel record in più che 
-  contiene il puntatore al blocco contentente record che hanno chiave minore della sua chiave più piccola.\\
-  \`E da tenere a mente che il discorso fatto per la domanda 1 è valido anche per la domanda 2, visto che stiamo calcolando
+  contiene il puntatore al blocco contentente record che hanno chiave minore della sua chiave più piccola. \`E da tenere a mente 
+  che il discorso fatto per la domanda 1 è valido anche per la domanda 2, visto che stiamo calcolando
   sempre il numero di record in un blocco.\\
-  
   Calcolato $RecBloccoI$ e ricordando che ogni blocco nel File Principale corrisponde a un record nel File Indice, il numero 
   dei blocchi nel File indice è:
   \begin{itemize}
@@ -150,8 +149,8 @@ dove le $\bigl\lfloor X \bigr\rfloor$ indicano la parte intera inferiore di $X$ 
   Per il file Hash valgono le suddette considerazioni, tenendo conto però che un file HASH ha i record distribuiti in egual misura
   in gruppi di blocchi chiamati bucket. I blocchi in un bucket sono organizzati come una \emph{linked list}, il primo blocco punta al
   secondo, il secondo al terzo e cosi via. Gli indirizzi dei primi blocchi dei bucket sono conservati in un file indice composto solo
-  sa puntatori. Ci sono quindi tanti puntatori quanti bucket. Detto ciò vogliamo rispondere alle seguenti domande: quanti blocchi di
-  memoria occupa il file? Quale è il numero medio di accessi per ricercare un record del file?\\
+  da puntatori. Detto ciò vogliamo rispondere alle seguenti domande: quanti blocchi di
+  memoria occupa il file? Quale è il numero medio di accessi per ricercare un record del file?
 \begin{multicols}{2}
 Calcoliamo innanzitutto il numero di record per blocco richiesto per la directory; 
 \begin{center}
