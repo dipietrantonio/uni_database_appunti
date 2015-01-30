@@ -28,7 +28,7 @@ transazioni non è controllata, introduciamo il concetto di \textbf{schedule} (p
 insieme di transazioni.
 \begin{defn}
 Dato un insieme $T$ di transazioni, uno \textbf{schedule} $S$ di $T$ è un ordinamento delle
-operazioni nelle transazioni in $T$ tale che per ogni transazione $t$ in $T$ se $o_1$ e $o_2$ sono due operazioni
+operazioni nelle transazioni in $T$ tale che, per ogni transazione $t$ in $T$, se $o_1$ e $o_2$ sono due operazioni
 in $t$ tali che $o_1$ precede $o_2$ in $t$ allora $o_1$ precede $o_2$ in $S$.
 \end{defn}
 In altre parole uno schedule deve \emph{conservare l'ordine} che le operazioni hanno all'interno delle singole 
@@ -794,7 +794,7 @@ Consideriamo le seguenti transazioni:
  
   \begin{tabular}{|l|}
   \hline
-  $t_1$\\
+  $t_3$\\
   \hline
   rlock(Y)\\
   unlock(Y)\\
@@ -827,6 +827,37 @@ Il seguente schedule di $\{t_1, t_2, t_3\}$ è serializzabile
 \end{center}
 
 infatti il suo grafo di serializzazione
+
+\begin{center}
+ \includegraphics[width=150px]{grafo3.eps}
+\end{center}
+
+non contiene cicli; lo schedule seriale equivalente fornito dall’algoritmo è $t_1$, $t_3$, $t_2$. Al contrario il
+seguente schedule di $\{t_1$, $t_2$, $t_3\}$ non è serializzabile
+
+\begin{center}
+\begin{longtable}{|l|l|l|}
+ \hline
+ $t_1$ & $t_2$ & $t_3$\\
+ \hline
+ rlock(X)& &\\
+ unlock(X)& &\\
+ & wlock(X)& \\
+ & unlock(X)& \\
+ & & rlock(Y) \\
+ & & unlock(Y)\\
+ & rlock(Z)& \\
+ & unlock(Z)& \\
+ & &wlock(Z)\\
+ & &unlock(Z)\\
+ wlock(Y) & &\\
+ unlock(Y) & &\\
+\hline
+ \end{longtable}
+\end{center}
+
+infatti il suo grafo di serializzazione
+
 \begin{center}
  \includegraphics[width=150px]{img_6_3_2.eps}
 \end{center}

@@ -123,6 +123,8 @@ dove le $\bigl\lfloor X \bigr\rfloor$ indicano la parte intera inferiore di $X$ 
   \begin{center}
    $RecBloccoI = \Bigl\lfloor \dfrac{btBlocco - btPuntatore}{btPuntatore + btChiave}\Bigr\rfloor$
   \end{center}
+  Se si tratta di un B-tree, al valore ottenuto dalla formula bisogna aggiungere +1. Esso rappresenta quel record in più che 
+  contiene il puntatore al blocco contentente record che hanno chiave minore della sua chiave più piccola.\\
   \`E da tenere a mente che il discorso fatto per la domanda 1 è valido anche per la domanda 2, visto che stiamo calcolando
   sempre il numero di record in un blocco.\\
   
@@ -287,16 +289,16 @@ Quindi calcoliamo il numero di blocchi nel file principale
 \end{center}
 Calcoliamo ora il numero di record in un blocco del file indice
 \begin{center}
- $RecBloccoI = \Bigl\lceil \dfrac{1024-4}{10+4} \Bigr\rceil = 73$.\\
+ $RecBloccoI = \Bigl\lceil \dfrac{1024-4}{10+4} \Bigr\rceil + 1 = 74$.\\
 \end{center}
 Il numero di blocchi nel file indice è dato dalla somma di questi tre valori:
 \begin{center}
- Blocchi al livello I $= \Bigl\lceil \frac{13.715}{73} \Bigr\rceil = 188$.\\
+ Blocchi al livello I $= \Bigl\lceil \frac{13.715}{74} \Bigr\rceil = 186$.\\
  
- Blocchi al livello II $= \Bigl\lceil \frac{188}{73} \Bigr\rceil = 3$.\\
+ Blocchi al livello II $= \Bigl\lceil \frac{186}{74} \Bigr\rceil = 3$.\\
  
- Blocchi al livello III $= \Bigl\lceil \frac{3}{73} \Bigr\rceil = 1$.\\
- Totale = $202$.
+ Blocchi al livello III $= \Bigl\lceil \frac{3}{74} \Bigr\rceil = 1$.\\
+ Totale = $200$.
 \end{center}
 Ne deriva che il costo di ricerca è dato da 3 (numero di livelli) + 1 (accesso al blocco nel File Principale).
 \newpage
@@ -579,17 +581,17 @@ Quindi calcoliamo il numero di blocchi nel file principale
 \end{center}
 Calcoliamo ora il numero di record in un blocco del file indice
 \begin{center}
- $RecBloccoI = \Bigl\lceil \dfrac{1024-4}{14} \Bigr\rceil = 73$.\\
+ $RecBloccoI = \Bigl\lceil \dfrac{1024-4}{14} \Bigr\rceil + 1 = 74$.\\
 \end{center}
 Il numero di blocchi nel file indice è dato dalla somma dei seguenti valori:
 \begin{center}
- Blocchi al livello I $= \Bigl\lceil \frac{16.046}{73} \Bigr\rceil = 220$.\\
+ Blocchi al livello I $= \Bigl\lceil \frac{16.046}{74} \Bigr\rceil = 217$.\\
 
- Blocchi al livello II $= \Bigl\lceil \frac{220}{73} \Bigr\rceil = 4$.\\
+ Blocchi al livello II $= \Bigl\lceil \frac{217}{74} \Bigr\rceil = 3$.\\
 
- Blocchi al livello III $= \Bigl\lceil \frac{4}{73} \Bigr\rceil = 1$.\\
+ Blocchi al livello III $= \Bigl\lceil \frac{3}{74} \Bigr\rceil = 1$.\\
  
- Totale = 225 blocchi.
+ Totale = 221 blocchi.
 \end{center}
 
 Il costo della ricerca è 4 accessi.
@@ -887,12 +889,12 @@ cercato sia a metà bucket.
  $G$ & $G'$ & $G''$\\
  \hline
  $AB \rightarrow C$ & $AB \rightarrow C$ & $AB \rightarrow C$\\
- $AB \rightarrow D$ & $B \rightarrow D$ & $B \rightarrow D$\\
- $D \rightarrow E$ & $D \rightarrow E$ & $D \rightarrow E$\\
+ $AB \rightarrow D$ & $B \rightarrow D$ & \textbackslash \\
+ $B \rightarrow E$ & $B \rightarrow E$ & $D \rightarrow E$\\
  $E \rightarrow D$ & $E \rightarrow D$ & $E \rightarrow D$\\
  \end{tabular}\\
  
- \noindent Applicando l'Algoritmo 4.5 troviamo $\rho^1= \{H, ABC, BD, DE\}$, alla quale aggiungiamo la chiave di $R$
+ \noindent Applicando l'Algoritmo 4.5 troviamo $\rho^1= \{H, ABC, DE\}$, alla quale aggiungiamo la chiave di $R$
  per ottenere la scomposizione richiesta $\rho = \rho^1 \cup \{ABH\}$.
  
 \subsubsection{Esercizio 3}
