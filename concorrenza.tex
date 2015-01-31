@@ -1070,38 +1070,27 @@ Si consideri il seguente schedule
 \hline
  \end{longtable}
 \end{center}
-Le figure seguenti mostrano il poligrafo che viene costruito ai passi 1, 2 e 3 dell'algoritmo.
-\begin{center}
-\begin{figure}[h!]
-\centering
-\includegraphics[width=200px]{img_6_3_2(1).eps}
+Le figure prime tre seguenti mostrano il poligrafo che viene costruito ai passi 1, 2 e 3 dell'algoritmo.
+\begin{multicols}{2}
 
+\includegraphics[width=180px]{img_6_3_2(1).eps}\\
 Passo 1
-\end{figure}
 
-\begin{figure}[h!]
-\centering
-\includegraphics[width=200px]{img_6_3_2(2).eps}
+\includegraphics[width=180px]{img_6_3_2(3).eps}\\
+Passo 3
 
+\includegraphics[width=180px]{img_6_3_2(2).eps}\\
 Passo 2
 
-\end{figure}
-
-\begin{figure}[h!]
-\centering
-\includegraphics[width=200px]{img_6_3_2(3).eps}
-
-Passo 3
-\end{figure}
-\end{center}
+\includegraphics[width=150px]{img_6_3_2(4).eps}\\
+Schedule non serializzabile
+\end{multicols}
 
 Poiché il poligrafo risultante è aciclico lo schedule è serializzabile e lo schedule seriale (che rispetta
-i vincoli di precedenza tra transazioni imposti da esso) fornito dall'algoritmo è $t_1$, $t_2$, $t_3$,$t_4$.
-Viceversa la figura seguente mostra il poligrafo costruito dall'algoritmo per lo schedule visto in
-p recedenza; poiché contiene un ciclo, tale schedule non è serializzabile.
-\begin{center}
- \includegraphics[width=150px]{img_6_3_2(4).eps}
-\end{center}
+i vincoli di precedenza tra transazioni imposti da esso) fornito dall'algoritmo è $t_1$, $t_2$, $t_3$, $t_4$. Viceversa la
+quarta figura mostra il poligrafo costruito dall'algoritmo per lo schedule visto in
+precedenza; poiché contiene un ciclo, tale schedule non è serializzabile.
+
 
 \subsection{Deadlock e livelock}
 In un sistema che utilizza i lock per il controllo della concorrenza si possono verificare delle
