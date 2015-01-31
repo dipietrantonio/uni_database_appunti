@@ -738,7 +738,7 @@ la successiva operazione di $wlock$ su $X$ (in altre parole, $t_1$ modifica il v
 valore di $X$ prodotto da $t_1$ prima che $X$ venga nuovamente modificato da $t_3$). Allora in qualsiasi
 schedule seriale equivalente ad S $t_1$ deve precedere $t_2$ e $t_2$ deve precedere $t_3$. D'altra parte, se due
 transazioni $t_1$ e $t_2$ leggono entrambe il valore di un item $X$ prodotto da una transazione non è lecito
-stabilire nessuna precedenza tra $t_1$ e $t_2$ .
+stabilire nessuna precedenza tra $t_1$ e $t_2$.
 Per rappresentare le precedenze tra le transazioni è possibile usare, come per il modello precedente,
 un grafo diretto che ha per nodi le transazioni e ha un arco da una transazione $t_i$ a una transazione
 $t_j$ se la semantica delle transazioni impone che $t_i$ debba precedere $t_j$. Analogamente a quanto
@@ -832,7 +832,7 @@ infatti il suo grafo di serializzazione
  \includegraphics[width=150px]{grafo3.eps}
 \end{center}
 
-non contiene cicli; lo schedule seriale equivalente fornito dall’algoritmo è $t_1$, $t_3$, $t_2$. Al contrario il
+non contiene cicli; lo schedule seriale equivalente fornito dall'algoritmo è $t_1$, $t_3$, $t_2$. Al contrario il
 seguente schedule di $\{t_1$, $t_2$, $t_3\}$ non è serializzabile
 
 \begin{center}
@@ -863,7 +863,7 @@ infatti il suo grafo di serializzazione
 \end{center}
 contiene un ciclo.\\
 
-Analogamente a quanto mostrato per il modello precedente anche per questo modello è possibile
+Analogamente a quanto mostrato per il modello precedente, anche per questo modello è possibile
 dimostrare che qualsiasi schedule di un insieme di transazioni a due fasi (cioè transazioni in cui
 nessuna operazione di lock può seguire una operazione di unlock) è serializzabile e che per qualsiasi
 transazione $t$ a due fasi esiste uno schedule di transazioni contenente $t$ e almeno una transazione
@@ -872,12 +872,12 @@ non a due fasi che non è serializzabile.
 \subsubsection{Read-only, write-only}
 Nei due modelli di transazioni esaminati precedentemente viene fatta l'assunzione che ogni volta
 che una transazione modifica un item $X$ legge il vecchio valore di $X$ e il nuovo valore di $X$ dipende
-dal vecchio; in particolare nel primo modello l'insieme degli item letti e quello degli item scritti da
+dal vecchio; in particolare, nel primo modello l'insieme degli item letti e quello degli item scritti da
 una transazione coincidono, mentre nel secondo modello l'insieme degli item scritti da una
 transazione è contenuto nell'insieme degli item letti dalla stessa transazione. Un modello più
 realistico dovrebbe prevedere che non ci sia necessariamente una relazione di contenimento tra
-l'insieme degli item letti, \emph{read set}, e quello degli item scritti, \emph{write set}, da una transazione. Pertanto
-considereremo ora un modello in cui, analogamente al modello precedente, una transazione può
+l'insieme degli item letti, \emph{read set}, e quello degli item scritti, \emph{write set}, da una transazione. 
+Pertanto considereremo ora un modello in cui, analogamente al modello precedente, una transazione può
 effettuare operazioni di rlock e wlock, ma in cui:
 \begin{enumerate}
  \item non si assume che quando una transazione scrive un item debba averlo letto
@@ -885,12 +885,23 @@ effettuare operazioni di rlock e wlock, ma in cui:
 indipendentemente dal fatto che abbia influenza sul valore finale di qualche item prodotto dalla
 transazione.
 \end{enumerate}
+In pratica, una transazione può accedere ad un item solo per leggerlo, senza modificarlo. Se una transazione
+desidera \emph{solo leggere} un item $X$ effettua una $rlock(X)$ che impedisce a qualsiasi altra transazione
+di modificare $X$, ma non di leggere $X$; se una transazione desidera \emph{solo modificare} un item $X$ 
+effettua un $wlock(X)$ e in tal caso nessuna altra transazione può leggere o modificare $X$. Entrambi i lock
+sono rilasciati mediante una $unlock(X)$. Quindi, una transazione può essere modellizzata come una sequenza
+di operazioni di rlock, wlock e unlock: ogni rlock(X) implica la lettura di $X$, ogni unlock(X) associato a
+una wlock(X) implica la scrittura di $X$.\\
+Il nuovo valore viene calcolato da una funzione che è associata in modo univoco ad ogni coppia wlock-unlock
+ed ha per argomenti tutti gli \emph{item letti}(rlocked) dalla transazione prima dell'operazione di unlock.\\
+
 In conseguenza del punto 2, dovremmo considerare equivalenti due schedule se producono lo stesso valore
 per ogni item su cui effettuano operazioni di scrittura. Una definizione di serializzabilità basata su
 tale nozione di equivalenza non è però soddisfacente, come mostrato dall'esempio seguente.\\
 
 Consideriamo lo schedule
-\begin{center}
+\begin{multicols}{2}
+\begin{flushright}
 \begin{tabular}{|l|l|l|}
  \hline
  $t_1$ & $t_2$ & $t_3$\\
@@ -913,13 +924,37 @@ Consideriamo lo schedule
  & & unlock(D)\\
 \hline
  \end{tabular}
-\end{center}
+ \end{flushright}
+ \begin{flushleft}
+  \begin{tabular}{l}
+   \\
+   \\
+   $A = f_1()$\\
+   \\
+   $C = f_2()$\\
+   \\
+   \\
+   \\
+   $B=f_3(f_1())$\\
+   \\
+   \\
+   \\
+   $D= f_4(f_2())$\\
+   \\
+   \\
+   $B=f_5()$ [sovrascrive il valore precedente]\\
+   $D=f_6()$ [sovrascrive il valore precedente]\\
+  \end{tabular}
+
+ \end{flushleft}
+
+\end{multicols}
 
 
 In base alla definizione di serializzabilità, detta \textbf{view serializability}, data sopra, tale schedule è
 serializzabile; infatti i valori finali prodotti dallo schedule per gli item $A$, $B$, $C$ e $D$ sono i valori per
 tali item calcolati rispettivamente dalle transazioni $t_1$, $t_3$, $t_2$ e $t_3$ e sono gli stessi valori prodotti
-dallo schedule seriale $t_1$, $t_2$, $t_3$ . Tuttavia, se la transazione $t_3$ non viene eseguita (ad esempio per la
+dallo schedule seriale $t_1$, $t_2$, $t_3$. Tuttavia, se la transazione $t_3$ non viene eseguita (ad esempio per la
 caduta del sistema) i valori finali prodotti per gli item $B$ e $D$ non coincidono né con i valori prodotti
 dallo schedule seriale $t_1$, $t_2$, né con i valori prodotti dallo schedule seriale $t_2$, $t_1$.
 Inoltre è stato dimostrato che se si adotta tale definizione di serializzabilità, il problema di decidere
@@ -928,10 +963,10 @@ Prenderemo pertanto in esame un'altra definizione di serializzabilità, più res
 precedente, detta \textbf{conflict serializabilty}, basata su alcuni vincoli di precedenza imposti dalla
 semantica delle transazioni; in base a tale definizione lo schedule appena visto risulta non
 serializzabile.\\
-Nel modello esaminato precedentemente se in uno schedule $S$ una transazione $t_1$ effettua un
+Nel modello esaminato precedentemente (lock a tre valori) se in uno schedule $S$ una transazione $t_1$ effettua un
 $wlock(X)$ e $t_2$ è un'altra transazione che effettua il successivo $wlock(X)$ allora $t_2$ legge il valore di
 $X$ scritto da $t_1$ e in base a tale valore calcola il nuovo valore di $X$; pertanto in qualsiasi schedule
-seriale equivalente ad S $t_1$ deve precedere $t_2$ . Nel modello attualmente in esame, se $t_2$ non legge $X$
+seriale equivalente ad S $t_1$ deve precedere $t_2$. Nel modello attualmente in esame, se $t_2$ non legge $X$
 non c'è alcun motivo per cui debba seguire $t_1$ in uno schedule seriale equivalente ad $S$; in altre
 parole due scritture successive di uno stesso item da parte di due distinte transazioni non
 impongono nessun vincolo di precedenza. Vediamo quindi quali sono i vincoli che vanno
@@ -939,10 +974,11 @@ effettivamente imposti per uno schedule seriale equivalente ad uno schedule $S$:
 \begin{enumerate}
  \item Se in $S$ una transazione $t_2$ legge il valore di un item $X$ scritto da una transazione $t_1$ allora $t_1$
 deve precedere $t_2$ e,
- \item se $t_3$ è una terza transazione che scrive $X$ allora $t_3$ deve precedere $t_1$ o seguire $t_2$ .
+ \item se $t_3$ è una terza transazione che scrive $X$ allora $t_3$ deve precedere $t_1$ o seguire $t_2$.
 \end{enumerate}
 A tali vincoli devono essere aggiunti i seguenti:
 \begin{enumerate}
+\setcounter{enumi}{2}
 \item se una transazione legge il valore iniziale di un item $X$ allora deve precedere qualsiasi
 transazione che scriva $X$
 \item se una transazione scrive il valore finale di un item $X$ allora deve seguire qualsiasi transazione
@@ -965,26 +1001,27 @@ Analogamente a quanto visto per i modelli precedenti anche in questo caso possia
 vincoli di precedenza imposti dalla semantica delle transazioni mediante gli archi in un particolare
 tipo di grafo diretto. In particolare il vincolo 1 può essere rappresentato da un arco diretto $t_1\rightarrow t_2$ e
 il vincolo 2 dalla coppia di archi alternativi $t_3\rightarrow t_1$ e $t_2\rightarrow t_3$. Una collezione di nodi, archi e
-coppie di archi alternativi viene detta poligrafo. Un poligrafo è aciclico se almeno uno dei grafi che
-possono essere ottenuti prendendo un arco da ogni coppia di grafi alternativi è aciclico.
+coppie di archi alternativi viene detta \textbf{poligrafo}.
+\begin{defn}
+Un poligrafo è \emph{aciclico} se almeno uno dei grafi che possono essere ottenuti prendendo un arco da 
+ogni coppia di grafi alternativi è aciclico.
+\end{defn}
 Analogamente a quanto visto per i modelli precedenti, anche in questo caso la serializzabilità di uno
 schedule può essere testata da un algoritmo che costruisce un poligrafo e quindi verifica se è
 aciclico; inoltre, se è aciclico, fornisce (applicando l'ordinamento topologico ad un grafo aciclico
 ottenuto dal poligrafo nel modo detto sopra) uno schedule seriale che rispetta i vincoli di
 precedenza tra transazioni imposti dallo schedule dato. Prima di esaminare l'algoritmo osserviamo
 che poiché in questo modello non si assume che il valore di un item letto da una transazione sia
-significativo indipendentemente dal fatto che abbia influenza sul valore finale di qualche item
+significativo, indipendentemente dal fatto che abbia influenza sul valore finale di qualche item
 prodotto dalla transazione, una transazione che non ha alcun effetto sui valori finali prodotti da uno
 schedule è considerata inutile in quello schedule. Come vedremo le transazioni inutili vengono
-eliminate dall'algoritmo in quanto sono irrilevanti nel determinare la serializzabilità di uno schedule
-(in altre parole una transazione inutile in uno schedule $S$ può leggere in $S$ e in uno schedule seriale
-$S'$, che rispetta i vincoli di precedenza tra transazioni imposti da $S$, valori diversi).
+eliminate dall'algoritmo in quanto sono irrilevanti nel determinare la serializzabilità di uno schedule.
+In altre parole, una transazione inutile in uno schedule $S$ può leggere in $S$ e in uno schedule seriale
+$S'$, che rispetta i vincoli di precedenza tra transazioni imposti da $S$, valori diversi.
 
-\begin{defn}
-Dato uno schedule $S$ i nodi del poligrafo $P$ sono le transazioni di $S$. 
-\end{defn}
-
-La costruzione degli archi di $P$ avviene attraverso i seguenti passi:
+\begin{alg}
+Dato uno schedule $S$, i nodi del poligrafo $P$ sono le transazioni di $S$. La costruzione degli archi di $P$ 
+avviene attraverso i seguenti passi:
 \begin{enumerate}
  \item vengono creati gli archi in accordo al vincolo 1; quindi se una transazione $t_2$ legge il valore di
 un item $X$ scritto da una transazione $t_1$ viene aggiunto l'arco diretto $t_1\rightarrow t_2$
@@ -999,7 +1036,7 @@ aggiunge:
  \item la coppia di archi alternativi $t_3\rightarrow t_1$ e $t_2\rightarrow t_3$ se $t_1 \not= t_0$ e $t_2 \not= t_f$.
 \end{itemize}
 \end{enumerate}
-
+\end{alg}
 Si consideri il seguente schedule
 \begin{center}
  \begin{longtable}{|l|l|l|l|}
@@ -1366,4 +1403,4 @@ con i seguenti timestamp: $TS(t_1)= 110$, $TS(t_2)=100$. Consideriamo il seguent
  \end{tabular}
 \end{center}
 
-In questo caso l’operazione $(*)$ non viene eseguita.
+In questo caso l'operazione $(*)$ non viene eseguita.
