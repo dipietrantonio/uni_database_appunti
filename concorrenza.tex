@@ -1105,7 +1105,7 @@ Un \textbf{deadlock} si verifica quando ogni transazione in un insieme $T$ è in
 un item sul quale qualche altra transazione in $t$ mantiene un lock.\\
 Entrambi i problemi si possono presentare in un qualsiasi sistema in cui i processi possono essere
 eseguiti concorrentemente e quindi sono stati largamente studiati nell'ambito dei sistemi operativi.
-Il primo problema può essere risolto con una strategia first \emph{came-first served}; in altre parole il
+Il primo problema può essere risolto con una strategia \emph{first came-first served}; in altre parole il
 sistema mantiene memoria delle successive richieste di lock in modo che, quando un item $X$ viene
 rilasciato, viene garantito un lock su $X$ alla transazione che per prima ha richiesto un lock su $X$.
 Un'altra possibile strategia può essere quella di eseguire le transazioni in base alle loro priorità e di
