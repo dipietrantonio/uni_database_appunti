@@ -84,7 +84,12 @@ dove le $\bigl\lfloor X \bigr\rfloor$ indicano la parte intera inferiore di $X$ 
  $RecBlocco$.
  \begin{itemize}
   \item La formula enunciata prima è valida quando è richiesto che il blocco venga \textbf{riempito completamente} dai record e 
- l'organizzazione del file è il \emph{B-tree} o l'\emph{ISAM} (file a indice sparso).
+ l'organizzazione del file è il \emph{B-tree}.
+ \item Se l'organizzazione è l'\emph{ISAM} (file a indice sparso) ed è richiesto che il blocco venga \textbf{riempito completamente} 
+ dai record la formula diventa
+  \begin{center}
+  $RecBlocco = \Bigl\lceil \dfrac{btBlocco - btPuntatore}{btRecord} \Bigr\rceil$.
+  \end{center}
   \item Con \emph{B-tree} o l'\emph{ISAM}, spesso è richiesto che il blocco sia \textbf{pieno fino ad una certa percentuale} $P$:
   sarà allora necessario prima calcolare il $P\%$ di $btBlocco$, che indicheremo con $PercBlocco$ = $(P \cdot btBlocco)/100$. Il numero
   di record in un blocco sarà
@@ -407,7 +412,7 @@ sia utilizzato al massimo.
 Come visto nel paragrafo Tecniche Risolutive, si calcola prima il numero di record per blocco. Il testo dice che 
 ogni blocco è riempito al massimo. Applichiamo la formula:
 \begin{center}
- $RecBlocco = \Bigl\lfloor \dfrac{2048}{130} \Bigr\rfloor = 15$.\\
+ $RecBlocco = \Bigl\lfloor \dfrac{2048-5}{130} \Bigr\rfloor = 15$.\\
 \end{center}
 Quindi calcoliamo il numero di blocchi nel file principale
 \begin{center}
