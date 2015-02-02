@@ -366,7 +366,7 @@ Ne deriva che il costo di ricerca è dato da 3 (numero di livelli) + 1 (accesso 
  $(AI)^+_F = IABCDE \not\supseteq R$;\\
  $(HI)^+_F = HI \not\supseteq R$;\\
  Ne tanto meno la chiusura dei singoli attributi contiene $R$. Quindi $AHI$ è chiave per $R$. $R$ non è in 3NF perché contiene
- la dipendenza $AB\rightarrow B$ dove $AB$ non è superchiave e $D$ non è primo.\\
+ la dipendenza $AB\rightarrow D$ dove $AB$ non è superchiave e $D$ non è primo.\\
 
 Per rispondere al terzo punto bisogna trovare la copertura minimale di $F$:
 \begin{center}
@@ -889,11 +889,11 @@ cercato sia a metà bucket.
  \hline
  $AB \rightarrow C$ & $AB \rightarrow C$ & $AB \rightarrow C$\\
  $AB \rightarrow D$ & $B \rightarrow D$ & \textbackslash \\
- $B \rightarrow E$ & $B \rightarrow E$ & $D \rightarrow E$\\
+ $B \rightarrow E$ & $B \rightarrow E$ & $B \rightarrow E$\\
  $E \rightarrow D$ & $E \rightarrow D$ & $E \rightarrow D$\\
  \end{tabular}\\
  
- \noindent Applicando l'Algoritmo 4.5 troviamo $\rho^1= \{H, ABC, DE\}$, alla quale aggiungiamo la chiave di $R$
+ \noindent Applicando l'Algoritmo 4.5 troviamo $\rho^1= \{H, ABC, BE, DE\}$, alla quale aggiungiamo la chiave di $R$
  per ottenere la scomposizione richiesta $\rho = \rho^1 \cup \{ABH\}$.
  
 \subsubsection{Esercizio 3}
@@ -924,7 +924,7 @@ Il numero di blocchi nel file indice è dato dalla formula:
 \begin{center}
  $\Bigl\lceil \dfrac{8.471}{117} \Bigr\rceil = 73$.
 \end{center}
-Il costo massimo per la ricerca è $\lceil log_2(8.471)\rceil + 1 = 15$
+Il costo massimo per la ricerca è $\lceil log_2(73)\rceil + 1 = 8$
   
  
 
