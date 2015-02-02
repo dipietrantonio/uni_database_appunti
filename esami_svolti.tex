@@ -250,7 +250,7 @@ cercato sia a metà bucket.
  $(H)^+_F = HBEACD \not\supseteq R$;\\
  $(I)^+_F = I \not\supseteq R$;\\\\
 Quindi $HI$ è chiave per $R$. $R$ inoltre non è in terza forma normale perché prendendo certe dipendenze in $F$, ad esempio 
-$AB \rightarrow CD$, si ha che $AB$ non è superchiave e $CD$ non è primo; ciò va contro la definizione di schema in 3NF.\\
+$B \rightarrow E$, si ha che $B$ non è superchiave ed $E$ non è primo; ciò va contro la definizione di schema in 3NF.\\
 Per rispondere al terzo punto bisogna trovare la copertura minimale di $F$:
 \begin{center}
  \begin{tabular}{l|l|l}
@@ -366,7 +366,8 @@ Ne deriva che il costo di ricerca è dato da 3 (numero di livelli) + 1 (accesso 
  $(AI)^+_F = IABCDE \not\supseteq R$;\\
  $(HI)^+_F = HI \not\supseteq R$;\\
  Ne tanto meno la chiusura dei singoli attributi contiene $R$. Quindi $AHI$ è chiave per $R$. $R$ non è in 3NF perché contiene
- la dipendenza $AB\rightarrow D$ dove $AB$ non è superchiave e $D$ non è primo.\\
+ la dipendenza $C\rightarrow ED$, la quale implica la presenza di $C \rightarrow E$ e $C\rightarrow D$ in $F^+$ e, tenuto conto
+ della seconda ad esempio, $C$ non è superchiave e $D$ non è primo.\\
 
 Per rispondere al terzo punto bisogna trovare la copertura minimale di $F$:
 \begin{center}
@@ -880,7 +881,7 @@ cercato sia a metà bucket.
  $(AH)^+_F = AH \not\supseteq R$\\
  $(BH)^+_F= BHED \not\supseteq R$\\
  ne tanto meno R sarà contenuto nelle chiusure dei singoli attributi. $R$ tuttavia non è in terza forma normale perché $F^+$ 
- contiene dipendenze come $AB\rightarrow CD$, dove $AB$ non è superchiave e $CD$ non è primo.\\
+ contiene dipendenze come $B\rightarrow E$, dove $B$ non è superchiave e $E$ non è primo.\\
  
  \noindent Per trovare la decomposizione richiesta bisogna prima trovare la copertura minimale di $F$:\\
  
