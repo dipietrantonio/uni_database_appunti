@@ -88,7 +88,7 @@ dove le $\bigl\lfloor X \bigr\rfloor$ indicano la parte intera inferiore di $X$ 
  \item Se l'organizzazione è l'\emph{ISAM} (file a indice sparso) ed è richiesto che il blocco venga \textbf{riempito completamente} 
  dai record la formula diventa
   \begin{center}
-  $RecBlocco = \Bigl\lceil \dfrac{btBlocco - btPuntatore}{btRecord} \Bigr\rceil$.
+  $RecBlocco = \Bigl\lfloor \dfrac{btBlocco - btPuntatore}{btRecord} \Bigr\rfloor$.
   \end{center}
   \item Con \emph{B-tree} o l'\emph{ISAM}, spesso è richiesto che il blocco sia \textbf{pieno fino ad una certa percentuale} $P$:
   sarà allora necessario prima calcolare il $P\%$ di $btBlocco$, che indicheremo con $PercBlocco$ = $(P \cdot btBlocco)/100$. Il numero
@@ -171,7 +171,7 @@ Calcoliamo innanzitutto il numero di record per blocco richiesto per la director
 \end{center}
 quindi i blocchi richiesti dalla directory sono
 \begin{center}
- $BlocchiDir = \Bigl\lceil \dfrac{totBucket}{puntatori \times blocco} \Bigr\rfloor$
+ $BlocchiDir = \Bigl\lceil \dfrac{totBucket}{puntatori \times blocco} \Bigr\rceil$
 \end{center}
 Passiamo al file principale, diviso in bucket. Calcoliamo il numero di record per blocco
 \begin{center}
@@ -279,7 +279,7 @@ Per rispondere al terzo punto bisogna trovare la copertura minimale di $F$:
 Quindi si esegue l'algoritmo 4.5 ed esce $\rho= \{I, BD, BE, EA, EC, HB\}$.
 
 \subsubsection{Esercizio 3}
-Abbiamo un file di 288.000 record. Ogni record occupa 49 byte di cui 10 per la chiave. Ogni blocco contiene 2048 byte. 
+Abbiamo un file di 288\,000 record. Ogni record occupa 49 byte di cui 10 per la chiave. Ogni blocco contiene 2\,048 byte. 
 Un puntatore a blocco occupa 4 byte. Usiamo una organizzazione B-tree riempiendo al minimo sia i blocchi del file 
 principale che quelli del file indice.
 \begin{enumerate}
@@ -292,23 +292,23 @@ principale che quelli del file indice.
 Come visto nel paragrafo Tecniche Risolutive, si calcola prima il numero di record per blocco. Il testo dice che 
 ogni blocco è riempito al minimo, che in un B-Tree equivale a dire riempito a metà. Applichiamo la formula:
  \begin{center}
- $RecBlocco = \Bigl\lceil \dfrac{2048}{2\cdot 49} \Bigr\rceil = 21$.\\
+ $RecBlocco = \Bigl\lceil \dfrac{2\,048}{2\cdot 49} \Bigr\rceil = 21$\\
 \end{center}
 Quindi calcoliamo il numero di blocchi nel file principale
 \begin{center}
- $NumBlocchiFP = \Bigl\lceil \dfrac{288.000}{21} \Bigr\rceil = 13.715$.\\
+ $NumBlocchiFP = \Bigl\lceil \dfrac{288\,000}{21} \Bigr\rceil = 13\,715$\\
 \end{center}
 Calcoliamo ora il numero di record in un blocco del file indice
 \begin{center}
- $RecBloccoI = \Bigl\lceil \dfrac{1024-4}{10+4} \Bigr\rceil + 1 = 74$.\\
+ $RecBloccoI = \Bigl\lceil \dfrac{1\,024-4}{10+4} \Bigr\rceil + 1 = 74$\\
 \end{center}
 Il numero di blocchi nel file indice è dato dalla somma di questi tre valori:
 \begin{center}
- Blocchi al livello I $= \Bigl\lceil \frac{13.715}{74} \Bigr\rceil = 186$.\\
+ Blocchi al livello I $= \Bigl\lceil \frac{13\,715}{74} \Bigr\rceil = 186$\\
  
- Blocchi al livello II $= \Bigl\lceil \frac{186}{74} \Bigr\rceil = 3$.\\
+ Blocchi al livello II $= \Bigl\lceil \frac{186}{74} \Bigr\rceil = 3$\\
  
- Blocchi al livello III $= \Bigl\lceil \frac{3}{74} \Bigr\rceil = 1$.\\
+ Blocchi al livello III $= \Bigl\lceil \frac{3}{74} \Bigr\rceil = 1$\\
  Totale = $190$.
 \end{center}
 Ne deriva che il costo di ricerca è dato da 3 (numero di livelli) + 1 (accesso al blocco nel File Principale).
@@ -398,8 +398,8 @@ Quindi si esegue l'algoritmo 4.5 ed esce $\rho^1= \{HI, AB, AC, CE, CD\}$. La sc
 $\rho = \{AHI\} \cup \rho^1$.
 
 \subsubsection{Esercizio 3}
-\`E dato un file di 1.750.000 record. Ogni record occupa 130 byte, di cui 35 per la chiave. Un puntatore a blocco occupa 5 byte.
-Un blocco di memoria contiene 2048 byte. Utilizziamo un indice ISAM, e supponiamo che ogni blocco sia per i dati che per l'indice 
+\`E dato un file di 1\,750\,000 record. Ogni record occupa 130 byte, di cui 35 per la chiave. Un puntatore a blocco occupa 5 byte.
+Un blocco di memoria contiene 2\,048 byte. Utilizziamo un indice ISAM, e supponiamo che ogni blocco sia per i dati che per l'indice 
 sia utilizzato al massimo. 
 \begin{enumerate}
  \item Quanti blocchi dobbiamo utilizzare per il file principale? 
@@ -412,22 +412,22 @@ sia utilizzato al massimo.
 Come visto nel paragrafo Tecniche Risolutive, si calcola prima il numero di record per blocco. Il testo dice che 
 ogni blocco è riempito al massimo. Applichiamo la formula:
 \begin{center}
- $RecBlocco = \Bigl\lfloor \dfrac{2048-5}{130} \Bigr\rfloor = 15$.\\
+ $RecBlocco = \Bigl\lfloor \dfrac{2\,048-5}{130} \Bigr\rfloor = 15$\\
 \end{center}
 Quindi calcoliamo il numero di blocchi nel file principale
 \begin{center}
- $NumBlocchiFP = \Bigl\lceil \dfrac{1.750.000}{15} \Bigr\rceil = 116.667$.\\
+ $NumBlocchiFP = \Bigl\lceil \dfrac{1\,750\,000}{15} \Bigr\rceil = 116\,667$\\
 \end{center}
 Calcoliamo ora il numero di record in un blocco del file indice
 \begin{center}
- $RecBloccoI = \Bigl\lfloor \dfrac{2048}{35+5} \Bigr\rfloor = 51$.\\
+ $RecBloccoI = \Bigl\lfloor \dfrac{2\,048}{35+5} \Bigr\rfloor = 51$\\
 \end{center}
 Il numero di blocchi nel file indice è dato dalla seguente formula:
 \begin{center}
-  $NumBlocchiFI= \Bigl\lceil \dfrac{116.667}{51} \Bigr\rceil = 2.288$.\\
+  $NumBlocchiFI= \Bigl\lceil \dfrac{116\,667}{51} \Bigr\rceil = 2\,288$\\
 \end{center}
 Il numero massimo di accessi con la ricerca binaria sul file indice è quando l'algoritmo deve scorrere tutta l'altezza
-dell'albero binario, quindi si ha $\lceil log_2(2.288)\rceil$ più 1 accesso al File Principale per un totale di 13 accessi.
+dell'albero binario, quindi si ha $\lceil log_2(2\,288)\rceil$ più 1 accesso al File Principale per un totale di 13 accessi.
 
 \newpage
 \subsection{Esame 1/07/2013}
@@ -572,7 +572,7 @@ dell'albero binario, quindi si ha $\lceil log_2(2.288)\rceil$ più 1 accesso al 
 Alla terza iterazione non ci sono più dipendenze non rispettate dall'istanza di $R$, ma non c'è una riga con tutte ``a''.
 L'algoritmo termina qui, dichiarando che $\rho$ ha una perdita nel Join.
 \subsubsection{Esercizio 3}
-Abbiamo un file di 353.000 record. Ogni record occupa 47 byte di cui 10 per la chiave. Ogni blocco contiene 2048 byte. 
+Abbiamo un file di 353\,000 record. Ogni record occupa 47 byte di cui 10 per la chiave. Ogni blocco contiene 2\,048 byte. 
 Un puntatore a blocco occupa 4 byte. Usiamo una organizzazione B-tree riempiendo al minimo sia i blocchi del file 
 principale che quelli del file indice.
 
@@ -585,23 +585,23 @@ principale che quelli del file indice.
 \noindent\textbf{\fontsize{14pt}{1em}Soluzione.}\\
 Come visto nel paragrafo Tecniche Risolutive, si calcola prima il numero di record per blocco.
 \begin{center}
- $RecBlocco = \Bigl\lceil \dfrac{2048}{2\cdot 47} \Bigr\rceil = 22$.\\
+ $RecBlocco = \Bigl\lceil \dfrac{2\,048}{2\cdot 47} \Bigr\rceil = 22$\\
 \end{center}
 Quindi calcoliamo il numero di blocchi nel file principale
 \begin{center}
- $NumBlocchiFP = \Bigl\lceil \dfrac{353.000}{22} \Bigr\rceil = 16.046$.\\
+ $NumBlocchiFP = \Bigl\lceil \dfrac{353\,000}{22} \Bigr\rceil = 16\,046$\\
 \end{center}
 Calcoliamo ora il numero di record in un blocco del file indice
 \begin{center}
- $RecBloccoI = \Bigl\lceil \dfrac{1024-4}{14} \Bigr\rceil + 1 = 74$.\\
+ $RecBloccoI = \Bigl\lceil \dfrac{1\,024-4}{14} \Bigr\rceil + 1 = 74$\\
 \end{center}
 Il numero di blocchi nel file indice è dato dalla somma dei seguenti valori:
 \begin{center}
- Blocchi al livello I $= \Bigl\lceil \frac{16.046}{74} \Bigr\rceil = 217$.\\
+ Blocchi al livello I $= \Bigl\lceil \frac{16\,046}{74} \Bigr\rceil = 217$\\
 
- Blocchi al livello II $= \Bigl\lceil \frac{217}{74} \Bigr\rceil = 3$.\\
+ Blocchi al livello II $= \Bigl\lceil \frac{217}{74} \Bigr\rceil = 3$\\
 
- Blocchi al livello III $= \Bigl\lceil \frac{3}{74} \Bigr\rceil = 1$.\\
+ Blocchi al livello III $= \Bigl\lceil \frac{3}{74} \Bigr\rceil = 1$\\
  
  Totale = 221 blocchi.
 \end{center}
@@ -784,7 +784,7 @@ Un blocco di memoria contiene 2048 byte. Il file ha un’organizzazione hash con
 Calcoliamo innanzitutto il numero di record per blocco richiesto per la directory; in questo
 caso i record contengono solo i puntatori al primo blocco di un bucket.
 \begin{center}
- $puntatori \times blocco = \Bigl\lfloor \dfrac{2048}{5} \Bigr\rfloor = 409$
+ $puntatori \times blocco = \Bigl\lfloor \dfrac{2\,048}{5} \Bigr\rfloor = 409$
 \end{center}
 quindi i blocchi richiesti dalla directory sono
 \begin{center}
@@ -792,21 +792,21 @@ quindi i blocchi richiesti dalla directory sono
 \end{center}
 Passiamo al file principale, diviso in bucket. Calcoliamo il numero di record per blocco
 \begin{center}
- $\Bigl\lfloor \dfrac{2048-5}{130} \Bigr\rfloor = 15$
+ $\Bigl\lfloor \dfrac{2\,048-5}{130} \Bigr\rfloor = 15$
 \end{center}
 I record totali devono essere ripartiti uniformemente nei bucket
 \begin{center}
- $record \times bucket = \Bigl\lceil \dfrac{1.750.000}{300} \Bigr\rceil = 5834$
+ $record \times bucket = \Bigl\lceil \dfrac{1\,750\,000}{300} \Bigr\rceil = 5\,834$
 \end{center}
 Ora il numero totale di blocchi nel file principale è dato dal numero di blocchi in un bucket
 moltiplicato per il numero di bucket.
 \begin{center}
- $BlocchiFP = \Bigl\lceil \dfrac{5834}{15} \Bigr\rceil \cdot 300 = 116.700$
+ $BlocchiFP = \Bigl\lceil \dfrac{5\,834}{15} \Bigr\rceil \cdot 300 = 116\,700$
 \end{center}
-Quindi in totale il file occupa 116.700 + 1 (quello della directory) blocchi. Il costo medio di 
+Quindi in totale il file occupa 116\,700 + 1 (quello della directory) blocchi. Il costo medio di 
 una ricerca è dato da
 \begin{center}
- $\Bigl\lceil \Bigl\lceil \dfrac{5834}{15} \Bigr\rceil \cdot \dfrac{1}{2} \Bigr\rceil$
+ $\Bigl\lceil \Bigl\lceil \dfrac{5\,834}{15} \Bigr\rceil \cdot \dfrac{1}{2} \Bigr\rceil$
 \end{center}
 visto che si cerca dentro un solo bucket ed essendo il costo medio si suppone che il record
 cercato sia a metà bucket.
@@ -910,7 +910,7 @@ cercato sia a metà bucket.
  per ottenere la scomposizione richiesta $\rho = \rho^1 \cup \{ABH\}$.
  
 \subsubsection{Esercizio 3}
-Abbiamo un file di 288.000 record. Ogni record occupa 49 byte di cui 10 per la chiave. Ogni blocco contiene 2048 byte.
+Abbiamo un file di 288\,000 record. Ogni record occupa 49 byte di cui 10 per la chiave. Ogni blocco contiene 2\,048 byte.
 Un puntatore a blocco occupa 4 byte. Usiamo una organizzazione ISAM riempiendo i blocchi del file principale all'$80\%$.
 \begin{enumerate}
  \item  Quanti blocchi dobbiamo utilizzare per il file principale? 
@@ -919,23 +919,23 @@ Un puntatore a blocco occupa 4 byte. Usiamo una organizzazione ISAM riempiendo i
 \end{enumerate}
 
 \noindent\textbf{\fontsize{14pt}{1em}Soluzione.}\\
-Innanzitutto calcoliamo l'$80\%$ di 2048. $\lceil2048 \cdot 0,8\rceil = 1639$
+Innanzitutto calcoliamo l'$80\%$ di 2\,048. $\lceil2\,048 \cdot 0,8\rceil = 1\,639$
 
 Calcoliamo il numero di recod per blocco
 \begin{center}
- $RecBlocco = \Bigl\lceil \dfrac{1639}{49} \Bigr\rceil = 34$.\\
+ $RecBlocco = \Bigl\lceil \dfrac{1\,639}{49} \Bigr\rceil = 34$\\
 \end{center}
 Quindi calcoliamo il numero di blocchi nel file principale
 \begin{center}
- $NumBlocchiFP = \Bigl\lceil \dfrac{288.000}{34} \Bigr\rceil = 8.471$.\\
+ $NumBlocchiFP = \Bigl\lceil \dfrac{288\,000}{34} \Bigr\rceil = 8\,471$\\
 \end{center}
 Calcoliamo ora il numero di record in un blocco del file indice
 \begin{center}
- $RecBloccoI = \Bigl\lceil \dfrac{1639}{14} \Bigr\rceil = 118$.\\
+ $RecBloccoI = \Bigl\lceil \dfrac{1\,639}{14} \Bigr\rceil = 118$\\
 \end{center}
 Il numero di blocchi nel file indice è dato dalla formula:
 \begin{center}
- $\Bigl\lceil \dfrac{8.471}{118} \Bigr\rceil = 72$.
+ $\Bigl\lceil \dfrac{8\,471}{118} \Bigr\rceil = 72$
 \end{center}
 Il costo massimo per la ricerca è $\lceil log_2(72)\rceil + 1 = 8$
   
