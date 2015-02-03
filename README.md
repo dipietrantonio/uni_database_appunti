@@ -18,5 +18,5 @@ __________________________
 
 Autore/i: Cristian Di Pietrantonio
 
-Ringrazio per l'aiuto nella correzione di errori e sviste nel testo ed esercizi: Federica Granese, Michael Aratari, Emanuele Alessi, Luca De Santis, Mirco Cassaro, Michele Laurenti, Matteo Cellucci, Franco Bertollini, Andrea Coletta.
+Ringrazio per l'aiuto nella correzione di errori e sviste nel testo ed esercizi: Federica Granese, Michael Aratari, Emanuele Alessi, Luca De Santis, Mirco Cassaro, Michele Laurenti, Matteo Cellucci, Franco Bertollini, Andrea Coletta, Marco Esposito.
 
