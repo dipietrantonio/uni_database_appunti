@@ -3,8 +3,7 @@ Appunti di Basi di Dati
 Corso: Informatica
 Università La Sapienza
 
-CONSIGLIO di non stampare ancora la dispensa in quanto ancora soggetta a correzioni
-<a href="https://github.com/Halolegend94/uni_database_appunti/blob/master/main.pdf?raw=true">DOWNLOAD PDF</a>
+Release 1.0 <a href="https://github.com/Halolegend94/uni_database_appunti/blob/master/main.pdf?raw=true">DOWNLOAD PDF</a>
 _________________________
 1 Febbraio 2015
 
