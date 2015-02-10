@@ -3,9 +3,9 @@ Appunti di Basi di Dati
 Corso: Informatica
 Università La Sapienza
 
-Release 1.0 <a href="https://github.com/Halolegend94/uni_database_appunti/blob/master/main.pdf?raw=true">DOWNLOAD PDF</a>
+Release 1.1 <a href="https://github.com/Halolegend94/uni_database_appunti/blob/master/main.pdf?raw=true">DOWNLOAD PDF</a>
 _________________________
-1 Febbraio 2015
+10 Febbraio 2015
 
 Con questo progetto si intende raccogliere in un unico documento PDF tutto il materiale utile per superare l'esame di Basi di Dati tenuto dalla professoressa Moscarini. 
 Il codice sorgente è scritto in LaTeX, per una migliore qualità del documento e per future modifiche e aggiunte da parte di terzi.
