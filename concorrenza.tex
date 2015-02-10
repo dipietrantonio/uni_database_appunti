@@ -1176,7 +1176,7 @@ dati sporchi. Ciò può essere ottenuto adottando un protocollo di locking a due
 \begin{defn}
  Una transazione soddisfa il protocollo a due fasi stretto se:
  \begin{enumerate}
-  \item non scrive sulla base di dati fino a quando non ha raggiunto il suo pun to di commit
+  \item non scrive sulla base di dati fino a quando non ha raggiunto il suo punto di commit
   \item non rilascia un lock finchè non ha finito di scrivere sulla base di dati.
  \end{enumerate}
 \end{defn}
@@ -1219,7 +1219,7 @@ alla transazione di procedere solo se tutti i lock che ha richiesto sono disponi
 in una coda di attesa. In tal modo non possono verificarsi deadlock, ma possono ancora verificarsi
 livelock. Per evitare anche il verificarsi di livelock si può impedire ad una transazione $t$ di
 procedere (anche se tutti i lock da essa richiesti sono disponibili) se c'è un'altra transazione che
-precede $t$ nella coda che è in attesa di ottene re un lock richiesto da $t$. \`E facile vedere che se si
+precede $t$ nella coda che è in attesa di ottenere un lock richiesto da $t$. \`E facile vedere che se si
 adotta un protocollo in cui tutti i lock sono richiesti all'inizio e uno scheduler che garantisce ad una
 transazione $t$ tutti i lock richiesti se e solo se:
 \begin{enumerate}
@@ -1237,7 +1237,7 @@ transazione potrebbero essere eseguiti senza quel lock; inoltre una transazione 
 richiedere un lock su ogni item che potrebbe essergli necessario anche se poi di fatto non l'utlizza.
 Ad esempio, se una transazione deve effettuare una ricerca su un file con indice sparso e gli item
 sono i blocchi, la transazione deve effettuare un lock su ogni blocco del file principale e del file
-in dice anche se poi accederà soltanto ad alcuni blocchi del file indice e ad un solo blocco del file
+indice anche se poi accederà soltanto ad alcuni blocchi del file indice e ad un solo blocco del file
 principale.\\
 
 La versione più aggressiva di un protocollo di locking a due fasi stretto è quella che impone ad una
@@ -1265,14 +1265,14 @@ mantenuti da transazioni abortite).
 I metodi per il controllo della concorrenza basati sui \emph{timestamp} ordinano le transazioni in base ai
 loro timestamp. Il timestamp è assegnato ad una transazione dallo scheduler quando la transazione
 ha inizio. A tale scopo lo scheduler può o gestire un contatore (ogni volta che ha inizio una
-transazione ta le contatore viene incrementato e il suo valore è il timestamp della transazione)
+transazione tale contatore viene incrementato e il suo valore è il timestamp della transazione)
 oppure usare l'orologio interno della macchina (in tal caso il timestamp è l'ora di inizio della
 transazione).\\
 In tale approccio al controllo della concorrenza, uno schedule è serializzabile se è equivalente allo
 schedule seriale in cui le transazioni compaiono ordinate in base al loro timestamp.\\
 Dato uno schedule occorre verificare che, per ciascun item acceduto da più di una transazione,
 l'ordine con cui le transazioni accedono all'item non viola la serializzabilità dello schedule. A tale
-sco po vengono associati a ciascun item $X$ due timestamp:
+scopo vengono associati a ciascun item $X$ due timestamp:
 \begin{itemize}
  \item il read timestamp di $X$, denotato con $read\_TS(X)$, che è il più grande fra tutti i timestamp di
 transazioni che hanno letto con successo $X$;
