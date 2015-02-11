@@ -174,7 +174,7 @@ ha quel valore per la chiave e 1 accesso in scrittura.\\
 
 \subsubsection{File hash}
 In questo tipo di organizzazione i record sono ripartiti in \textbf{bucket} (secchi) in base al valore della
-chiave. Se $B$ è il numero dei bucket, questi vengono numerati da $0$ a $B-1$. Dato un valore $v$ per
+chiave. Se $B$ è il numero dei bucket, questi vengono numerati da $1$ a $B$. Dato un valore $v$ per
 chiave il numero del bucket in cui deve trovarsi un record con chiave $v$ è calcolato mediante una
 funzione che prende il nome di \emph{funzione hash}.
 Ciascun bucket è costituito da uno o più blocchi (come vedremo, affinchè la gestione del file sia
