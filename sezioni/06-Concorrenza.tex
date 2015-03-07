@@ -569,14 +569,14 @@ archi entranti (l'ordine di eliminazione dei nodi fornisce lo schedule seriale $
 
 Ecco i grafi dei due schedule visti prima: il primo ha un ciclo, infatti lo schedule non è serializzabile.
 \begin{multicols}{2}
- \includegraphics[width=170px]{grafo1.eps}\\
- \includegraphics[width=170px]{grafo2.eps}
+ \includegraphics[width=170px]{immagini-eps/grafo1.eps}\\
+ \includegraphics[width=170px]{immagini-eps/grafo2.eps}
 \end{multicols}
 
 Considerando invece il seguente grafo, una possibile eliminazione ricorsiva dei nodi con archi non entranti
 produce il seguente schedule seriale: $t_4$, $t_7$, $t_5$, $t_1$, $t_8$, $t_9$, $t_2$, $t_3$, $t_6$.\\
 \begin{center}
-\includegraphics[width=200px]{ordinamento_topologico.eps}\\ 
+\includegraphics[width=200px]{immagini-eps/ordinamento_topologico.eps}\\ 
 \end{center}
 
 \noindent Il seguente teorema prova la correttezza dell'algoritmo.
@@ -691,7 +691,7 @@ un'operazione di lock dopo aver effettuato un'operazione di unlock; consideriamo
 
 Infatti il suo grafo di serializzazione
 \begin{center}
-  \includegraphics[width=150px]{img_6_3_1.eps}
+  \includegraphics[width=150px]{immagini-eps/img_6_3_1.eps}
 \end{center}
 contiene un ciclo. Naturalmente possono esistere schedule di transazioni che non sono a due fasi
 che sono serializzabili. Tuttavia poiché è normale non conoscere l'insieme di transazioni con cui
@@ -829,7 +829,7 @@ Il seguente schedule di $\{t_1, t_2, t_3\}$ è serializzabile
 infatti il suo grafo di serializzazione
 
 \begin{center}
- \includegraphics[width=150px]{grafo3.eps}
+ \includegraphics[width=150px]{immagini-eps/grafo3.eps}
 \end{center}
 
 non contiene cicli; lo schedule seriale equivalente fornito dall'algoritmo è $t_1$, $t_3$, $t_2$. Al contrario il
@@ -859,7 +859,7 @@ seguente schedule di $\{t_1$, $t_2$, $t_3\}$ non è serializzabile
 infatti il suo grafo di serializzazione
 
 \begin{center}
- \includegraphics[width=150px]{img_6_3_2.eps}
+ \includegraphics[width=150px]{immagini-eps/img_6_3_2.eps}
 \end{center}
 contiene un ciclo.\\
 
@@ -1073,16 +1073,16 @@ Si consideri il seguente schedule
 Le figure prime tre seguenti mostrano il poligrafo che viene costruito ai passi 1, 2 e 3 dell'algoritmo.
 \begin{multicols}{2}
 
-\includegraphics[width=180px]{img_6_3_2(1).eps}\\
+\includegraphics[width=180px]{immagini-eps/img_6_3_2(1).eps}\\
 Passo 1
 
-\includegraphics[width=180px]{img_6_3_2(3).eps}\\
+\includegraphics[width=180px]{immagini-eps/img_6_3_2(3).eps}\\
 Passo 3
 
-\includegraphics[width=180px]{img_6_3_2(2).eps}\\
+\includegraphics[width=180px]{immagini-eps/img_6_3_2(2).eps}\\
 Passo 2
 
-\includegraphics[width=150px]{img_6_3_2(4).eps}\\
+\includegraphics[width=150px]{immagini-eps/img_6_3_2(4).eps}\\
 Schedule non serializzabile
 \end{multicols}
 
